@@ -21,7 +21,7 @@ class PositionForm extends Component {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then((response) => {
+      .then(response => {
         // if(response.data.length==0){this.roleObj=["temp"];}
         // else{
 
@@ -32,7 +32,7 @@ class PositionForm extends Component {
 
         this.setState({ companyInfo: response.data });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -49,7 +49,7 @@ class PositionForm extends Component {
         <div id="role-form-outer-div">
           <Form
             id="form"
-            onSubmit={(e) =>
+            onSubmit={e =>
               this.props.onPositionEditUpdate(
                 this.props.editData,
                 e.target[0].value,
@@ -91,7 +91,7 @@ class PositionForm extends Component {
                   name="PositionName"
                   required
                   value={this.state.PositionData}
-                  onChange={(value) => this.onChange(value)}
+                  onChange={value => this.onChange(value)}
                 />
               </Col>
             </Form.Group>

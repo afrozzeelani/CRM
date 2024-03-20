@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./DepartmentTable.css";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-import { RingLoader } from "react-spinners";
-import { css } from "@emotion/core";
+
 import { Button } from "react-bootstrap";
+
 
 class DepartmentTable extends Component {
   state = {
     departmentData: [],
-    loading: true
+    loading: true,
   };
   departmentObj = [];
   rowDataT = [];
@@ -19,8 +19,8 @@ class DepartmentTable extends Component {
     axios
       .get("http://localhost:4000/api/department", {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         this.departmentObj = response.data;
@@ -33,7 +33,7 @@ class DepartmentTable extends Component {
           let temp = {
             data,
             CompanyName: data["company"][0]["CompanyName"],
-            DepartmentName: data["DepartmentName"]
+            DepartmentName: data["DepartmentName"],
           };
 
           this.rowDataT.push(temp);
@@ -51,8 +51,8 @@ class DepartmentTable extends Component {
       axios
         .delete("http://localhost:4000/api/department/" + e, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           this.componentDidMount();
@@ -95,46 +95,44 @@ class DepartmentTable extends Component {
         <div className="d-flex justify-between aline-items-start mb-3">
           <div className=" my-auto">
             <h3 className="fw-bold text-muted">Department Details</h3>
-            <p className="text-muted">
-              You can create new department and view all department of the
-              companies here !
-            </p>
           </div>
 
           <Button
             className="my-auto"
-            variant="primary"
-            id="add-button"
+            variant="primary shadow-sm"
             onClick={this.props.onAddDepartment}
           >
             <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-            Add new department
+            Create Department
           </Button>
         </div>
-        <table className="table table-striped">
+        <table className="table">
           <thead>
             <th
               style={{
-                background: "linear-gradient(#1D267D, #2F58CD)",
-                color: "white"
+                background: "var(--primaryDashColorDark)",
+                color: "var(--primaryDashMenuColor)",
               }}
+              className="py-1"
             >
               Company
             </th>
             <th
               style={{
-                background: "linear-gradient(#1D267D, #2F58CD)",
-                color: "white"
+                background: "var(--primaryDashColorDark)",
+                color: "var(--primaryDashMenuColor)",
               }}
+              className="py-1"
             >
               Department
             </th>
             <th
               style={{
-                background: "linear-gradient(#1D267D, #2F58CD)",
-                color: "white"
+                background: "var(--primaryDashColorDark)",
+                color: "var(--primaryDashMenuColor)",
               }}
-              className="py-1 text-center"
+              className="py-1"
+
             >
               Action
             </th>
@@ -143,30 +141,34 @@ class DepartmentTable extends Component {
           <tbody>
             {this.state.departmentData.map((items, index) => (
               <tr key={index}>
-                <td className="py-0">{items["company"][0]["CompanyName"]}</td>
-                <td className="py-0">{items.DepartmentName}</td>
-                <td className="py-0">
-                  <div className="d-flex gap-3 py-2">
-                    <p
+                <td className="text-capitalize fw-bold">{items["company"][0]["CompanyName"]}</td>
+                <td className="text-capitalize fw-bold">{items.DepartmentName}</td>
+                <td >
+                  <div className="d-flex wrap-nowrap justify-content-end gap-3">
+                    <span
+                      onClick={() => this.props.onEditDepartment(items)}
                       style={{ cursor: "pointer" }}
                       title="Update"
-                      className="m-auto text-primary"
+                      className="text-primary d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                     >
                       <FontAwesomeIcon
                         icon={faEdit}
-                        onClick={() => this.props.onEditDepartment(items)}
+
                       />
-                    </p>
-                    <p
+                      <span>Edit</span>
+                    </span>
+                    <span
+                      onClick={() => this.onDepartmentDelete(items["_id"])}
                       style={{ cursor: "pointer" }}
                       title="Delete"
-                      className="m-auto text-danger"
+                      className="text-danger d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                     >
                       <FontAwesomeIcon
                         icon={faTrash}
-                        onClick={() => this.onDepartmentDelete(items["_id"])}
+
                       />
-                    </p>
+                      <span>Delete</span>
+                    </span>
                   </div>
                 </td>
               </tr>

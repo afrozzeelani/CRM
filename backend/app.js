@@ -261,7 +261,6 @@ io.on("connection", (socket) => {
    }
   
 
-  
     // console.log(Taskname, path, description, department, managerEmail, comment, duration, status, startDate, endDate);
     try {
       // await PdfSchema.create({ title: title, pdf: fileName });

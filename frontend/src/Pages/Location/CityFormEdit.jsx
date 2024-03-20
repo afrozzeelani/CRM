@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+// import "./CityForm.css";
 import { HashRouter as Router, Route, Link } from "react-router-dom";
 // import { Form,Button } from "react-bootstrap";
-// import "./CityForm.css";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
 

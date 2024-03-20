@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./StateTable.css";
+import axios from "axios";
 // import { HashRouter as Router, Route, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -127,23 +127,21 @@ class StateTable extends Component {
         <div id="clear-both"></div>
 
         {!this.state.loading ? (
-          <table className="table table-striped">
+          <table className="table">
             <thead>
               <tr>
                 <th
                   style={{
-                    background:
-                      "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
                   }}
                 >
                   Country
                 </th>
                 <th
                   style={{
-                    background:
-                      "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
                   }}
                 >
                   State

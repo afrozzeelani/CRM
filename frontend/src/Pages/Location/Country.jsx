@@ -1,10 +1,23 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./Country.css";
+import axios from "axios";
 import CountryTable from "./CountryTable.jsx";
 import CountryForm from "./CountryForm.jsx";
 import CountryFormEdit from "./CountryFormEdit.jsx";
+// import { HashRouter as Router, Route, Link } from "react-router-dom";
 
+// function CountryTableF() {
+//   return <CountryTable/>;
+// }
+// function CountryFormF() {
+//   return  <CountryForm onCountrySubmit={handleCountrySubmit}/>;
+// }
+
+// function handleCountrySubmit(e) {
+//   e.preventDefault();
+//   console.log(e);
+
+// }
 
 class Country extends Component {
   state = {

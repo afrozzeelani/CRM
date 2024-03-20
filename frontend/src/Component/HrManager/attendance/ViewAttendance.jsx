@@ -1,10 +1,6 @@
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { TfiReload } from "react-icons/tfi";
-import { FaCircleInfo } from "react-icons/fa6";
-import { MdOutlineRefresh } from "react-icons/md";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 const AttendanceDetails = () => {
   const [employeeId, setEmployeeId] = useState("");
@@ -12,7 +8,7 @@ const AttendanceDetails = () => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
+
   const [hoveredDate, setHoveredDate] = useState(null);
   const [isInfoHovering, setIsInfoHovering] = useState(false);
 
@@ -53,27 +49,7 @@ const AttendanceDetails = () => {
     setEmployeeId(event.target.value);
   };
 
-  // const handleFetchAttendance = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:4000/api/attendance/${employeeId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token") || ""}`
-  //         }
-  //       }
-  //     );
-  //     let singleUser = response.data.filter((val) => {
-  //       return val.employeeObjID._id === employeeId;
-  //     });
-  //     setAttendanceData(singleUser.length > 0 ? singleUser[0] : null);
-  //   } catch (error) {
-  //     console.error("Error fetching attendance data:", error);
-  //   }
-  // };
-
   const handleFetchAttendance = async () => {
-    setIsButtonClicked(true);
     try {
       const response = await axios.get(
         `http://localhost:4000/api/attendance/${employeeId}`,
@@ -91,11 +67,6 @@ const AttendanceDetails = () => {
       setAttendanceData(singleUser.length > 0 ? singleUser[0] : null);
     } catch (error) {
       console.error("Error fetching attendance data:", error);
-    } finally {
-      // Reset the isButtonClicked state after a delay to allow the animation to play
-      setTimeout(() => {
-        setIsButtonClicked(false);
-      }, 500);
     }
   };
 
@@ -141,6 +112,121 @@ const AttendanceDetails = () => {
     }
   };
 
+  const getLogStatus = (status) => {
+    switch (status) {
+      case "login":
+        return (
+          <span
+            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
+            style={{ color: "green", width: "fit-content" }}
+          >
+            <div
+              style={{
+                height: "12px",
+                width: "12px",
+                borderRadius: "50%",
+                backgroundColor: "green"
+              }}
+              className="spinner-grow"
+            ></div>
+            Login
+          </span>
+        );
+      case "logout":
+        return (
+          <span
+            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
+            style={{ color: "red", width: "fit-content" }}
+          >
+            <div
+              style={{
+                height: "12px",
+                width: "12px",
+                borderRadius: "50%",
+                backgroundColor: "red"
+              }}
+              className="spinner-grow"
+            ></div>
+            Logout
+          </span>
+        );
+      case "Break":
+        return (
+          <span
+            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
+            style={{ color: "orange", width: "fit-content" }}
+          >
+            <div
+              style={{
+                height: "12px",
+                width: "12px",
+                borderRadius: "50%",
+                backgroundColor: "orange"
+              }}
+              className="spinner-grow"
+            ></div>
+            Break
+          </span>
+        );
+      case "Login":
+        return (
+          <span
+            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
+            style={{ color: "green", width: "fit-content" }}
+          >
+            <div
+              style={{
+                height: "12px",
+                width: "12px",
+                borderRadius: "50%",
+                backgroundColor: "green"
+              }}
+              className="spinner-grow"
+            ></div>
+            Login
+          </span>
+        );
+      case "Logout":
+        return (
+          <span
+            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
+            style={{ color: "red", width: "fit-content" }}
+          >
+            <div
+              style={{
+                height: "12px",
+                width: "12px",
+                borderRadius: "50%",
+                backgroundColor: "red"
+              }}
+              className="spinner-grow"
+            ></div>
+            Logout
+          </span>
+        );
+      case "resume":
+        return (
+          <span
+            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
+            style={{ color: "green", width: "fit-content" }}
+          >
+            <div
+              style={{
+                height: "12px",
+                width: "12px",
+                borderRadius: "50%",
+                backgroundColor: "green"
+              }}
+              className="spinner-grow"
+            ></div>
+            Resume
+          </span>
+        );
+      default:
+        return "";
+    }
+  };
+
   const getMonthsForYear = (year) => {
     if (year === new Date().getFullYear()) {
       return Array.from({ length: new Date().getMonth() + 1 }, (_, i) => i + 1);
@@ -167,7 +253,7 @@ const AttendanceDetails = () => {
     const formattedSeconds = String(seconds % 60).padStart(2, "0");
     const formattedMillisecond = String(millisecond % 60).padStart(2, "0");
 
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}:${formattedMillisecond}`;
+    return `${formattedMinutes}hrs: ${formattedSeconds}min: ${formattedMillisecond}sec`;
   };
 
   const getAttendanceMark = (date) => {
@@ -175,17 +261,17 @@ const AttendanceDetails = () => {
     if (loginTime) {
       const [loginHour, loginMinute] = loginTime.split(":").map(Number);
       if (loginHour > 9 || (loginHour === 9 && loginMinute > 45)) {
-        return "H";
+        return "Half Day";
       } else if (loginHour > 9 || (loginHour === 9 && loginMinute > 30)) {
-        return "L";
+        return "Late";
       }
     }
-    return loginTime ? "P" : "A";
+    return loginTime ? "Present" : "Absent";
   };
 
   return (
     <div className="d-flex flex-column p-5 gap-3">
-      {/* <div className="d-flex gap-3 ">
+      <div className="d-flex gap-3 ">
         <div>
           <select
             className="form-select w-100 shadow-sm text-muted"
@@ -218,50 +304,12 @@ const AttendanceDetails = () => {
         >
           Fetch Attendance
         </button>
-      </div> */}
-      <div className="d-flex gap-3 justify-content-between">
-        <div>
-          <select
-            className="form-select w-100 shadow-sm text-muted"
-            id="employeeId"
-            value={employeeId}
-            onChange={handleEmployeeChange}
-          >
-            <option value="" disabled>
-              --Select an employee--
-            </option>
-            {employees
-              .sort((a, b) => a.empID - b.empID)
-              .map((employee) => (
-                <option
-                  className="text-uppercase"
-                  key={employee._id}
-                  value={employee._id}
-                >
-                  <p>
-                    🪪 ({employee.empID}) {employee.FirstName}
-                  </p>
-                </option>
-              ))}
-          </select>
-        </div>
-        <button
-          disabled={!employeeId}
-          style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
-          className="btn shadow btn-dark fw-bolder"
-          onClick={handleFetchAttendance}
-        >
-          <MdOutlineRefresh
-            className={`fs-4 ${isButtonClicked ? "rotate" : ""}`}
-          />{" "}
-          Get
-        </button>
       </div>
 
       {attendanceData && (
         <div className="d-flex gap-3">
-          <div>
-            <label htmlFor="year">Select a year:</label>
+          <div className="w-25">
+            <label htmlFor="year">Select Year:</label>
             <select
               className="form-select shadow"
               id="year"
@@ -275,8 +323,8 @@ const AttendanceDetails = () => {
               ))}
             </select>
           </div>
-          <div>
-            <label htmlFor="month">Select a month:</label>
+          <div className="w-25">
+            <label htmlFor="month">Select Month:</label>
             <select
               className="form-select shadow"
               id="month"
@@ -297,14 +345,64 @@ const AttendanceDetails = () => {
         <div style={{ overflow: "auto", height: "80vh" }}>
           <table className="table">
             <thead>
-              <tr className="shadow-sm">
-                <th className="bg-dark text-white text-center">Date</th>
-                <th className="bg-dark text-white text-center">Status</th>
-                <th className="bg-dark text-white">Login Time</th>
-                <th className="bg-dark text-white">Logout Time</th>
-                <th className="bg-dark text-white">Break</th>
-                <th className="bg-dark text-white">Total Login</th>
-                <th className="bg-dark text-white">Status</th>
+              <tr
+                style={{ position: "sticky", top: "0", zIndex: "3" }}
+                className="shadow-sm"
+              >
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
+                    cursor: "pointer"
+                  }}
+                >
+                  Date
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
+                    cursor: "pointer"
+                  }}
+                >
+                  Attendance Status
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
+                    cursor: "pointer"
+                  }}
+                >
+                  Login Time
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
+                    cursor: "pointer"
+                  }}
+                >
+                  Logout Time
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
+                    cursor: "pointer"
+                  }}
+                >
+                  Break
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
+                    cursor: "pointer"
+                  }}
+                >
+                  Log Status
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -318,19 +416,36 @@ const AttendanceDetails = () => {
                         <tr
                           className="shadow-sm"
                           key={date.date}
-                          id={`attendance-row-${date.date}`} // Assign unique ID to each row
+                          id={`attendance-row-${date.date}`}
                           onMouseEnter={() => handleMouseEnter(date.date)}
                           onMouseLeave={() => handleMouseLeave()}
                         >
-                          <td className="text-center">
-                            <span className="fw-bold bg-info py-1 px-2  shadow-sm text-white">
-                              {date.date}
+                          <td className="">
+                            <span
+                              style={{ height: "30px", width: "30px" }}
+                              className="fw-bold d-flex justify-content-center align-items-center bg-info rounded-circle shadow-sm text-white"
+                            >
+                              {String(date.date).padStart(2, "0")}
                             </span>
                           </td>
                           <td
-                            style={{ whiteSpace: "pre", textAlign: "center" }}
+                            style={{ verticalAlign: "middle" }}
+                            className="text-start"
                           >
-                            {getAttendanceMark(date)}
+                            <span
+                              style={{ fontSize: ".8rem" }}
+                              className={`py-1 px-3 rounded-5 shadow-sm fw-bold ${
+                                getAttendanceMark(date) === "Present"
+                                  ? "bg-success text-white"
+                                  : getAttendanceMark(date) === "Late"
+                                  ? "bg-info text-white"
+                                  : getAttendanceMark(date) === "Half Day"
+                                  ? "bg-warning text-white"
+                                  : "bg-danger text-white"
+                              }`}
+                            >
+                              {getAttendanceMark(date)}
+                            </span>
                           </td>
                           <td className="text-uppercase">
                             {date.loginTime[0]}
@@ -350,77 +465,87 @@ const AttendanceDetails = () => {
                               onMouseLeave={handleInfoMouseLeave}
                             >
                               <span
-                                style={{ scale: "0.7" }}
-                                className="bg-warning py-0  text-white  px-2 rounded-5 my-auto"
+                                style={{ fontSize: ".9rem" }}
+                                className="fw-bold text-muted"
                               >
-                                {date.breakTime.length}
-                              </span>
-                              <span className="fw-bold text-dark fs-6">
                                 {millisecondsToTime(date.totalBrake)}
                               </span>{" "}
-                              <FaCircleInfo
-                                style={{ fontSize: ".9rem" }}
-                                className="text-info "
+                              <IoMdInformationCircleOutline
+                                style={{ fontSize: "1.1rem" }}
+                                className="text-dark "
                               />
                             </div>
-
                             <div
                               style={{ zIndex: "5", right: "0%" }}
                               className="position-absolute"
                             >
-                              {isInfoHovering &&
-                                hoveredDate === date.date && ( // Check if info button is hovered and the date is the hovered date
-                                  <table className="table table-bordered table-striped">
-                                    <thead>
-                                      <tr className="shadow-sm p-0">
-                                        <th className="bg-info  py-0 text-white">
-                                          Break
-                                        </th>
-                                        <th className="bg-info  py-0 text-white">
-                                          Resume
-                                        </th>
-                                        <th
-                                          className="text-end  py-0 bg-info text-white"
+                              {isInfoHovering && hoveredDate === date.date && (
+                                <table className="table table-bordered table-striped">
+                                  <thead>
+                                    <tr className="shadow-sm">
+                                      <th
+                                        style={{
+                                          whiteSpace: "pre",
+                                          backgroundColor:
+                                            "var(--primaryDashColorDark)",
+                                          color: "var(--primaryDashMenuColor)"
+                                        }}
+                                      >
+                                        Break
+                                      </th>
+                                      <th
+                                        style={{
+                                          whiteSpace: "pre",
+                                          backgroundColor:
+                                            "var(--primaryDashColorDark)",
+                                          color: "var(--primaryDashMenuColor)"
+                                        }}
+                                      >
+                                        Resume
+                                      </th>
+                                      <th
+                                        style={{
+                                          whiteSpace: "pre",
+                                          backgroundColor:
+                                            "var(--primaryDashColorDark)",
+                                          color: "var(--primaryDashMenuColor)"
+                                        }}
+                                      >
+                                        Total Break
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {date.breakTime.map((breakTime, index) => (
+                                      <tr className="shadow-sm" key={index}>
+                                        <td
+                                          className="text-uppercase text-center"
                                           style={{ whiteSpace: "pre" }}
                                         >
-                                          Total Break
-                                        </th>
+                                          {breakTime}
+                                        </td>
+                                        <td
+                                          className="text-uppercase text-center"
+                                          style={{ whiteSpace: "pre" }}
+                                        >
+                                          {date.ResumeTime[index]}
+                                        </td>
+                                        <td
+                                          className="text-end"
+                                          style={{ whiteSpace: "pre" }}
+                                        >
+                                          {millisecondsToTime(
+                                            date.BreakData[index]
+                                          )}
+                                        </td>
                                       </tr>
-                                    </thead>
-                                    <tbody>
-                                      {date.breakTime.map(
-                                        (breakTime, index) => (
-                                          <tr className="shadow-sm" key={index}>
-                                            <td
-                                              className="text-uppercase  py-1 text-center"
-                                              style={{ whiteSpace: "pre" }}
-                                            >
-                                              {breakTime}
-                                            </td>
-                                            <td
-                                              className="text-uppercase  py-1 text-center"
-                                              style={{ whiteSpace: "pre" }}
-                                            >
-                                              {date.ResumeTime[index]}
-                                            </td>
-                                            <td
-                                              className="text-end py-1 "
-                                              style={{ whiteSpace: "pre" }}
-                                            >
-                                              {millisecondsToTime(
-                                                date.BreakData[index]
-                                              )}
-                                            </td>
-                                          </tr>
-                                        )
-                                      )}
-                                    </tbody>
-                                  </table>
-                                )}
+                                    ))}
+                                  </tbody>
+                                </table>
+                              )}
                             </div>
                           </td>
-                          <td>{millisecondsToTime(date.totalLogAfterBreak)}</td>
-                          <td>{date.status}</td>
+                          <td>{getLogStatus(date.status)}</td>
                         </tr>
                       ))
                   )
@@ -443,7 +568,7 @@ const AttendanceDetails = () => {
           }}
         >
           <div className="fs-2 fw-bolder">
-            <TfiReload className="spinner-border text-info" />
+            <span className="spinner-border text-info" />
           </div>
           <p className="text-muted">
             User not selected. To view data, please select a user.
@@ -455,4 +580,3 @@ const AttendanceDetails = () => {
 };
 
 export default AttendanceDetails;
-

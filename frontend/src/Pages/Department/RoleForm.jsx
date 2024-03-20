@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import "./RoleForm.css";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
-import "./RoleForm.css";
 
 class RoleForm extends Component {
   state = {

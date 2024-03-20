@@ -7,7 +7,7 @@ import Department from "../../Pages/Department/Department.jsx";
 import AdminPortal from "../Admin/AdminPortal.jsx";
 import AdminProjectBid from "../Admin/AdminProjectBid.jsx";
 import Salary from "../../Pages/Salary/Salary.jsx";
-import LeaveApplicationHR from "../../Component/HrManager/LeaveApplicationHR.jsx";
+import LeaveApplicationHR from "../../Component/HrManager/LeaveStatus/LeaveApplicationHR.jsx";
 import AdminEmployeeTable from "../../Pages/AddEmployee/EmployeeTable.jsx";
 import NotFound404 from "../../Pages/PageNot/NotFound404.jsx";
 // ********************task management***************//
@@ -30,7 +30,7 @@ import LeaveApplicationHRAccept from "../HrManager/LeaveStatus/LeaveApplicationH
 import LeaveApplicationHRReject from "../HrManager/LeaveStatus/LeaveApplicationHRReject.jsx";
 import Notification from "./Notification/Notification.jsx";
 import InnerDashContainer from "../InnerDashContainer.jsx";
-import NoticeManagement from "./Notification/NoticeManagement.jsx"
+import NoticeManagement from "./Notification/NoticeManagement.jsx";
 const AdminRoutes = () => {
   return (
     <InnerDashContainer>
@@ -91,11 +91,7 @@ const AdminRoutes = () => {
             exact
             component={LeaveApplicationHRReject}
           />
-            <Route
-            path="/admin/notification"
-            exact
-            component={Notification}
-          />
+          <Route path="/admin/notification" exact component={Notification} />
           {/*END LEAVE ROUTES */}
           <Route component={NotFound404} />
           {/* ********task******* */}

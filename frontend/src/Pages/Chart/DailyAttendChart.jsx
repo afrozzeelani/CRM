@@ -149,35 +149,57 @@ const DailyAttendChart = () => {
   };
 
   return (
-    <div>
-      <div className="ChartCard shadow-sm ">
-        <div className="ChartHeader">
-          <div className="d-flex justify-content-between ">
-            <h4 className="fw-bolder my-auto text-white ">
-              Today's Attendance
-            </h4>
-            <span className="p-0 fw-bolder fs-6 text-muted d-flex flex-column ">
-              <span className="m-0 p-0 fs-6 text-center bg-white shadow-sm rounded-5 px-2">
-                {" "}
-                <span className="fw-bold">{dd}</span>-
-                <span className="fw-bold">{mm}</span>-
-                <span className="fw-bold">{yyyy}</span>
-              </span>
-              {/* <span className="text-uppercase m-0 p-0 text-primary fs-4 text-center">
-                {status(dayCurrent)}
-              </span> */}
-            </span>
-          </div>
-        </div>
-        <Chart
-          options={chartOption.options}
-          series={chartOption.series}
-          type="donut"
-          width="100%"
-          height="300px"
-        />
+    <div style={{ height: "fit-content" }} className="ChartCard p-2">
+      <div className="ChartHeader">
+        <h6
+          style={{
+            width: "fit-content",
+            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
+            color: "var(--primaryDashColorDark)"
+          }}
+          className="fw-bolder d-flex px-3 rounded-5 py-1"
+        >
+          Today's Attendance
+        </h6>
       </div>
+      <Chart
+        options={chartOption.options}
+        series={chartOption.series}
+        type="donut"
+        width="100%"
+        height="300px"
+      />
     </div>
+
+    // <div>
+    //   <div className="ChartCard shadow-sm ">
+    //     <div className="ChartHeader">
+    //       <div className="d-flex justify-content-between ">
+    //         <h4 className="fw-bolder my-auto text-white ">
+    //           Today's Attendance
+    //         </h4>
+    //         <span className="p-0 fw-bolder fs-6 text-muted d-flex flex-column ">
+    //           <span className="m-0 p-0 fs-6 text-center bg-white shadow-sm rounded-5 px-2">
+    //             {" "}
+    //             <span className="fw-bold">{dd}</span>-
+    //             <span className="fw-bold">{mm}</span>-
+    //             <span className="fw-bold">{yyyy}</span>
+    //           </span>
+    //           {/* <span className="text-uppercase m-0 p-0 text-primary fs-4 text-center">
+    //             {status(dayCurrent)}
+    //           </span> */}
+    //         </span>
+    //       </div>
+    //     </div>
+    //     <Chart
+    //       options={chartOption.options}
+    //       series={chartOption.series}
+    //       type="donut"
+    //       width="100%"
+    //       height="300px"
+    //     />
+    //   </div>
+    // </div>
   );
 };
 

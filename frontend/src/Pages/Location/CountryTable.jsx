@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./CountryTable.css";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
@@ -143,7 +143,7 @@ class CountryTable extends Component {
   render() {
     // let value=(this.props.pass) ? undefined : "";<i class="fas fa-plus"></i>
     return (
-      <div id="table-outer-div-scroll">
+      <div className="container-fluid mb-5">
         <h2 id="role-title">Country Details</h2>
         {/* <Link to="/admin/role/form"> */}
         {/* <button id="add-button" >
@@ -187,9 +187,8 @@ class CountryTable extends Component {
               <tr>
                 <th
                   style={{
-                    background:
-                      "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
                   }}
                   className="py-1"
                 >

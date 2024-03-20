@@ -51,8 +51,6 @@ const LeaveApplicationEmpTable = (props) => {
         );
 
         setRowData(newRowsData);
-
-        props.updateTotalLeaves(newRowsData.length);
       })
       .catch((error) => {
         console.log(error);
@@ -104,42 +102,66 @@ const LeaveApplicationEmpTable = (props) => {
     loadLeaveApplicationEmpData();
   }, []);
 
-  // const getTotalLeaveCount = () => {
-  //   // Check if leaveApplicationEmpData is defined before accessing its properties
-  //   return leaveApplicationEmpData && leaveApplicationEmpData.leaveApplication
-  //     ? leaveApplicationEmpData.leaveApplication.length
-  //     : 0;
-  // };
-  // // In LeaveApplicationEmpTable component
-  // useEffect(() => {
-  //   if (typeof props.updateTotalEmployeeLeave !== "function") {
-  //     console.error("updateTotalEmployeeLeave is not a function");
-  //   }
-  // }, [props.updateTotalEmployeeLeave]);
-
   return (
-    <InnerDashContainer>
-      <h2 id="role-title"> Leave Application</h2>
-      <Button
-        variant="primary"
-        id="add-button"
-        onClick={props.onAddLeaveApplicationEmp}
-      >
-        <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-        Apply Leave
-      </Button>
+    <div className="container-fluid">
+      <div className="d-flex justify-content-between py-2">
+        <h4 className="fw-bold my-auto"> Leave Application</h4>
+        <Button
+          variant="primary"
+          id="add-button"
+          onClick={props.onAddLeaveApplicationEmp}
+        >
+          <FontAwesomeIcon icon={faPlus} id="plus-icon" />
+          Apply Leave
+        </Button>
+      </div>
 
       <div id="clear-both" />
       {!loading ? (
         <div>
-          <Table className="table table-bordered">
+          <Table className="table">
             <thead>
               <tr>
-                <th className="bg-success text-white">Leave Type</th>
-                <th className="bg-success text-white">Start Date</th>
-                <th className="bg-success text-white">End Date</th>
-                <th className="bg-success text-white">Remarks</th>
-                <th className="bg-success text-white">Status</th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
+                  }}
+                >
+                  Leave Type
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
+                  }}
+                >
+                  Start Date
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
+                  }}
+                >
+                  End Date
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
+                  }}
+                >
+                  Remarks
+                </th>
+                <th
+                  style={{
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
+                  }}
+                >
+                  Status
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -166,7 +188,7 @@ const LeaveApplicationEmpTable = (props) => {
           />
         </div>
       )}
-    </InnerDashContainer>
+    </div>
   );
 };
 

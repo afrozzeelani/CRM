@@ -254,7 +254,6 @@ const App = () => {
 
         // Get the current time in milliseconds
         const currentTimeMs = currentDate.getTime();
-
         await axios.post(
           `http://localhost:4000/api/attendance/${attencenceID}`,
           {

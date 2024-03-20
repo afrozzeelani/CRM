@@ -1,11 +1,11 @@
 import React, { Component } from "react";
+import "./RoleTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
-import "./RoleTable.css";
 
 const override = css`
   display: block;
@@ -24,7 +24,7 @@ class RoleTable extends Component {
 
     getRowHeight: function (params) {
       return 35;
-    }
+    },
   };
   roleObj = [];
   rowDataT = [];
@@ -33,8 +33,8 @@ class RoleTable extends Component {
     axios
       .get("http://localhost:4000/api/role", {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         this.roleObj = response.data;
@@ -48,7 +48,7 @@ class RoleTable extends Component {
           let temp = {
             data,
             CompanyName: data["company"][0]["CompanyName"],
-            RoleName: data["RoleName"]
+            RoleName: data["RoleName"],
           };
 
           this.rowDataT.push(temp);
@@ -67,8 +67,8 @@ class RoleTable extends Component {
       axios
         .delete("http://localhost:4000/api/role/" + e, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           this.componentDidMount();
@@ -114,30 +114,26 @@ class RoleTable extends Component {
         <div className="d-flex justify-between aline-items-start mb-3">
           <div className=" my-auto">
             <h3 className="fw-bold text-muted">Role Details</h3>
-            <p>
-              You can create new role and view all role of the companies here !
-            </p>
           </div>
 
           <Button
             variant="primary"
-            className="my-auto"
-            id="add-button"
+            className="my-auto shadow-sm"
             onClick={this.props.onAddRole}
           >
             <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-            Add new role
+            Create Role
           </Button>
         </div>
         <div id="clear-both" />
         {!this.state.loading ? (
-          <table className="table table-striped">
+          <table className="table">
             <thead>
               <tr>
                 <th
                   style={{
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
                   }}
                   className="py-1"
                 >
@@ -145,8 +141,8 @@ class RoleTable extends Component {
                 </th>
                 <th
                   style={{
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
                   }}
                   className="py-1"
                 >
@@ -154,9 +150,9 @@ class RoleTable extends Component {
                 </th>
                 <th
                   style={{
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
-                    textAlign: "center"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
+                    textAlign: "center",
                   }}
                   className="py-1"
                 >
@@ -170,31 +166,34 @@ class RoleTable extends Component {
                 {this.roleObj.map((data, index) => (
                   <tbody key={index}>
                     <tr>
-                      <td>{data["company"][0]["CompanyName"]}</td>
-                      <td>{data["RoleName"]}</td>
+                      <td className="fw-bold text-capitalize">{data["company"][0]["CompanyName"]}</td>
+                      <td className="fw-bold text-capitalize">{data["RoleName"]}</td>
 
-                      <td className="roleAction">
-                        <div className="d-flex gap-5">
+                      <td >
+                        <div className="d-flex wrap-nowrap justify-content-end gap-3">
                           <span
-                            title="Update"
-                            className="m-auto text-primary"
+                            onClick={() => this.props.onEditRole(data)}
                             style={{ cursor: "pointer" }}
+                            title="Update"
+                            className="text-primary d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                           >
                             <FontAwesomeIcon
                               icon={faEdit}
-                              onClick={() => this.props.onEditRole(data)}
-                            />
-                          </span>
 
+                            />
+                            <span>Edit</span>
+                          </span>
                           <span
-                            title="Delete"
-                            className="m-auto text-danger"
+                            onClick={() => this.onRoleDelete(data["_id"])}
                             style={{ cursor: "pointer" }}
+                            title="Delete"
+                            className="text-danger d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                           >
                             <FontAwesomeIcon
                               icon={faTrash}
-                              onClick={() => this.onRoleDelete(data["_id"])}
+
                             />
+                            <span>Delete</span>
                           </span>
                         </div>
                       </td>

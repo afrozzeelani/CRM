@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./CityForm.css";
+import axios from "axios";
+
 import { Form, Button, Col, Row } from "react-bootstrap";
 
 class CityForm extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./PositionTable.css";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
@@ -13,7 +13,7 @@ import {
   Row,
   Table,
   Dropdown,
-  DropdownButton
+  DropdownButton,
 } from "react-bootstrap";
 
 import { AgGridReact } from "ag-grid-react";
@@ -36,7 +36,7 @@ class PositionTable extends Component {
 
     getRowHeight: function (params) {
       return 35;
-    }
+    },
   };
   positionObj = [];
   rowDataT = [];
@@ -45,8 +45,8 @@ class PositionTable extends Component {
     axios
       .get("http://localhost:4000/api/position", {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         this.positionObj = response.data;
@@ -59,7 +59,7 @@ class PositionTable extends Component {
           let temp = {
             data,
             CompanyName: data["company"][0]["CompanyName"],
-            PositionName: data["PositionName"]
+            PositionName: data["PositionName"],
           };
 
           this.rowDataT.push(temp);
@@ -78,8 +78,8 @@ class PositionTable extends Component {
       axios
         .delete("http://localhost:4000/api/position/" + e, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           this.componentDidMount();
@@ -124,84 +124,48 @@ class PositionTable extends Component {
         <div className="d-flex justify-between mb-3">
           <div>
             <h2 className="fw-bold text-muted my-auto">Position Details</h2>
-            <p className="text-muted">
-              You can create new position and also view all existing position of
-              the company here !
-            </p>
           </div>
           <Button
-            className="my-auto"
+            className="my-auto shadow-sm"
             variant="primary"
-            id="add-button"
             onClick={this.props.onAddPosition}
           >
             <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-            Add new position
+            Create Position
           </Button>
         </div>
         <div id="clear-both" />
-        {/* {!this.state.loading ? (
-          <div
-            id="table-div"
-            className="ag-theme-balham"
-          //   style={
-          //     {
-          //     height: "500px",
-          //     width: "100%"
-          //   }
-          // }
-          >
-            <AgGridReact
-              columnDefs={this.state.columnDefs}
-              defaultColDef={this.state.defaultColDef}
-              columnTypes={this.state.columnTypes}
-              rowData={this.state.rowData}
-              // floatingFilter={true}
-              // onGridReady={this.onGridReady}
-              pagination={true}
-              paginationPageSize={10}
-              getRowHeight={this.state.getRowHeight}
-            />
-          </div>
-        ) : (
-            <div id="loading-bar">
-              <RingLoader
-                css={override}
-                sizeUnit={"px"}
-                size={50}
-                color={"#0000ff"}
-                loading={true}
-              />
-            </div>
-          )} */}
-        <Table className="table table-striped">
+        <Table className="table">
           <thead>
             <tr>
               <th
                 style={{
-                  background: "linear-gradient(#1D267D, #2F58CD)",
-                  color: "white"
+                  background: "var(--primaryDashColorDark)",
+                  color: "var(--primaryDashMenuColor)",
                 }}
-                className="p"
+                className="py-1"
+
               >
                 Company
               </th>
               <th
                 style={{
-                  background: "linear-gradient(#1D267D, #2F58CD)",
-                  color: "white"
+                  background: "var(--primaryDashColorDark)",
+                  color: "var(--primaryDashMenuColor)",
                 }}
-                className="p"
+                className="py-1"
+
               >
                 Position
               </th>
               <th
                 style={{
-                  background: "linear-gradient(#1D267D, #2F58CD)",
-                  color: "white ",
-                  textAlign: "center"
+                  background: "var(--primaryDashColorDark)",
+                  color: "var(--primaryDashMenuColor)",
+                  textAlign: "center",
                 }}
-                className="p"
+                className="py-1"
+
               >
                 {" "}
                 Action
@@ -211,31 +175,34 @@ class PositionTable extends Component {
           <tbody>
             {this.positionObj.map((data, index) => (
               <tr key={index}>
-                <td>{data["company"][0]["CompanyName"]}</td>
-                <td>{data["PositionName"]}</td>
+                <td className="text-capitalize fw-bold">{data["company"][0]["CompanyName"]}</td>
+                <td className="text-capitalize fw-bold">{data["PositionName"]}</td>
 
-                <td>
-                  <div className="d-flex gap-5">
+                <td >
+                  <div className="d-flex wrap-nowrap justify-content-end gap-3">
                     <span
-                      title="Update"
-                      className="m-auto text-primary"
+                      onClick={() => this.props.onEditPosition(data)}
                       style={{ cursor: "pointer" }}
+                      title="Update"
+                      className="text-primary d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                     >
                       <FontAwesomeIcon
                         icon={faEdit}
-                        onClick={() => this.props.onEditPosition(data)}
-                      />
-                    </span>
 
+                      />
+                      <span>Edit</span>
+                    </span>
                     <span
-                      title="Delete"
-                      className="m-auto text-danger"
+                      onClick={() => this.onPositionDelete(data["_id"])}
                       style={{ cursor: "pointer" }}
+                      title="Delete"
+                      className="text-danger d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                     >
                       <FontAwesomeIcon
                         icon={faTrash}
-                        onClick={() => this.onPositionDelete(data["_id"])}
+
                       />
+                      <span>Delete</span>
                     </span>
                   </div>
                 </td>

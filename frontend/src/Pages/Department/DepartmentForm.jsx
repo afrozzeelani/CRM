@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import "./DepartmentForm.css";
 // import { Form,Button } from "react-bootstrap";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
-import "./DepartmentForm.css";
 
 class DepartmentForm extends Component {
   state = {

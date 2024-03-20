@@ -1,9 +1,9 @@
 .AdminDashBG {
-  background: url(../../img/texturetech.png);
   background-repeat: no-repeat;
   background-position: right bottom;
   background-size: 800px;
 }
+
 .DashboardCard {
   background: url(../../img/pattern.png);
   background-position: center;

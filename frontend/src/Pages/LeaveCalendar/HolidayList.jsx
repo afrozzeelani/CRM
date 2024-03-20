@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { GiIndianPalace, GiPartyPopper } from "react-icons/gi"; // Importing necessary icons
 import { PiBankBold } from "react-icons/pi";
+import { FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
 
 function HolidayList() {
   const [holidaysData, setHolidaysData] = useState([]);
+  const [filteredHolidays, setFilteredHolidays] = useState([]);
   const [isListVisible, setListVisibility] = useState(true);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const toggleListVisibility = () => {
     setListVisibility(!isListVisible);
   };
@@ -19,6 +21,7 @@ function HolidayList() {
         if (response.status === 200) {
           const data = response.data;
           setHolidaysData(data);
+          setFilteredHolidays(data);
         } else {
           console.error("Failed to fetch holiday data:", response.statusText);
         }
@@ -29,6 +32,22 @@ function HolidayList() {
 
     fetchHolidays();
   }, []);
+
+  useEffect(() => {
+    filterHolidays();
+  }, [searchTerm]);
+
+  const filterHolidays = () => {
+    let filtered = [...holidaysData];
+
+    // Filter by search term
+    if (searchTerm) {
+      filtered = filtered.filter((holiday) =>
+        holiday.holidayName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    setFilteredHolidays(filtered);
+  };
 
   const getHolidayIcons = (holidayType) => {
     switch (holidayType) {
@@ -105,36 +124,42 @@ function HolidayList() {
 
   return (
     <div className="container">
-      <div className="birthday shadow position-relative">
-        <div>
-          <h5
-            style={{
-              position: "sticky",
-              top: "0",
-              zIndex: "5",
-              backgroundColor: "var(--primaryDashColorDark)",
-              color: "var(--primaryDashMenuColor)"
-            }}
-            className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center"
-          >
-            Holiday List
-          </h5>
-          <div>
-            {holidaysData.map((holiday, index) => (
-              <div className="row p-2" key={index}>
-                <span className="col-3 border-0 text-center">
-                  {getHolidayIcons(holiday.holidayType)}
-                </span>
-                <span className="col-5 border-0 fw-bold text-muted">
-                  {holiday.holidayName}
-                </span>
-                <span
-                  style={{ whiteSpace: "pre" }}
-                  className="col-3 border-0 fw-bold text-primary"
-                >{`${holiday.holidayDate}-${holiday.holidayMonth}-${holiday.holidayYear}`}</span>
-              </div>
-            ))}
+      <div style={{ overflow: "hidden" }} className="shadow p-0 rounded-4 ">
+        <h5
+          style={{
+            backgroundColor: "var(--primaryDashColorDark)",
+            color: "var(--primaryDashMenuColor)"
+          }}
+          className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center"
+        >
+          Holiday List
+        </h5>
+        <div className="row mx-auto shadow-sm pb-1">
+          <div className="col-12">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search holiday..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
+        </div>
+        <div style={{ height: "20rem", overflow: "auto" }}>
+          {filteredHolidays.map((holiday, index) => (
+            <div className="row p-2 mx-auto" key={index}>
+              <span className="col-3 border-0 text-center">
+                {getHolidayIcons(holiday.holidayType)}
+              </span>
+              <span className="col-5 border-0 fw-bold text-muted">
+                {holiday.holidayName}
+              </span>
+              <span
+                style={{ whiteSpace: "pre" }}
+                className="col-3 border-0 fw-bold text-primary"
+              >{`${holiday.holidayDate}-${holiday.holidayMonth}-${holiday.holidayYear}`}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

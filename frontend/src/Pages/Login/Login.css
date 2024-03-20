@@ -1,3 +1,11 @@
+body {
+  background-color: #2b447b;
+}
+
+#root {
+  height: auto;
+}
+
 #main-outer-div {
   position: relative;
   background-color: #fff;
@@ -97,4 +105,22 @@
   background-color: rgba(255, 255, 255, 0.568);
   box-shadow: -3px 3px 5px rgba(202, 201, 201, 0.804);
   border-radius: 10px;
+}
+
+@keyframes beat {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.heart {
+  animation: beat 0.7s infinite;
 }

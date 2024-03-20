@@ -24,7 +24,7 @@ import ManagerActiveTask from "./ManagerTaskManagement/ManagerActiveTask.jsx";
 import Attendance from "./attendance/Attendance.jsx";
 import InnerDashContainer from "../InnerDashContainer.jsx";
 import LeaveCalendar from "../../Pages/LeaveCalendar/LeaveCalendar.jsx";
-import TodaysAttendance from "../HrManager/attendance/TodaysAttendance.jsx";
+import TodaysAttendance from "../../Pages/DailyAttendance/TodaysAttendance.jsx";
 import Employee from "../../Pages/AddEmployee/Employee.jsx";
 import LeaveApplication from "../../Pages/ApplyLeave/LeaveApplication.jsx";
 import LeaveApplicationHRAccept from "../HrManager/LeaveStatus/LeaveApplicationHRAccept.jsx";

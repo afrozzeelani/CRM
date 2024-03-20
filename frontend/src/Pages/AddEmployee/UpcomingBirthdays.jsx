@@ -94,7 +94,7 @@ const UpcomingBirthdays = () => {
   }, [rowData]);
 
   return (
-    <div className="container">
+    <div className="div">
       <div className="birthday shadow position-relative">
         <h5
           style={{

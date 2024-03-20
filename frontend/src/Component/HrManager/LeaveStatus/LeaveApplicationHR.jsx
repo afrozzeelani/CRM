@@ -1,16 +1,14 @@
-import React, { useState,useContext } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import LeaveApplicationHRTable from "./LeaveApplicationHRTable.jsx";
 import LeaveApplicationHRFormEdit from "./LeaveApplicationHRFormEdit.jsx";
 import "./LeaveApplicationHR.css";
-import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceContext.js";
-import {v4 as uuid} from "uuid";
+
 const LeaveApplicationHR = (props) => {
   const [table, setTable] = useState(true);
   const [editForm, setEditForm] = useState(false);
   const [editData, setEditData] = useState({});
-  const {socket} = useContext(AttendanceContext);
-  const email = localStorage.getItem("Email");
+
   const handleLeaveApplicationHRSubmit = (event) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
@@ -86,23 +84,6 @@ const LeaveApplicationHR = (props) => {
       .then((res) => {
         setTable(false);
         setTable(true);
-        const taskId = uuid();
-        let leaveStatus = "";
-        if(body.Status==="2"){
-          leaveStatus = "Approved"
-        }else if(body.Status==="3"){
-          leaveStatus = "Rejected"
-        }
-        const data = {
-          taskId,
-          employeeEmail:info.employee[0].Email,
-          managerEmail:info.managerEmail,
-          message: `${info.employee[0].Email} Leave request ${leaveStatus} by ${email}`,
-          status: "unseen",
-          path: "leaveApplication"
-        }
-        console.log(data)
-        socket.emit("leaveHrStatusNotification", data);
       })
       .catch((err) => {
         console.log(err);

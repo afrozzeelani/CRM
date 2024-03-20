@@ -5,11 +5,22 @@ import axios from "axios";
 
 const DepartmentChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [chartOption, setChartOption] = useState({
     options: {
       labels: [],
+      legend: {
+        position: "bottom"
+      },
+      fill: {
+        colors: [
+          "#008DDA",
+          "#4CCD99",
+          "#FFC700",
+          "#FF407D",
+          "#9F70FD",
+          "#FE7A36"
+        ]
+      },
       plotOptions: {
         pie: {
           donut: {
@@ -65,15 +76,62 @@ const DepartmentChart = () => {
     setChartOption({
       options: {
         labels: labels,
+        fill: {
+          colors: [
+            "#008DDA",
+            "#4CCD99",
+            "#FFC700",
+            "#FF407D",
+            "#9F70FD",
+            "#FE7A36"
+          ]
+        },
+        legend: {
+          position: "bottom",
+          labels: {
+            colors: [
+              "#008DDA",
+              "#4CCD99",
+              "#FFC700",
+              "#FF407D",
+              "#9F70FD",
+              "#FE7A36"
+            ]
+          }
+        },
         plotOptions: {
           pie: {
             donut: {
               labels: {
+                colors: [
+                  "#008DDA",
+                  "#4CCD99",
+                  "#FFC700",
+                  "#FF407D",
+                  "#9F70FD",
+                  "#FE7A36"
+                ],
                 show: true,
                 total: {
-                  show: true
+                  show: true,
+                  colors: [
+                    "#008DDA",
+                    "#4CCD99",
+                    "#FFC700",
+                    "#FF407D",
+                    "#9F70FD",
+                    "#FE7A36"
+                  ]
                 }
-              }
+              },
+              colors: [
+                "#008DDA",
+                "#4CCD99",
+                "#FFC700",
+                "#FF407D",
+                "#9F70FD",
+                "#FE7A36"
+              ]
             }
           }
         }
@@ -88,16 +146,25 @@ const DepartmentChart = () => {
 
   return (
     <>
-      <div className="ChartCard shadow-sm ">
+      <div style={{ height: "fit-content" }} className="ChartCard p-2">
         <div className="ChartHeader">
-          <h5 className="fw-bolder d-flex gap-3">Employee By Department</h5>
+          <h6
+            style={{
+              width: "fit-content",
+              boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
+              color: "var(--primaryDashColorDark)"
+            }}
+            className="fw-bolder d-flex px-3 rounded-5 py-1"
+          >
+            Employee By Department
+          </h6>
         </div>
         <Chart
           options={chartOption.options}
           series={chartOption.series}
           type="donut"
           width="100%"
-          height="300px"
+          height="380"
         />
       </div>
     </>

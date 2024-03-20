@@ -1,25 +1,14 @@
 import React, { useState, useEffect } from "react";
-// import "./LeaveApplicationHRTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import {
-  Form,
-  Button,
-  Col,
-  Row,
-  Table,
-  Dropdown,
-  DropdownButton
-} from "react-bootstrap";
-
-// *************csv & pdf **************//
+import { Dropdown, DropdownButton } from "react-bootstrap";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
-// *************csv & pdf **************//
+import { LuSearch } from "react-icons/lu";
 
 const override = css`
   display: block;
@@ -31,16 +20,11 @@ const override = css`
 const LeaveApplicationHRTable = (props) => {
   const [leaveApplicationHRData, setLeaveApplicationHRData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchData, setSearchData] = useState("");
-  const [totalLeaves, setTotalLeaves] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [rowData, setRowData] = useState([]);
-
-  // ...
-
-  let leaveApplicationHRObj = [];
-  let rowDataT = [];
+  const [filteredData, setFilteredData] = useState([]);
 
   const loadLeaveApplicationHRData = () => {
     axios
@@ -50,51 +34,52 @@ const LeaveApplicationHRTable = (props) => {
         }
       })
       .then((response) => {
-        leaveApplicationHRObj = response.data;
-        console.log("response", response.data);
-        setLeaveApplicationHRData(response.data);
+        const leaveApplicationHRObj = response.data;
+        setLeaveApplicationHRData(leaveApplicationHRObj);
         setLoading(false);
 
-        rowDataT = [];
-
-        leaveApplicationHRObj.map((data) => {
-          let temp = {
+        const rowDataT = leaveApplicationHRObj.map((data) => {
+          return {
             data,
-            empID:
-              data["employee"] &&
-              data["employee"][0] &&
-              data["employee"][0]["empID"],
+            empID: data?.employee?.[0]?.empID,
             Name:
-              data["employee"] &&
-              data["employee"][0] &&
-              data["employee"][0]["FirstName"] +
-                " " +
-                data["employee"][0]["LastName"],
-            Leavetype: data["Leavetype"],
-            FromDate: data["FromDate"].slice(0, 10),
-            ToDate: data["ToDate"].slice(0, 10),
-            Reasonforleave: data["Reasonforleave"],
-            Status: status(data["Status"])
+              data?.employee?.[0]?.FirstName +
+              " " +
+              data?.employee?.[0]?.LastName,
+            Leavetype: data?.Leavetype,
+            FromDate: data?.FromDate?.slice(0, 10),
+            ToDate: data?.ToDate?.slice(0, 10),
+            Reasonforleave: data?.Reasonforleave,
+            Status: status(data?.Status)
           };
-
-          rowDataT.push(temp);
         });
 
         setRowData(rowDataT);
-
-        setTotalLeaves(response.data.length);
-        props.updateTotalLeaves(response.data.length);
+        setFilteredData(rowDataT);
+        props.updateTotalLeaves(leaveApplicationHRObj.length);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  // ...
+  useEffect(() => {
+    loadLeaveApplicationHRData();
+  }, []);
+
+  useEffect(() => {
+    filterData();
+  }, [searchQuery]);
+
+  const filterData = () => {
+    const filtered = rowData.filter((item) => {
+      return item.Name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+    setFilteredData(filtered);
+  };
 
   const onLeaveApplicationHRDelete = (e1, e2) => {
-    console.log(e1, e2);
-    if (window.confirm("Are you sure to delete this record? ") == true) {
+    if (window.confirm("Are you sure to delete this record? ")) {
       axios
         .delete(
           "http://localhost:4000/api/leave-application-hr/" + e1 + "/" + e2,
@@ -114,74 +99,44 @@ const LeaveApplicationHRTable = (props) => {
   };
 
   const exportToPDF = () => {
-    window.confirm("Are you sure to download Leave record? ");
-    const { rowData } = this.state;
-    // Set A4 landscape dimensions
-    const pdfWidth = 297; // A4 width in mm
-    const pdfHeight = 210; // A4 height in mm
-    const doc = new jsPDF({
-      orientation: "landscape",
-      unit: "mm",
-      format: [pdfWidth, pdfHeight]
-    });
+    if (window.confirm("Are you sure to download Leave record? ")) {
+      const pdfWidth = 297; // A4 width in mm
+      const pdfHeight = 210; // A4 height in mm
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: [pdfWidth, pdfHeight]
+      });
 
-    doc.setFontSize(18);
-    doc.text("Employee Leave Details", pdfWidth / 2, 15, "center");
-    const headers = [
-      "Emp Id",
-      "Leave Type",
-      "Start Date",
-      "End Date",
-      "Remarks",
-      "Status"
-    ];
-    const data = rowData.map((row) => [
-      row.empID,
-      row.Leavetype,
-      row.FromDate,
-      row.ToDate,
-      row.Reasonforleave,
-      row.Status,
+      doc.setFontSize(18);
+      doc.text("Employee Leave Details", pdfWidth / 2, 15, "center");
+      const headers = [
+        "Emp Id",
+        "Leave Type",
+        "Start Date",
+        "End Date",
+        "Remarks",
+        "Status"
+      ];
+      const data = filteredData.map((row) => [
+        row.empID,
+        row.Leavetype,
+        row.FromDate,
+        row.ToDate,
+        row.Reasonforleave,
+        row.Status,
 
-      "" // Action column - you can customize this based on your requirements
-    ]);
-    doc.setFontSize(12);
-    doc.autoTable({
-      head: [headers],
-      body: data,
-      startY: 25
-    });
+        "" // Action column - you can customize this based on your requirements
+      ]);
+      doc.setFontSize(12);
+      doc.autoTable({
+        head: [headers],
+        body: data,
+        startY: 25
+      });
 
-    doc.save("leaveApplication_data.pdf");
-  };
-
-  useEffect(() => {
-    loadLeaveApplicationHRData();
-  }, []);
-
-  const renderButton = (params) => {
-    console.log(params);
-    return (
-      <FontAwesomeIcon
-        icon={faTrash}
-        onClick={() =>
-          onLeaveApplicationHRDelete(
-            params.data.data["employee"][0]["_id"],
-            params.data.data["_id"]
-          )
-        }
-      />
-    );
-  };
-
-  const renderEditButton = (params) => {
-    console.log(params);
-    return (
-      <FontAwesomeIcon
-        icon={faEdit}
-        onClick={() => props.onEditLeaveApplicationHR(params.data.data)}
-      />
-    );
+      doc.save("leaveApplication_data.pdf");
+    }
   };
 
   const status = (s) => {
@@ -204,14 +159,13 @@ const LeaveApplicationHRTable = (props) => {
   };
 
   const sortData = (columnName) => {
-    const { rowData, sortColumn, sortDirection } = this.state;
     let newSortDirection = "asc";
 
     if (sortColumn === columnName && sortDirection === "asc") {
       newSortDirection = "desc";
     }
 
-    const sortedData = [...rowData];
+    const sortedData = [...filteredData];
 
     sortedData.sort((a, b) => {
       const valueA = a[columnName];
@@ -228,28 +182,50 @@ const LeaveApplicationHRTable = (props) => {
       return sortDirection === "desc" ? comparison * -1 : comparison;
     });
 
-    setRowData(sortedData);
+    setFilteredData(sortedData);
     setSortColumn(columnName);
     setSortDirection(newSortDirection);
   };
-  const rejectedLeaves = rowData.filter(
+
+  const approvedLeaves = filteredData.filter(
     (data) => data.Status === "Rejected"
   ).length;
 
   return (
-    <div className="p-4">
-      <div className="d-flex justify-between">
-        <h3 className="fw-bold text-muted">
-          Rejected Leaves ({rejectedLeaves})
-        </h3>
-
-        <button
-          className="btn px-3 d-flex justify-center  aline-center gap-2"
-          onClick={exportToPDF}
-        >
-          <BsFillFileEarmarkPdfFill className="text-danger fs-4" />
-          <p className="my-auto fs-5 fw-bold">PDF</p>
-        </button>
+    <div className="container-fluid">
+      <div className="d-flex flex-column justify-between">
+        <div className="d-flex justify-content-between aline-items-center">
+          <h4 className="fw-bold  my-auto text-muted">
+            Approved Leaves{" "}
+            <span className="text-danger">({approvedLeaves})</span>
+          </h4>
+          <div className="d-flex gap-2 justify-content-between py-3">
+            <button
+              className="btn px-3 shadow-sm d-flex justify-center  aline-center gap-2"
+              onClick={exportToPDF}
+            >
+              <BsFillFileEarmarkPdfFill className="text-danger fs-6" />
+              <p className="my-auto fs-6 fw-bold">PDF</p>
+            </button>
+            <div className="searchholder p-0 d-flex  position-relative">
+              <input
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  paddingLeft: "15%"
+                }}
+                className="form-control border border-primary border-2"
+                type="text"
+                placeholder="Search by name"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <LuSearch
+                style={{ position: "absolute", top: "30%", left: "5%" }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="clear-both" />
@@ -263,14 +239,14 @@ const LeaveApplicationHRTable = (props) => {
             scrollbarWidth: "thin"
           }}
         >
-          <table className="table table-striped">
+          <table className="table">
             <thead>
               <tr>
                 <th
                   style={{
                     cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   onClick={() => sortData("empID")}
                 >
@@ -279,29 +255,18 @@ const LeaveApplicationHRTable = (props) => {
                 <th
                   style={{
                     cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
-                  }}
-                  onClick={() => sortData("Name")}
-                >
-                  Emp Name {renderSortIcon("Name")}
-                </th>
-                <th
-                  style={{
-                    cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   onClick={() => sortData("Leavetype")}
                 >
                   Leave Type {renderSortIcon("Leavetype")}
                 </th>
                 <th
-                  s
                   style={{
                     cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   onClick={() => sortData("FromDate")}
                 >
@@ -310,8 +275,8 @@ const LeaveApplicationHRTable = (props) => {
                 <th
                   style={{
                     cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   onClick={() => sortData("ToDate")}
                 >
@@ -320,8 +285,8 @@ const LeaveApplicationHRTable = (props) => {
                 <th
                   style={{
                     cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   onClick={() => sortData("Status")}
                 >
@@ -330,8 +295,8 @@ const LeaveApplicationHRTable = (props) => {
                 <th
                   style={{
                     cursor: "pointer",
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white"
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   onClick={() => sortData("Reasonforleave")}
                 >
@@ -339,8 +304,8 @@ const LeaveApplicationHRTable = (props) => {
                 </th>
                 <th
                   style={{
-                    background: "linear-gradient(#1D267D, #2F58CD)",
-                    color: "white",
+                    background: "var(--primaryDashColorDark)",
+                    color: "var(--primaryDashMenuColor)",
                     textAlign: "center"
                   }}
                 >
@@ -349,18 +314,78 @@ const LeaveApplicationHRTable = (props) => {
               </tr>
             </thead>
             <tbody>
-              {rowData
+              {filteredData
                 .filter((e) => e.Status == "Rejected")
                 .map((data, index) => (
-                  <tr key={index}>
-                    <td className="text-uppercase py-1">{data.empID}</td>
-                    <td className="py-1">{data.Name}</td>
-                    <td className="py-1">{data.Leavetype}</td>
-                    <td className="py-1">{data.FromDate}</td>
-                    <td className="py-1">{data.ToDate}</td>
-                    <td className="py-1">{data.Status}</td>
-                    <td className="py-1">{data.Reasonforleave}</td>
+                  <tr className="fw-bold" key={index}>
                     <td className="py-1">
+                      <div className="d-flex aline-center gap-2">
+                        <div style={{ height: "40px", width: "40px" }}>
+                          <img
+                            style={{
+                              height: "100%",
+                              width: "100%",
+                              borderRadius: "50%",
+                              overflow: "hidden",
+                              objectFit: "cover"
+                            }}
+                            src={
+                              data?.data?.profile?.image_url
+                                ? data?.data?.profile?.image_url
+                                : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                            }
+                            alt=""
+                          />
+                        </div>
+                        <div className="d-flex flex-column">
+                          <span
+                            style={{ fontSize: "12px" }}
+                            className="fw-bold"
+                          >
+                            {data.empID}
+                          </span>
+                          <span
+                            style={{ fontSize: "15px" }}
+                            className="fw-bold text-capitalize text-primary"
+                          >
+                            {data.Name}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="py-1 text-muted"
+                    >
+                      {data.Leavetype}
+                    </td>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="py-1 text-muted"
+                    >
+                      {data.FromDate}
+                    </td>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="py-1 text-muted"
+                    >
+                      {data.ToDate}
+                    </td>
+                    <td style={{ verticalAlign: "middle" }} className="py-1  ">
+                      <span className="bg-danger text-white px-2 py-1 rounded-5">
+                        {data.Status}
+                      </span>
+                    </td>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="py-1 text-muted"
+                    >
+                      {data.Reasonforleave}
+                    </td>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="py-1 text-muted"
+                    >
                       <div
                         className="d-flex gap-3 py-2"
                         style={{ cursor: "pointer" }}

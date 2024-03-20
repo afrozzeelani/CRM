@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { css } from "@emotion/core";
 import "./Login.css";
+import { css } from "@emotion/core";
 import LoginIMG from "../../img/LOGINBACK.svg";
 import { RxEyeOpen } from "react-icons/rx";
 import { GoEyeClosed } from "react-icons/go";
 import { FaUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
 
 const override = css`
   display: block;
@@ -23,22 +23,25 @@ const Login = (props) => {
       style={{ height: "100vh", width: "100%", overflow: "auto" }}
       className="  m-0 p-0 bg-light"
     >
-      <div style={{ height: "100%", width: "100%" }} className="row bg-white">
+      <div
+        style={{ height: "100%", width: "100%" }}
+        className="row mx-auto bg-white"
+      >
         <div
           style={{ height: "100%" }}
-          className="col-12 col-md-6  px-5 d-flex bg-white flex-column justify-content-center aline-center"
+          className="col-12 col-md-6  px-0 p-md-5 d-flex bg-white flex-column justify-content-center aline-center"
         >
           <form
-            style={{ height: "100%", widt: "60%" }}
+            style={{ height: "100%" }}
             onSubmit={props.onSubmit}
-            className="form  my-auto  p-3 pb-5 rounded text-black fw-bold d-flex flex-column justify-content-center gap-5"
+            className="form  my-auto  w-75  p-0 p-md-3 pb-4 rounded text-black fw-bold d-flex flex-column justify-content-center"
           >
-            <h2 className="fw-bolder text-success mb-2 text-start">
+            <h2 className="fw-bolder text-success mb-4 text-center text-md-start">
               {" "}
               <FaUserCircle /> Log in
             </h2>
-            <div className="d-flex flex-column gap-2">
-              <label for="email" className="ps-2">
+            <div className="d-flex flex-column my-3">
+              <label for="email" className="ps-2 fw-normal">
                 Enter uour email address{" "}
               </label>
               <input
@@ -49,9 +52,9 @@ const Login = (props) => {
               />
             </div>
 
-            <div className="d-flex flex-column gap-2">
-              <label for="password" className="ps-2">
-                Enter your password:
+            <div className="d-flex position-relative flex-column my-3 mb-4 mb-md-3">
+              <label for="password" className="ps-2  fw-normal">
+                Enter your password
               </label>
               <div className="position-relative">
                 <input
@@ -62,7 +65,7 @@ const Login = (props) => {
                   type={!seePass ? "password" : "text"}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <button
+                <span
                   style={{
                     position: "absolute",
                     top: "5%",
@@ -70,18 +73,32 @@ const Login = (props) => {
                     outline: "none",
                     border: "none"
                   }}
-                  className="btn p-0 fs-5 text-muted my-0"
-                  onClick={() => setSeepass(seePass ? false : true)}
+                  className="fs-5 text-muted my-0"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSeepass(seePass ? false : true);
+                  }}
                 >
-                  {" "}
                   {!seePass ? <RxEyeOpen /> : <GoEyeClosed />}
-                </button>
+                </span>
               </div>
-              <p className="text-muted  fw-normal text-start">
-                <Link to="/forgetPassword" className="fw-semibold   px-2">
-                  Forgot password
-                </Link>
-              </p>
+              {!props.pass ? (
+                <p
+                  style={{
+                    position: "absolute",
+                    fontWeight: "normal",
+                    bottom: "-80%",
+                    left: "50%",
+                    transform: "translate(-50%)",
+                    whiteSpace: "pre"
+                  }}
+                  className="alert   text-danger"
+                >
+                  Invalid User Name or Password
+                </p>
+              ) : (
+                ""
+              )}
             </div>
 
             <p
@@ -94,21 +111,34 @@ const Login = (props) => {
               {alertMsg}
             </p>
 
-            <button
-              style={{ width: "fit-content" }}
-              className="btn btn-success px-5 rounded-5 fw-bolder shadow-sm"
-            >
-              Login
-            </button>
+            <div className="row mx-auto w-100 justify-content-between my-3 row-gap-4">
+              <input
+                type="submit"
+                className="btn col-12 col-md-5 btn-success shadow rounded-5 fw-bolder shadow-sm"
+                value=" Login"
+              />
+              <Link
+                to="/forgetPassword"
+                className="fw-semibold btn  col-12 col-md-5 shadow rounded-5 mt-0"
+              >
+                Forgot password
+              </Link>
+            </div>
 
-            <p className="text-muted  fw-normal text-center">
-              if You forget your password please contact administration !
+            <p
+              style={{
+                position: "absolute",
+                bottom: "0",
+                left: "50%",
+                transform: "translate(-50%)",
+                fontWeight: "normal",
+                whiteSpace: "pre"
+              }}
+              className="d-blocktext-center text-muted"
+            >
+              Made with <span className="heart beat">❤️</span> by Kasper
+              Infotech
             </p>
-            {!props.pass ? (
-              <p className="alert text-danger">Invalid UserName or Password</p>
-            ) : (
-              ""
-            )}
           </form>
         </div>
         <div

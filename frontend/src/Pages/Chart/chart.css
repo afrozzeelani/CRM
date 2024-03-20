@@ -1,33 +1,17 @@
-.ChartCard {
-  padding: 0;
+/* Task && Department CHART css */
+.chart_container {
+  /* border: 1px solid #80808073; */
+  border-radius: 13px;
+  box-shadow: 1px 1px 10px #80808073;
   height: 350px;
-  border-radius: 10px;
-  overflow: auto;
 }
 
-.ChartCard .ChartHeader {
-  padding: .5rem;
-  background-color: var(--primaryDashColorDark);
-  color: var(--primaryDashMenuColor);
-  text-align: start;
+.chart_heading {
+  align-items: center;
+  padding: 4px 10px;
 }
 
-.ChartCard .chartBody {
-  height: 100%;
-  padding: .5rem;
-}
-
-tspan {
-  font-size: .9rem;
-  font-weight: bold;
-  color: var(--primaryDashColorDark) !important;
-  /* color: rgba(89, 206, 34, 0.85); */
-}
-
-.apexcharts-yaxis-title-text {
-  padding: 0;
+.chart_heading h2 {
+  font-size: 21px;
   text-align: center;
-  word-spacing: .5rem;
-  font-size: .9rem;
-  letter-spacing: .2rem;
 }

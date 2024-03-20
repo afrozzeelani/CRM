@@ -12,7 +12,7 @@ const employeeSchema = new mongoose.Schema({
   Gender: { type: String, required: true },
   DOB: { type: Date },
   reportManager: { type: String },
-  reportHr:  { type: String },
+  reportHr: { type: String },
   DateOfJoining: { type: Date },
   TerminateDate: { type: Date },
   Deleted: { type: Boolean },
@@ -39,9 +39,9 @@ const employeeSchema = new mongoose.Schema({
   Hobbies: { type: String },
   PANcardNo: { type: String },
   PermanetAddress: { type: String },
-  PresentAddress: { type: String }, 
-  Notification: {type: []},
-  Notice: {type: []},
+  PresentAddress: { type: String },
+  Notification: { type: [] },
+  Notice: { type: [] }
 });
 
 autoIncrement.initialize(connection);

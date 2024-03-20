@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
-import "./chart.css";
+// import "./chart.css";
 import axios from "axios";
 
 const DepartmentChart = () => {

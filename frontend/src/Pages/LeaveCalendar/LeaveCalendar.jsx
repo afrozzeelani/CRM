@@ -86,7 +86,7 @@ const LeaveCalendar = () => {
                 tileContent={({ date, view }) => {
                   if (view === "month") {
                     const formattedDate = new Date(date);
-                    formattedDate.setDate(formattedDate.getDate()); // Subtract one day
+                    formattedDate.setDate(formattedDate.getDate() + 1); // Subtract one day
                     const formattedDateString = formattedDate
                       .toISOString()
                       .split("T")[0];

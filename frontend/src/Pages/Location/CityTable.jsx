@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import "./CityTable.css";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
@@ -17,7 +17,7 @@ class CityTable extends Component {
   state = {
     cityData: [],
     loading: true,
-    rowData: []
+    rowData: [],
   };
   cityObj = [];
   rowDataT = [];
@@ -27,8 +27,8 @@ class CityTable extends Component {
     axios
       .get("http://localhost:4000/api/city", {
         headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
+          authorization: localStorage.getItem("token") || "",
+        },
       })
       .then((response) => {
         // if(response.data.length==0){this.cityObj=["temp"];}
@@ -45,7 +45,7 @@ class CityTable extends Component {
             data,
             CountryName: data["state"][0]["country"][0]["CountryName"],
             StateName: data["state"][0]["StateName"],
-            CityName: data["CityName"]
+            CityName: data["CityName"],
           };
 
           this.rowDataT.push(temp);
@@ -64,8 +64,8 @@ class CityTable extends Component {
       axios
         .delete("http://localhost:4000/api/city/" + e, {
           headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+            authorization: localStorage.getItem("token") || "",
+          },
         })
         .then((res) => {
           this.componentDidMount();
@@ -131,7 +131,7 @@ class CityTable extends Component {
                   style={{
                     background:
                       "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                    color: "white"
+                    color: "white",
                   }}
                   className="py-1"
                 >
@@ -141,7 +141,7 @@ class CityTable extends Component {
                   style={{
                     background:
                       "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                    color: "white"
+                    color: "white",
                   }}
                   className="py-1"
                 >
@@ -151,7 +151,7 @@ class CityTable extends Component {
                   style={{
                     background:
                       "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                    color: "white"
+                    color: "white",
                   }}
                   className="py-1"
                 >
