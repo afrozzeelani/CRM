@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import axios from "axios";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 
-function SetLog() {
+function ManualAttendance() {
   // const [employees, setEmployees] = useState([]);
   // const [selectedEmployee, setSelectedEmployee] = useState("");
   // const [attencenceID, setAttencenceID] = useState("");
@@ -180,6 +180,7 @@ function SetLog() {
           {employees.map((employee) => (
             <option key={employee._id} value={employee._id}>
               {employee.FirstName}
+              {employee.empID}
             </option>
           ))}
         </select>
@@ -206,4 +207,4 @@ function SetLog() {
   );
 }
 
-export default SetLog;
+export default ManualAttendance;

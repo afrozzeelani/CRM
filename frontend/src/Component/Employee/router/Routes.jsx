@@ -96,12 +96,7 @@ const RouterContent = ({ data }) => {
         exact
         component={UpcomingBirthdays}
       />
-       <Route
-        path="/employee/notification"
-        exact
-        component={Notification}
-      />
-      
+      <Route path="/employee/notification" exact component={Notification} />
     </div>
     // </DashContainer>
   );

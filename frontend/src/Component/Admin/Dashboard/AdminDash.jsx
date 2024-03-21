@@ -7,7 +7,7 @@ import HolidayList from "../../../Pages/LeaveCalendar/HolidayList";
 import EmployeeCount from "./CountData/EmployeeCount";
 import LeaveCount from "./CountData/LeavesCount";
 import NoticeBoard from "../Notification/NoticeBoard";
-import DailyAttendChart from "./Chart/DailyAttendChart";
+import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
 const AdminDash = () => {
   return (
     <div className="main-container">

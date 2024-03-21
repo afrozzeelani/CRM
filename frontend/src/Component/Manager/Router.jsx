@@ -32,77 +32,87 @@ import LeaveApplicationHRReject from "../HrManager/LeaveStatus/LeaveApplicationH
 import Notification from "./Notification/Notification.jsx";
 const MainContent = () => {
   return (
-    <div id="main-area">
-      <div id="sidebar-top-content" />
-      <Switch>
-        <Route path="/manager/employee" component={Employee} />
-        <Route path="/manager/salary" exact component={Salary} />
-        <Route path="/manager/company" exact component={Company} />
-        <Route path="/manager/role" component={Role} />
-        <Route path="/manager/position" exact component={Position} />
-        <Route path="/manager/department" exact component={Department} />
-        <Route path="/manager/country" exact component={Country} />
-        <Route path="/manager/state" exact component={State} />
-        <Route path="/manager/city" exact component={City} />
+    <InnerDashContainer>
+      <div id="main-area">
+        <div id="sidebar-top-content" />
+        <Switch>
+          <Route path="/manager/employee" component={Employee} />
+          <Route path="/manager/salary" exact component={Salary} />
+          <Route path="/manager/company" exact component={Company} />
+          <Route path="/manager/role" component={Role} />
+          <Route path="/manager/position" exact component={Position} />
+          <Route path="/manager/department" exact component={Department} />
+          <Route path="/manager/country" exact component={Country} />
+          <Route path="/manager/state" exact component={State} />
+          <Route path="/manager/city" exact component={City} />
 
-        {/* leave route */}
-        <Route
-          path="/manager/leaveApplication"
-          exact
-          component={LeaveApplicationHR}
-        />
+          {/* leave route */}
+          <Route
+            path="/manager/leaveApplication"
+            exact
+            component={LeaveApplicationHR}
+          />
 
-        <Route path="/manager/hrLeave" exact component={LeaveApplication} />
-        <Route
-          path="/manager/leaveAccepted"
-          exact
-          component={LeaveApplicationHRAccept}
-        />
-        <Route
-          path="/manager/leaveRejected"
-          exact
-          component={LeaveApplicationHRReject}
-        />
-        {/* leave route */}
+          <Route path="/manager/hrLeave" exact component={LeaveApplication} />
+          <Route
+            path="/manager/leaveAccepted"
+            exact
+            component={LeaveApplicationHRAccept}
+          />
+          <Route
+            path="/manager/leaveRejected"
+            exact
+            component={LeaveApplicationHRReject}
+          />
+          {/* leave route */}
 
-        <Route path="/manager/city" exact component={City} />
-        <Route path="/manager/dashboard" exact component={Dashboard} />
-        {/* <Route path="/manager/task" exact component={TaskAssign} /> */}
-        <Route path="/manager/newTask" exact component={ManagerNewTask} />
-        <Route path="/manager/activeTask" exact component={ManagerActiveTask} />
-        <Route
-          path="/manager/taskcancle"
-          exact
-          component={ManagerCencelledTask}
-        />
-        <Route
-          path="/manager/taskcomplete"
-          exact
-          component={ManagerCompletedTask}
-        />
-        <Route
-          path="/manager/rejectTask"
-          exact
-          component={ManagerRejectedTask}
-        />
-        <Route path="/manager/attenDance" exact component={Attendance} />
-        <Route
-          path="/manager/viewAttenDance"
-          exact
-          component={ViewAttendance}
-        />
-        <Route path="/manager/holiday" exact component={LeaveCalendar} />
-        <Route
-          path="/manager/todaysAttendance"
-          exact
-          component={TodaysAttendance}
-        />
-        <Route path="/manager/notification" exact component={Notification} />
-        <Route path="/manager/createLeave" exact component={LeaveApplication} />
-        {/* attendance */}
-        <Route render={() => <NotFound404 />} />
-      </Switch>
-    </div>
+          <Route path="/manager/city" exact component={City} />
+          <Route path="/manager/dashboard" exact component={Dashboard} />
+          {/* <Route path="/manager/task" exact component={TaskAssign} /> */}
+          <Route path="/manager/newTask" exact component={ManagerNewTask} />
+          <Route
+            path="/manager/activeTask"
+            exact
+            component={ManagerActiveTask}
+          />
+          <Route
+            path="/manager/taskcancle"
+            exact
+            component={ManagerCencelledTask}
+          />
+          <Route
+            path="/manager/taskcomplete"
+            exact
+            component={ManagerCompletedTask}
+          />
+          <Route
+            path="/manager/rejectTask"
+            exact
+            component={ManagerRejectedTask}
+          />
+          <Route path="/manager/attenDance" exact component={Attendance} />
+          <Route
+            path="/manager/viewAttenDance"
+            exact
+            component={ViewAttendance}
+          />
+          <Route path="/manager/holiday" exact component={LeaveCalendar} />
+          <Route
+            path="/manager/todaysAttendance"
+            exact
+            component={TodaysAttendance}
+          />
+          <Route path="/manager/notification" exact component={Notification} />
+          <Route
+            path="/manager/createLeave"
+            exact
+            component={LeaveApplication}
+          />
+          {/* attendance */}
+          <Route render={() => <NotFound404 />} />
+        </Switch>
+      </div>
+    </InnerDashContainer>
   );
 };
 

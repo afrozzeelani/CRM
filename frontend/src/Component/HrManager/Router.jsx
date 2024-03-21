@@ -27,6 +27,7 @@ import TodaysAttendance from "../../Pages/DailyAttendance/TodaysAttendance.jsx";
 import LeaveApplication from "../../Pages/ApplyLeave/LeaveApplication.jsx";
 import LeaveApplicationHRAccept from "./LeaveStatus/LeaveApplicationHRAccept.jsx";
 import LeaveApplicationHRReject from "./LeaveStatus/LeaveApplicationHRReject.jsx";
+import ManualAttendance from "./attendance/ManualAttendance.jsx";
 // import Main from "../../Pages/Profile/Main.jsx";
 import Notification from "./Notification/Notification.jsx";
 const MainContent = () => {
@@ -82,6 +83,7 @@ const MainContent = () => {
             component={LeaveApplicationHRReject}
           />
           <Route path="/hr/notification" exact component={Notification} />
+          <Route path="/hr/manualAttand" exact component={ManualAttendance} />
 
           {/* <Route path="/hr/profile" exact component={Main} /> */}
           {/* attendance */}

@@ -148,6 +148,9 @@ const EmpTaskChart = (props) => {
       chart: {
         id: "bar"
       },
+      fill: {
+        colors: ["var(--primaryDashColorDark)"]
+      },
       xaxis: {
         categories: [
           "New Task",
@@ -199,38 +202,25 @@ const EmpTaskChart = (props) => {
   };
 
   return (
-    // <div className="ChartCard shadow-sm">
-    //   <div className="ChartHeader">
-    //     <h5 className="fw-bolder d-flex gap-3 ">
-    //       <FaChartLine className="my-auto" />
-    //       Task Progress Report
-    //     </h5>
-    //   </div>
-    //   <div className="chartBody">
-    //     <Chart
-    //       options={barChartData.options}
-    //       series={barChartData.series}
-    //       type="bar"
-    //       width="100%"
-    //       height="85%"
-    //     />
-    //   </div>
-    // </div>
-
-    <div className="ChartCard shadow-sm">
+    <div style={{ height: "fit-content" }} className="ChartCard p-2 pb-0">
       <div className="ChartHeader">
-        <h5 className="fw-bolder d-flex gap-3 ">
-          <FaChartLine className="my-auto" />
+        <h6
+          style={{
+            width: "fit-content",
+            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
+            color: "var(--primaryDashColorDark)"
+          }}
+          className="fw-bolder d-flex px-3 rounded-5 py-1"
+        >
           Task Progress Report
-        </h5>
+        </h6>
       </div>
       <div className="chartBody">
         <Chart
           options={barChartData.options}
           series={barChartData.series}
           type="bar"
-          width="100%"
-          height="85%"
+          height="340px"
         />
       </div>
     </div>

@@ -113,66 +113,15 @@ const TaskChart = () => {
     ).length
   };
 
-  const chartData = {
-    series: [
-      {
-        name: "Total Employee",
-        data: Object.values(departmentCounts)
-      }
-    ],
-    options: {
-      chart: {
-        type: "bar",
-        height: 350
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: "40%",
-          endingShape: "rounded"
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ["transparent"]
-      },
-      xaxis: {
-        categories: Object.keys(departmentCounts),
-        title: {
-          text: "Department Wise Employee"
-        }
-      },
-      yaxis: {
-        title: {
-          text: "Number of Employee"
-        }
-      },
-
-      fill: {
-        opacity: 1,
-        colors: ["var(--primaryDashColorDark)"]
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return " " + val + "";
-          }
-        },
-        markers: {
-          colors: "yellow"
-        }
-      }
-    }
-  };
   const taskStatusChartData = {
     options: {
       chart: {
         id: "task-status-chart",
         type: "bar"
+      },
+      fill: {
+        opacity: 1,
+        colors: ["var(--primaryDashColorDark)"]
       },
       xaxis: {
         categories: Object.keys(taskStatusCounts),
@@ -195,19 +144,25 @@ const TaskChart = () => {
   };
 
   return (
-    <div className="ChartCard shadow-sm">
+    <div style={{ height: "fit-content" }} className="ChartCard p-2 pb-0">
       <div className="ChartHeader">
-        <h5 className="fw-bolder d-flex gap-3 ">
-          <FaChartLine className="my-auto" />
+        <h6
+          style={{
+            width: "fit-content",
+            boxShadow: "0 0 10px 1px rgba(0,0,0,.2) inset",
+            color: "var(--primaryDashColorDark)"
+          }}
+          className="fw-bolder d-flex px-3 rounded-5 py-1"
+        >
           Task Progress Report
-        </h5>
+        </h6>
       </div>
       <div className="chartBody">
         <Chart
           options={taskStatusChartData.options}
           series={taskStatusChartData.series}
           type="bar"
-          height="85%"
+          height="340px"
         />
       </div>
     </div>

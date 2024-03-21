@@ -34,16 +34,9 @@ const DashboardHR = (props) => {
               onLogout={props.onLogout}
             />
           </div>
-
-          <div
-            className="d-flex"
-            style={{
-              maxHeight: "100vh"
-            }}
-            id="main-non-nav"
-          >
+          <div className="d-flex">
             <Sidebar />
-            <div className="HrDashBG w-100" id="main-area">
+            <div className="p-0 w-100">
               <MainContent />
             </div>
           </div>
