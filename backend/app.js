@@ -9,9 +9,9 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
-    methods: [ "GET","POST"],
-    credentials: true,
-  },
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
 require("dotenv").config();
 
@@ -121,7 +121,7 @@ app.post("/api/tasks", upload.single("file"), async (req, res) => {
   const { status } = req.body;
   const { startDate } = req.body;
   const { endDate } = req.body;
-const {adminMail} = req.body;
+  const { adminMail } = req.body;
   const dateDifference = Math.ceil(
     (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)
   );
@@ -232,17 +232,14 @@ app.post("/api/tasks/:taskId/employees", async (req, res) => {
 });
 const users = {};
 io.on("connection", (socket) => {
-
   console.log("server================", socket.id);
   //abhay:- here user is connecting and we are storing socket id and Mail
-  socket.on('userConnected', (userData) => {
-
+  socket.on("userConnected", (userData) => {
     users[socket.id] = { email: userData.email, socketId: socket.id };
-    console.log("heelloo" , users)
+    console.log("heelloo", users);
   });
   //abhay:- when browser get closed or user get offline than this is automatically get trigger no need to trigger it manually
-  socket.on('disconnect', () => {
-
+  socket.on("disconnect", () => {
     const disconnectedUser = users[socket.id];
     if (disconnectedUser) {
       delete users[socket.id];
@@ -251,34 +248,33 @@ io.on("connection", (socket) => {
 
   //abhay:-admin want to send  notice to every employee
   app.post("/api/notice", upload.single("file"), async (req, res) => {
-    const {noticeId} = req.body;
+    const { noticeId } = req.body;
     const { notice } = req.body;
     const { path } = req.file;
-   const data = {
-    noticeId,
-    notice,
-    attachments:path
-   }
-  
+    const data = {
+      noticeId,
+      notice,
+      attachments: path
+    };
 
     // console.log(Taskname, path, description, department, managerEmail, comment, duration, status, startDate, endDate);
     try {
       // await PdfSchema.create({ title: title, pdf: fileName });
-   
-     await Employee.updateMany(
+
+      await Employee.updateMany(
         {},
         {
-            $push: {
-                Notice: {
-                    notice: notice,
-                    noticeId,
-                    attachments: path
-                },
-            },
+          $push: {
+            Notice: {
+              notice: notice,
+              noticeId,
+              attachments: path
+            }
+          }
         },
         { new: true }
-    );
-    io.emit("notice",data)
+      );
+      io.emit("notice", data);
       // await newPdf.save();
       res.status(201).json({
         message: "ok"
@@ -291,28 +287,25 @@ io.on("connection", (socket) => {
   });
   //abhay:-admin want to delete notice from every employee dashboard
 
-  app.post("/api/noticeDelete",  async (req, res) => {
-    const {noticeId} = req.body;
+  app.post("/api/noticeDelete", async (req, res) => {
+    const { noticeId } = req.body;
 
-  
-
-  
     // console.log(Taskname, path, description, department, managerEmail, comment, duration, status, startDate, endDate);
     try {
       // await PdfSchema.create({ title: title, pdf: fileName });
-   
+
       await Employee.updateMany(
         {},
         {
           $pull: {
             Notice: {
-              noticeId: { $eq: noticeId }, // Specify the noticeId you want to remove
-            },
-          },
+              noticeId: { $eq: noticeId } // Specify the noticeId you want to remove
+            }
+          }
         },
         { new: true }
       );
-    io.emit("noticeDelete",true)
+      io.emit("noticeDelete", true);
       // await newPdf.save();
       res.status(201).json({
         message: "ok"
@@ -324,307 +317,519 @@ io.on("connection", (socket) => {
     }
   });
   //abhay:- task is assigned to manager by Admin
-  socket.on("managerTaskNotification", async  (data)=>{
+  socket.on("managerTaskNotification", async (data) => {
     try {
-     
- const  {managerEmail} = data
-    const employee = await Employee.findOne({ Email: managerEmail });
+      const { managerEmail } = data;
+      const employee = await Employee.findOne({ Email: managerEmail });
 
-    let targetUser = Object.values(users).find(user => user.email === managerEmail);
-    if (employee && targetUser) {
-      const { taskId, taskName, senderMail,  status, path, message} = data;
-      console.log(users);
-    
-     
-      employee.Notification.unshift({path, taskId, taskName, senderMail,  status,managerEmail, message});
+      let targetUser = Object.values(users).find(
+        (user) => user.email === managerEmail
+      );
+      if (employee && targetUser) {
+        const { taskId, taskName, senderMail, status, path, message } = data;
+        console.log(users);
 
-      await employee.save();
-      io.to(targetUser.socketId).emit('taskNotificationReceived', data);
-   
-    }else if(employee){
-      const { taskId, taskName, senderMail,  status, path, message} = data;
-      console.log(users);
-    
-     
-      employee.Notification.unshift({path,message, taskId, taskName, senderMail,  status,managerEmail});
+        employee.Notification.unshift({
+          path,
+          taskId,
+          taskName,
+          senderMail,
+          status,
+          managerEmail,
+          message
+        });
 
-      await employee.save();
+        await employee.save();
+        io.to(targetUser.socketId).emit("taskNotificationReceived", data);
+      } else if (employee) {
+        const { taskId, taskName, senderMail, status, path, message } = data;
+        console.log(users);
+
+        employee.Notification.unshift({
+          path,
+          message,
+          taskId,
+          taskName,
+          senderMail,
+          status,
+          managerEmail
+        });
+
+        await employee.save();
+      }
+    } catch (error) {
+      console.error("Error saving notification:", error);
     }
+  });
+  //abhay:- task is assigned to employee by manager
+  socket.on("employeeTaskNotification", async (data) => {
+    try {
+      data.employeesEmail.forEach(async (val) => {
+        const employee = await Employee.findOne({ Email: val });
+        let targetUser = Object.values(users).find(
+          (user) => user.email === val
+        );
 
- 
-  }catch (error) {
-    console.error("Error saving notification:", error);
+        if (employee && targetUser) {
+          const { senderMail, taskId, taskName, message, status, path } = data;
+          employee.Notification.unshift({
+            path,
+            taskId,
+            message,
+            taskName,
+            status,
+            senderMail,
+            EmployeeMail: val
+          });
+
+          await employee.save();
+          io.to(targetUser.socketId).emit("taskNotificationReceived", data);
+        } else if (employee) {
+          const { senderMail, taskId, taskName, status, message, path } = data;
+          employee.Notification.unshift({
+            path,
+            taskId,
+            message,
+            taskName,
+            status,
+            senderMail,
+            EmployeeMail: val
+          });
+
+          await employee.save();
+        }
+      });
+
+      //   console.log(employee)
+
+      //   if (employee) {
+      //     const { taskId, taskName, senderMail,  status,} = data;
+      //     employee.Notification.unshift({taskId, taskName, senderMail,  status,managerEmail});
+
+      //     await employee.save();
+      //       console.log(socket.id)
+      //   }
+
+      // socket.broadcast.emit("taskNotificationReceived", data);
+    } catch (error) {
+      console.error("Error saving notification:", error);
+    }
+  });
+  //abhay:- when manager accept the task admin will get notification
+  socket.on("adminTaskNotification", async (data) => {
+    try {
+      //  console.log(data)
+      const { adminMail } = data;
+      const employee = await Employee.findOne({ Email: adminMail });
+
+      let targetUser = Object.values(users).find(
+        (user) => user.email === adminMail
+      );
+      if (employee && targetUser) {
+        const {
+          senderMail,
+          taskName,
+          Account,
+          status,
+          adminMail,
+          taskId,
+          path,
+          taskStatus,
+          message
+        } = data;
+
+        employee.Notification.unshift({
+          senderMail,
+          taskName,
+          Account,
+          status,
+          adminMail,
+          taskId,
+          path,
+          taskStatus,
+          message
+        });
+
+        await employee.save();
+        io.to(targetUser.socketId).emit("taskNotificationReceived", data);
+      } else if (employee) {
+        const {
+          senderMail,
+          taskName,
+          Account,
+          status,
+          adminMail,
+          taskId,
+          path,
+          taskStatus,
+          message
+        } = data;
+        // console.log(users);
+
+        employee.Notification.unshift({
+          senderMail,
+          taskName,
+          Account,
+          status,
+          adminMail,
+          taskId,
+          path,
+          taskStatus,
+          message
+        });
+
+        await employee.save();
+      }
+    } catch (error) {
+      console.error("Error saving notification:", error);
+    }
+  });
+  //abhay:-when employee apply leave
+  socket.on("leaveNotification", async (data) => {
+    try {
+      //  console.log(data)
+      const { managerEmail, hrEmail } = data;
+      const manager = await Employee.findOne({ Email: managerEmail });
+      const hr = await Employee.findOne({ Email: hrEmail });
+      let targetManager = Object.values(users).find(
+        (user) => user.email === managerEmail
+      );
+      let targetHr = Object.values(users).find(
+        (user) => user.email === hrEmail
+      );
+      if (manager && targetManager) {
+        const { message, status, path, taskId } = data;
+
+        manager.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          managerEmail,
+          hrEmail
+        });
+
+        await manager.save();
+        io.to(targetManager.socketId).emit("leaveNotificationReceived", data);
+      } else if (manager) {
+        const { message, status, path, taskId } = data;
+        // console.log(users);
+
+        manager.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          managerEmail,
+          hrEmail
+        });
+
+        await manager.save();
+      }
+      if (hr && targetHr) {
+        const { message, status, path, taskId } = data;
+
+        hr.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          managerEmail,
+          hrEmail
+        });
+
+        await hr.save();
+        io.to(targetHr.socketId).emit("leaveNotificationReceived", data);
+      } else if (hr) {
+        const { message, status, path, taskId } = data;
+        // console.log(users);
+
+        hr.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          managerEmail,
+          hrEmail
+        });
+
+        await hr.save();
+      }
+    } catch (error) {
+      console.error("Error saving notification:", error);
+    }
+  });
+  socket.on("leaveManagerStatusNotification", async (data) => {
+    try {
+      //  console.log(data)
+      const { employeeEmail, hrEmail } = data;
+      const employee = await Employee.findOne({ Email: employeeEmail });
+      const hr = await Employee.findOne({ Email: hrEmail });
+      let targetEmployee = Object.values(users).find(
+        (user) => user.email === employeeEmail
+      );
+      let targetHr = Object.values(users).find(
+        (user) => user.email === hrEmail
+      );
+      if (employee && targetEmployee) {
+        const { message, status, path, taskId } = data;
+
+        employee.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          employeeEmail,
+          hrEmail
+        });
+
+        await employee.save();
+        io.to(targetEmployee.socketId).emit(
+          "leaveManagerStatusNotificationReceived",
+          data
+        );
+      } else if (employee) {
+        const { message, status, path, taskId } = data;
+        // console.log(users);
+
+        employee.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          employeeEmail,
+          hrEmail
+        });
+
+        await employee.save();
+      }
+      if (hr && targetHr) {
+        const { message, status, path, taskId } = data;
+
+        hr.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          employeeEmail,
+          hrEmail
+        });
+
+        await hr.save();
+        io.to(targetHr.socketId).emit(
+          "leaveManagerStatusNotificationReceived",
+          data
+        );
+      } else if (hr) {
+        const { message, status, path, taskId } = data;
+        // console.log(users);
+
+        hr.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          employeeEmail,
+          hrEmail
+        });
+
+        await hr.save();
+      }
+    } catch (error) {
+      console.error("Error saving notification:", error);
+    }
+  });
+  socket.on("leaveHrStatusNotification", async (data) => {
+    try {
+      //  console.log(data)
+      const { employeeEmail, managerEmail } = data;
+      const employee = await Employee.findOne({ Email: employeeEmail });
+      const manager = await Employee.findOne({ Email: managerEmail });
+      let targetEmployee = Object.values(users).find(
+        (user) => user.email === employeeEmail
+      );
+      let targetManager = Object.values(users).find(
+        (user) => user.email === managerEmail
+      );
+      if (employee && targetEmployee) {
+        const { message, status, path, taskId } = data;
+
+        employee.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          employeeEmail,
+          managerEmail
+        });
+
+        await employee.save();
+        io.to(targetEmployee.socketId).emit(
+          "leaveManagerStatusNotificationReceived",
+          data
+        );
+      } else if (employee) {
+        const { message, status, path, taskId } = data;
+        // console.log(users);
+
+        employee.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          employeeEmail,
+          managerEmail
+        });
+
+        await employee.save();
+      }
+      if (manager && targetManager) {
+        const { message, status, path, taskId } = data;
+
+        manager.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          employeeEmail,
+          managerEmail
+        });
+
+        await manager.save();
+        io.to(targetManager.socketId).emit(
+          "leaveManagerStatusNotificationReceived",
+          data
+        );
+      } else if (manager) {
+        const { message, status, path, taskId } = data;
+        // console.log(users);
+
+        manager.Notification.unshift({
+          message,
+          status,
+          path,
+          taskId,
+          employeeEmail,
+          managerEmail
+        });
+
+        await manager.save();
+      }
+    } catch (error) {
+      console.error("Error saving notification:", error);
+    }
+  });
+  //abhay:- when employee accept the task manager and his team will get update
+  socket.on("employeeTaskUpdateNotification", async (data) => {
+    try {
+      data.employeesEmail.forEach(async (val) => {
+        const employee = await Employee.findOne({ Email: val });
+        let targetUser = Object.values(users).find(
+          (user) => user.email === val
+        );
+
+        if (employee && targetUser) {
+          const {
+            senderMail,
+            taskId,
+            taskName,
+            status,
+            path,
+            taskStatus,
+            Account,
+            message
+          } = data;
+          employee.Notification.unshift({
+            path,
+            taskId,
+            taskName,
+            taskStatus,
+            Account,
+            message,
+            status,
+            senderMail,
+            EmployeeMail: val
+          });
+
+          await employee.save();
+          io.to(targetUser.socketId).emit("taskNotificationReceived", data);
+        } else if (employee) {
+          const {
+            senderMail,
+            taskId,
+            taskName,
+            status,
+            path,
+            Account,
+            taskStatus,
+            message
+          } = data;
+          employee.Notification.unshift({
+            path,
+            taskId,
+            taskName,
+            Account,
+            taskStatus,
+            message,
+            status,
+            senderMail,
+            EmployeeMail: val
+          });
+
+          await employee.save();
+        }
+      });
+
+      //   console.log(employee)
+
+      //   if (employee) {
+      //     const { taskId, taskName, senderMail,  status,} = data;
+      //     employee.Notification.unshift({taskId, taskName, senderMail,  status,managerEmail});
+
+      //     await employee.save();
+      //       console.log(socket.id)
+      //   }
+
+      // socket.broadcast.emit("taskNotificationReceived", data);
+    } catch (error) {
+      console.error("Error saving notification:", error);
+    }
+  });
+  socket.on("notificationPageUpdate", (data) => {
+    socket.emit("notificationPageUpdate", data);
+  });
+});
+
+/* document */
+const documentSchema = new mongoose.Schema({
+  files: [String]
+});
+const Document = mongoose.model("Document", documentSchema);
+
+app.post("/upload", upload.array("files"), async (req, res) => {
+  try {
+    const files = req.files.map((file) => file.originalname);
+    const newDocument = new Document({ files });
+    await newDocument.save();
+    res.status(201).send("Document uploaded successfully.");
+  } catch (error) {
+    console.error("Error uploading document:", error);
+    res.status(500).send("Error uploading document.");
   }
-})
- //abhay:- task is assigned to employee by manager
-socket.on("employeeTaskNotification", async  (data)=>{
+});
+
+app.get("/documents", async (req, res) => {
   try {
+    const documents = await Document.find();
+    res.json(documents);
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+    res.status(500).send("Error fetching documents.");
+  }
+});
 
-data.employeesEmail.forEach(async (val) => {
-  const employee = await Employee.findOne({ Email: val });
-  let targetUser = Object.values(users).find(user => user.email === val);
+/* end  document */
 
-  if (employee && targetUser) {
-        const { senderMail, taskId, taskName, message, status, path} = data;
-        employee.Notification.unshift({path, taskId, message,taskName, status,senderMail,EmployeeMail:val});
-    
-        await employee.save();
-        io.to(targetUser.socketId).emit('taskNotificationReceived', data);
-      }else if(employee){
-        const { senderMail, taskId, taskName,  status,message, path} = data;
-        employee.Notification.unshift({path, taskId,message, taskName, status,senderMail,EmployeeMail:val});
-    
-        await employee.save();
-      }
-})
-
-
-//   console.log(employee)
-  
-//   if (employee) {
-//     const { taskId, taskName, senderMail,  status,} = data;
-//     employee.Notification.unshift({taskId, taskName, senderMail,  status,managerEmail});
-
-//     await employee.save();
-//       console.log(socket.id)
-//   }
-
-// socket.broadcast.emit("taskNotificationReceived", data);
-}catch (error) {
-  console.error("Error saving notification:", error);
-}
-})
-//abhay:- when manager accept the task admin will get notification  
-socket.on("adminTaskNotification", async(data)=>{
-  try {
-    //  console.log(data)
-    const  {adminMail} = data
-       const employee = await Employee.findOne({ Email: adminMail });
-   
-       let targetUser = Object.values(users).find(user => user.email === adminMail);
-       if (employee && targetUser) {
-        const {senderMail,taskName, Account,status,adminMail,taskId, path,taskStatus, message} = data;
-
-      
-       
-        employee.Notification.unshift({ senderMail,taskName, Account,status,adminMail,taskId, path,taskStatus, message});
-   
-         await employee.save();
-         io.to(targetUser.socketId).emit('taskNotificationReceived', data);
-      
-       }else if(employee){
-        const {senderMail,taskName, Account,status,adminMail,taskId, path,taskStatus,message} = data;
-        // console.log(users);
-      
-       
-        employee.Notification.unshift({ senderMail,taskName, Account,status,adminMail,taskId, path,taskStatus,message});
-   
-         await employee.save();
-       }
-   
-    
-     }catch (error) {
-       console.error("Error saving notification:", error);
-     }
-})
-//abhay:-when employee apply leave
-socket.on("leaveNotification", async(data)=>{
-  try {
-    //  console.log(data)
-    const  {managerEmail,hrEmail} = data
-       const manager = await Employee.findOne({ Email: managerEmail });
-       const hr = await Employee.findOne({ Email: hrEmail });
-       let targetManager = Object.values(users).find(user => user.email === managerEmail);
-       let targetHr = Object.values(users).find(user => user.email === hrEmail);
-       if (manager && targetManager) {
-        const {message,status,path,taskId} = data;
-
-      
-       
-        manager.Notification.unshift({message,status,path,taskId,managerEmail,hrEmail});
-   
-         await manager.save();
-         io.to(targetManager.socketId).emit('leaveNotificationReceived', data);
-      
-       }else if(manager){
-        const {message,status,path,taskId} = data;
-        // console.log(users);
-      
-       
-        manager.Notification.unshift({message,status,path,taskId,managerEmail,hrEmail});
-   
-         await manager.save();
-       }
-       if(hr && targetHr ){
-        const {message,status,path,taskId} = data;
-
-      
-       
-        hr.Notification.unshift({message,status,path,taskId,managerEmail,hrEmail});
-   
-         await hr.save();
-         io.to(targetHr.socketId).emit('leaveNotificationReceived', data);
-       }else if(hr){
-        const {message,status,path,taskId} = data;
-        // console.log(users);
-      
-       
-        hr.Notification.unshift({message,status,path,taskId,managerEmail,hrEmail});
-   
-         await hr.save();
-       }
-   
-    
-     }catch (error) {
-       console.error("Error saving notification:", error);
-     }
-})
-socket.on("leaveManagerStatusNotification", async(data)=>{
-  try {
-    //  console.log(data)
-    const  {employeeEmail,hrEmail} = data
-       const employee = await Employee.findOne({ Email: employeeEmail });
-       const hr = await Employee.findOne({ Email: hrEmail });
-       let targetEmployee = Object.values(users).find(user => user.email === employeeEmail);
-       let targetHr = Object.values(users).find(user => user.email === hrEmail);
-       if (employee && targetEmployee) {
-        const {message,status,path,taskId} = data;
-
-      
-       
-        employee.Notification.unshift({message,status,path,taskId,employeeEmail,hrEmail});
-   
-         await employee.save();
-         io.to(targetEmployee.socketId).emit('leaveManagerStatusNotificationReceived', data);
-      
-       }else if(employee){
-        const {message,status,path,taskId} = data;
-        // console.log(users);
-      
-       
-        employee.Notification.unshift({message,status,path,taskId,employeeEmail,hrEmail});
-   
-         await employee.save();
-       }
-       if(hr && targetHr ){
-        const {message,status,path,taskId} = data;
-
-      
-       
-        hr.Notification.unshift({message,status,path,taskId,employeeEmail,hrEmail});
-   
-         await hr.save();
-         io.to(targetHr.socketId).emit('leaveManagerStatusNotificationReceived', data);
-       }else if(hr){
-        const {message,status,path,taskId} = data;
-        // console.log(users);
-      
-       
-        hr.Notification.unshift({message,status,path,taskId,employeeEmail,hrEmail});
-   
-         await hr.save();
-       }
-   
-    
-     }catch (error) {
-       console.error("Error saving notification:", error);
-     }
-})
-socket.on("leaveHrStatusNotification", async(data)=>{
-  try {
-    //  console.log(data)
-    const  {employeeEmail,managerEmail} = data
-       const employee = await Employee.findOne({ Email: employeeEmail });
-       const manager = await Employee.findOne({ Email: managerEmail });
-       let targetEmployee = Object.values(users).find(user => user.email === employeeEmail);
-       let targetManager = Object.values(users).find(user => user.email === managerEmail);
-       if (employee && targetEmployee) {
-        const {message,status,path,taskId} = data;
-
-      
-       
-        employee.Notification.unshift({message,status,path,taskId,employeeEmail,managerEmail});
-   
-         await employee.save();
-         io.to(targetEmployee.socketId).emit('leaveManagerStatusNotificationReceived', data);
-      
-       }else if(employee){
-        const {message,status,path,taskId} = data;
-        // console.log(users);
-      
-       
-        employee.Notification.unshift({message,status,path,taskId,employeeEmail,managerEmail});
-   
-         await employee.save();
-       }
-       if(manager && targetManager ){
-        const {message,status,path,taskId} = data;
-
-      
-       
-        manager.Notification.unshift({message,status,path,taskId,employeeEmail,managerEmail});
-   
-         await manager.save();
-         io.to(targetManager.socketId).emit('leaveManagerStatusNotificationReceived', data);
-       }else if(manager){
-        const {message,status,path,taskId} = data;
-        // console.log(users);
-      
-       
-        manager.Notification.unshift({message,status,path,taskId,employeeEmail,managerEmail});
-   
-         await manager.save();
-       }
-   
-    
-     }catch (error) {
-       console.error("Error saving notification:", error);
-     }
-})
-//abhay:- when employee accept the task manager and his team will get update
-socket.on("employeeTaskUpdateNotification", async  (data)=>{
-  try {
-
-data.employeesEmail.forEach(async (val) => {
-  const employee = await Employee.findOne({ Email: val });
-  let targetUser = Object.values(users).find(user => user.email === val);
-
-  if (employee && targetUser) {
-        const { senderMail, taskId, taskName,  status, path,taskStatus,Account,message} = data;
-        employee.Notification.unshift({path, taskId, taskName,taskStatus,Account,message, status,senderMail,EmployeeMail:val});
-      
-        await employee.save();
-        io.to(targetUser.socketId).emit('taskNotificationReceived', data);
-      }else if(employee){
-        const { senderMail, taskId, taskName,  status, path,Account,taskStatus,message} = data;
-        employee.Notification.unshift({path, taskId, taskName,Account,taskStatus,message, status,senderMail,EmployeeMail:val});
-    
-        await employee.save();
-      }
-})
-
-
-//   console.log(employee)
-  
-//   if (employee) {
-//     const { taskId, taskName, senderMail,  status,} = data;
-//     employee.Notification.unshift({taskId, taskName, senderMail,  status,managerEmail});
-
-//     await employee.save();
-//       console.log(socket.id)
-//   }
-
-// socket.broadcast.emit("taskNotificationReceived", data);
-}catch (error) {
-  console.error("Error saving notification:", error);
-}
-})
-socket.on("notificationPageUpdate", (data)=>{
-  socket.emit("notificationPageUpdate", data)
-})
-
-
-})
 //  create a server
 var port = process.env.PORT;
 // console.log("ip========", port && process.env.IP);

@@ -1,7 +1,7 @@
 {
   "name": "project",
   "version": "1.0.0",
-  "description": "",
+  "description": "Note: this is a repository of Employee Management System backend. the repository of the Frontend is available here: https://github.com/fenil29/employee-management-system-frontend-react",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js"
@@ -26,5 +26,7 @@
     "nodemailer": "^6.9.9",
     "nodemon": "^3.0.3",
     "socket.io": "^4.7.4"
-  }
+  },
+  "devDependencies": {},
+  "keywords": []
 }
