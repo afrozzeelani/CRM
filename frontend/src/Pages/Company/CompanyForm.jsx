@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "./CompanyForm.css";
+import BASE_URL from "../config/config";
 
 import { Form, Button, Col, Row } from "react-bootstrap";
 
@@ -11,48 +12,48 @@ class CompanyForm extends Component {
     cityData: [],
     filteredCountryData: [],
     filteredStateData: [],
-    filteredCityData: [],
-  }
+    filteredCityData: []
+  };
 
   loadCountryInfo = () => {
     axios
-      .get("http://localhost:4000/api/country", {
+      .get(`${BASE_URL}/api/country`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ countryData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
   loadStateInfo = () => {
     axios
-      .get("http://localhost:4000/api/state", {
+      .get(`${BASE_URL}/api/state`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ stateData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
   loadCityInfo = () => {
     axios
-      .get("http://localhost:4000/api/city", {
+      .get(`${BASE_URL}/api/city`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ cityData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -66,20 +67,18 @@ class CompanyForm extends Component {
     let currentCountry = e.target.value;
 
     let filteredState = this.state.stateData.filter(
-      data => data["country"][0]["_id"] == currentCountry
+      (data) => data["country"][0]["_id"] == currentCountry
     );
     this.setState({ filteredStateData: filteredState });
-
   }
   onStateChange(e) {
     console.log(e.target.value);
     let currentState = e.target.value;
 
     let filteredCity = this.state.cityData.filter(
-      data => data["state"][0]["_id"] == currentState
+      (data) => data["state"][0]["_id"] == currentState
     );
     this.setState({ filteredCityData: filteredCity });
-
   }
   render() {
     return (
@@ -129,7 +128,9 @@ class CompanyForm extends Component {
                     Select your option
                   </option>
                   {this.state.countryData.map((data, index) => (
-                    <option key={index} value={data["_id"]}>{data["CountryName"]}</option>
+                    <option key={index} value={data["_id"]}>
+                      {data["CountryName"]}
+                    </option>
                   ))}
                 </Form.Control>
               </Col>
@@ -150,7 +151,9 @@ class CompanyForm extends Component {
                     Select your option
                   </option>
                   {this.state.filteredStateData.map((data, index) => (
-                    <option key={index} value={data["_id"]}>{data["StateName"]}</option>
+                    <option key={index} value={data["_id"]}>
+                      {data["StateName"]}
+                    </option>
                   ))}
                 </Form.Control>
               </Col>
@@ -166,7 +169,9 @@ class CompanyForm extends Component {
                     Select your option
                   </option>
                   {this.state.filteredCityData.map((data, index) => (
-                    <option key={index} value={data["_id"]}>{data["CityName"]}</option>
+                    <option key={index} value={data["_id"]}>
+                      {data["CityName"]}
+                    </option>
                   ))}
                 </Form.Control>
               </Col>

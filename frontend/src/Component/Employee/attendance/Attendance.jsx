@@ -3,6 +3,7 @@ import axios from "axios";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import InnerDashContainer from "../../InnerDashContainer";
 import Moment from "moment";
+import BASE_URL from "../../../Pages/config/config";
 
 function SetLog(props) {
   const [empName, setEmpName] = useState(null);
@@ -22,7 +23,7 @@ function SetLog(props) {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/employee/" + props.data["_id"],
+          `${BASE_URL}/api/employee/` + props.data["_id"],
           {
             headers: {
               authorization: localStorage.getItem("token") || ""
@@ -43,7 +44,7 @@ function SetLog(props) {
     const loadPersonalInfoData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/personal-info/" + props.data["_id"],
+          `${BASE_URL}/api/personal-info/` + props.data["_id"],
           {
             headers: {
               authorization: localStorage.getItem("token") || ""
@@ -76,7 +77,7 @@ function SetLog(props) {
   const getMessage = async (employeeID) => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/attendance/${employeeID}`
+        `${BASE_URL}/api/attendance/${employeeID}`
       );
       const lastEntry = response.data[response.data.length - 1];
 
@@ -104,7 +105,7 @@ function SetLog(props) {
       }
 
       const currentTime = Moment().format("HH:mm:ss");
-      await axios.post(`http://localhost:4000/api/attendance/${attencenceID}`, {
+      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
         employeeId: selectedEmployee,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
@@ -132,7 +133,7 @@ function SetLog(props) {
       }
 
       const currentTime = Moment().format("HH:mm:ss");
-      await axios.post(`http://localhost:4000/api/attendance/${attencenceID}`, {
+      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
         employeeId: selectedEmployee,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
@@ -162,7 +163,7 @@ function SetLog(props) {
       const currentTime = new Date().toLocaleTimeString();
       const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
 
-      await axios.post(`http://localhost:4000/api/attendance/${attencenceID}`, {
+      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
         employeeId: selectedEmployee,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
@@ -194,7 +195,7 @@ function SetLog(props) {
       const currentTime = new Date().toLocaleTimeString();
       const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
 
-      await axios.post(`http://localhost:4000/api/attendance/${attencenceID}`, {
+      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
         employeeId: selectedEmployee,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,

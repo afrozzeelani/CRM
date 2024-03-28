@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
+import BASE_URL from "../config/config";
 
 class RoleForm extends Component {
   state = {
@@ -14,16 +15,16 @@ class RoleForm extends Component {
   companyData = [];
   loadCompanyInfo = () => {
     axios
-      .get("http://localhost:4000/api/company", {
+      .get(`${BASE_URL}/api/company`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.companyData = response.data;
         this.setState({ companyInfo: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -38,7 +39,7 @@ class RoleForm extends Component {
         <div id="role-form-outer-div">
           <Form
             id="form"
-            onSubmit={e =>
+            onSubmit={(e) =>
               this.props.onRoleEditUpdate(
                 this.props.editData,
                 e.target[0].value,
@@ -79,7 +80,7 @@ class RoleForm extends Component {
                   name="RoleName"
                   required
                   value={this.state.RoleData}
-                  onChange={value => this.onChange(value)}
+                  onChange={(value) => this.onChange(value)}
                 />
               </Col>
             </Form.Group>

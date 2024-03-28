@@ -483,6 +483,44 @@ const attendanceRegister = async (req, res) => {
   }
 };
 
+// const todaysAttendance = async (req, res) => {
+//   try {
+//     const currentDate = new Date();
+//     const currentYear = currentDate.getFullYear();
+//     const currentMonth = currentDate.getMonth() + 1;
+//     const currentDay = currentDate.getDate();
+
+//     // Find all users and populate their attendance data for today
+//     const usersWithAttendance = await Employee.find().populate({
+//       path: "attendanceObjID",
+//       match: {
+//         "years.year": currentYear,
+//         "years.months.month": currentMonth,
+//         "years.months.dates.date": currentDay
+//       }
+//     });
+
+//     // Extract relevant attendance data and send it in the response
+//     const attendanceData = usersWithAttendance.map((user) => {
+//       const attendanceRecord = user.attendanceObjID; // Corrected
+//       return {
+//         userId: user._id,
+//         FirstName: user.FirstName,
+//         LastName: user.LastName,
+//         empID: user.empID,
+//         attendance: attendanceRecord
+//           ? attendanceRecord.years[0].months[0].dates[0]
+//           : null
+//       };
+//     });
+
+//     res.status(200).json(attendanceData);
+//   } catch (error) {
+//     console.error("Error fetching today's attendance data:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
 const todaysAttendance = async (req, res) => {
   try {
     const currentDate = new Date();
@@ -491,26 +529,48 @@ const todaysAttendance = async (req, res) => {
     const currentDay = currentDate.getDate();
 
     // Find all users and populate their attendance data for today
-    const usersWithAttendance = await Employee.find().populate({
-      path: "attendanceObjID",
-      match: {
-        "years.year": currentYear,
-        "years.months.month": currentMonth,
-        "years.months.dates.date": currentDay
-      }
-    });
+    const usersWithAttendance = await Employee.find().populate(
+      "attendanceObjID"
+    );
 
     // Extract relevant attendance data and send it in the response
     const attendanceData = usersWithAttendance.map((user) => {
-      const attendanceRecord = user.attendanceObjID; // Corrected
+      const attendanceRecord = user.attendanceObjID;
+      let attendance = null;
+
+      // Check if attendanceRecord exists and has valid data
+      if (
+        attendanceRecord &&
+        attendanceRecord.years &&
+        attendanceRecord.years.length > 0
+      ) {
+        const yearData = attendanceRecord.years.find(
+          (year) => year.year === currentYear
+        );
+
+        if (yearData && yearData.months && yearData.months.length > 0) {
+          const monthData = yearData.months.find(
+            (month) => month.month === currentMonth
+          );
+
+          if (monthData && monthData.dates && monthData.dates.length > 0) {
+            const dateData = monthData.dates.find(
+              (date) => date.date === currentDay
+            );
+
+            if (dateData) {
+              attendance = dateData;
+            }
+          }
+        }
+      }
+
       return {
         userId: user._id,
         FirstName: user.FirstName,
         LastName: user.LastName,
         empID: user.empID,
-        attendance: attendanceRecord
-          ? attendanceRecord.years[0].months[0].dates[0]
-          : null
+        attendance: attendance
       };
     });
 

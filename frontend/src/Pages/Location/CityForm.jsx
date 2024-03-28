@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./CityForm.css";
 import axios from "axios";
+import BASE_URL from "../config/config";
 
 import { Form, Button, Col, Row } from "react-bootstrap";
 
@@ -17,29 +18,29 @@ class CityForm extends Component {
   }
   loadCountryInfo = () => {
     axios
-      .get("http://localhost:4000/api/country", {
+      .get(`${BASE_URL}/api/country`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ countryData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
   loadStateInfo = () => {
     axios
-      .get("http://localhost:4000/api/state", {
+      .get(`${BASE_URL}/api/state`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ stateData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -52,7 +53,7 @@ class CityForm extends Component {
     console.log(e.target.value);
     let currentCountry = e.target.value;
     let filteredState = this.state.stateData.filter(
-      data => data["country"][0]["_id"] == currentCountry
+      (data) => data["country"][0]["_id"] == currentCountry
     );
     this.setState({ filteredStateData: filteredState });
   }

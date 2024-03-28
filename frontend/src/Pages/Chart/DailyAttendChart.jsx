@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReactApexChart from "react-apexcharts";
+import BASE_URL from "../config/config";
 
 const DailyAttendChart = () => {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -14,9 +15,7 @@ const DailyAttendChart = () => {
   useEffect(() => {
     const fetchAttendanceData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/api/todays-attendance"
-        );
+        const response = await axios.get(`${BASE_URL}/api/todays-attendance`);
         setAttendanceData(response.data);
       } catch (error) {
         console.error("Error fetching today's attendance data:", error);
@@ -201,7 +200,7 @@ export default DailyAttendChart;
 //     const fetchAttendanceData = async () => {
 //       try {
 //         const response = await axios.get(
-//           "http://localhost:4000/api/todays-attendance"
+//           "${BASE_URL}/api/todays-attendance"
 //         );
 //         setAttendanceData(response.data);
 //       } catch (error) {

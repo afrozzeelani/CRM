@@ -1,146 +1,240 @@
-import React, { Component } from "react";
-import "./Department.css";
+import React, { useState } from "react";
 import axios from "axios";
 import DepartmentTable from "./DepartmentTable.jsx";
 import DepartmentForm from "./DepartmentForm.jsx";
 import DepartmentFormEdit from "./DepartmentFormEdit.jsx";
-// import { HashRouter as Router, Route, Link } from "react-router-dom";
+import BASE_URL from "../config/config.js";
 
-// function DepartmentTableF() {
-//   return <DepartmentTable/>;
-// }
-// function DepartmentFormF() {
-//   return  <DepartmentForm onDepartmentSubmit={handleDepartmentSubmit}/>;
-// }
+const Department = () => {
+  const [table, setTable] = useState(true);
+  const [editForm, setEditForm] = useState(false);
+  const [editData, setEditData] = useState({});
 
-// function handleDepartmentSubmit(e) {
-//   e.preventDefault();
-//   console.log(e);
-
-// }
-
-class Department extends Component {
-  state = {
-    table: true,
-    editForm: false,
-    editData: {}
-  };
-
-  render() {
-    // let value=(this.props.pass) ? undefined : "";<i class="fas fa-plus"></i>
-    return (
-      //  <Router>
-      <React.Fragment>
-        {this.state.table ? (
-          this.state.editForm ? (
-            <DepartmentFormEdit
-              onDepartmentEditUpdate={this.handleDepartmentEditUpdate}
-              onFormEditClose={this.handleEditFormClose}
-              editData={this.state.editData}
-            />
-          ) : (
-              <DepartmentTable
-                onAddDepartment={this.handleAddDepartment}
-                onEditDepartment={this.handleEditDepartment}
-              />
-            )
-        ) : (
-            <DepartmentForm
-              onDepartmentSubmit={this.handleDepartmentSubmit}
-              onFormClose={this.handleFormClose}
-            />
-          )}
-
-        {/* <div>debru</div> */}
-        {/* <Route path="/admin/Department/table" exact component={DepartmentTable} /> */}
-        {/* <Route path="/admin/Department/form" exact component={() => <DepartmentForm onDepartmentSubmit={this.handleDepartmentSubmit} />} /> */}
-
-        {/* <DepartmentTable/> */}
-      </React.Fragment>
-
-      //  </Router>
-    );
-  }
-  handleDepartmentSubmit = event => {
+  const handleDepartmentSubmit = (event) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
-    this.setState({ table: true });
+    setTable(true);
 
     let body = {
       CompanyID: event.target[0].value,
       DepartmentName: event.target[1].value
     };
-    //  let body= "CompanyID=" + event.target[0].value + "&Department=" + event.target[1].value;
-    //  let body= "debru";
+
     axios
-      .post("http://localhost:4000/api/department", body, {
+      .post(`${BASE_URL}/api/department`, body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(res => {
-        this.setState({ table: false });
-        this.setState({ table: true });
+      .then((res) => {
+        setTable(false);
+        setTable(true);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
-    // this.setState({ loading: true });
-    // this.login(event.target[0].value, event.target[1].value);
-    // event.target.reset();
   };
-  handleAddDepartment = () => {
+
+  const handleAddDepartment = () => {
     console.log("clicked1");
-    this.setState({ table: false });
+    setTable(false);
   };
-  handleEditDepartment = e => {
+
+  const handleEditDepartment = (e) => {
     console.log(e);
     console.log("clicked6");
-    this.setState({ editForm: true });
-    this.setState({ editData: e });
+    setEditForm(true);
+    setEditData(e);
   };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
-  };
-  handleEditFormClose = () => {
-    console.log("clicked5");
-    this.setState({ editForm: false });
-  };
-  handleFormClose = () => {
-    console.log("clicked1");
-    this.setState({ table: true });
-  };
-  handleDepartmentEditUpdate = (info, newInfo) => {
-    newInfo.preventDefault();
-    // this.setState({ table: true });
-    let body = {
-      // ...info,CompanyID:formData1,Department:formData2
 
+  const handleFormClose = () => {
+    console.log("clicked1");
+    setTable(true);
+  };
+
+  const handleEditFormClose = () => {
+    console.log("clicked5");
+    setEditForm(false);
+  };
+
+  const handleDepartmentEditUpdate = (info, newInfo) => {
+    newInfo.preventDefault();
+    let body = {
       CompanyID: newInfo.target[0].value,
-      DepartmentName: newInfo.target[1].value,
+      DepartmentName: newInfo.target[1].value
     };
     console.log("update", body);
     axios
-      .put(
-        "http://localhost:4000/api/department/" + info["_id"],
-        body, {
+      .put(`${BASE_URL}/api/department/` + info["_id"], body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
-      }
-      )
-      .then(res => {
-        // this.componentDidMount();
-        this.setState({ table: false });
-        this.setState({ table: true });
       })
-      .catch(err => {
+      .then((res) => {
+        setTable(false);
+        setTable(true);
+      })
+      .catch((err) => {
         console.log(err);
       });
 
-    this.setState({ editForm: false });
+    setEditForm(false);
   };
-}
+
+  return (
+    <React.Fragment>
+      {table ? (
+        editForm ? (
+          <DepartmentFormEdit
+            onDepartmentEditUpdate={handleDepartmentEditUpdate}
+            onFormEditClose={handleEditFormClose}
+            editData={editData}
+          />
+        ) : (
+          <DepartmentTable
+            onAddDepartment={handleAddDepartment}
+            onEditDepartment={handleEditDepartment}
+          />
+        )
+      ) : (
+        <DepartmentForm
+          onDepartmentSubmit={handleDepartmentSubmit}
+          onFormClose={handleFormClose}
+        />
+      )}
+    </React.Fragment>
+  );
+};
 
 export default Department;
+
+// import React, { Component } from "react";
+// import "./Department.css";
+// import axios from "axios";
+// import DepartmentTable from "./DepartmentTable.jsx";
+// import DepartmentForm from "./DepartmentForm.jsx";
+// import DepartmentFormEdit from "./DepartmentFormEdit.jsx";
+// import BASE_URL from "../config/config.js";
+
+// class Department extends Component {
+//   state = {
+//     table: true,
+//     editForm: false,
+//     editData: {}
+//   };
+
+//   render() {
+//     // let value=(this.props.pass) ? undefined : "";<i class="fas fa-plus"></i>
+//     return (
+//       //  <Router>
+//       <React.Fragment>
+//         {this.state.table ? (
+//           this.state.editForm ? (
+//             <DepartmentFormEdit
+//               onDepartmentEditUpdate={this.handleDepartmentEditUpdate}
+//               onFormEditClose={this.handleEditFormClose}
+//               editData={this.state.editData}
+//             />
+//           ) : (
+//             <DepartmentTable
+//               onAddDepartment={this.handleAddDepartment}
+//               onEditDepartment={this.handleEditDepartment}
+//             />
+//           )
+//         ) : (
+//           <DepartmentForm
+//             onDepartmentSubmit={this.handleDepartmentSubmit}
+//             onFormClose={this.handleFormClose}
+//           />
+//         )}
+
+//         {/* <div>debru</div> */}
+//         {/* <Route path="/admin/Department/table" exact component={DepartmentTable} /> */}
+//         {/* <Route path="/admin/Department/form" exact component={() => <DepartmentForm onDepartmentSubmit={this.handleDepartmentSubmit} />} /> */}
+
+//         {/* <DepartmentTable/> */}
+//       </React.Fragment>
+
+//       //  </Router>
+//     );
+//   }
+//   handleDepartmentSubmit = (event) => {
+//     event.preventDefault();
+//     console.log("id", event.target[0].value, event.target[1].value);
+//     this.setState({ table: true });
+
+//     let body = {
+//       CompanyID: event.target[0].value,
+//       DepartmentName: event.target[1].value
+//     };
+//     //  let body= "CompanyID=" + event.target[0].value + "&Department=" + event.target[1].value;
+//     //  let body= "debru";
+//     axios
+//       .post(`${BASE_URL}/api/department`, body, {
+//         headers: {
+//           authorization: localStorage.getItem("token") || ""
+//         }
+//       })
+//       .then((res) => {
+//         this.setState({ table: false });
+//         this.setState({ table: true });
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//     // this.setState({ loading: true });
+//     // this.login(event.target[0].value, event.target[1].value);
+//     // event.target.reset();
+//   };
+//   handleAddDepartment = () => {
+//     console.log("clicked1");
+//     this.setState({ table: false });
+//   };
+//   handleEditDepartment = (e) => {
+//     console.log(e);
+//     console.log("clicked6");
+//     this.setState({ editForm: true });
+//     this.setState({ editData: e });
+//   };
+//   handleFormClose = () => {
+//     console.log("clicked1");
+//     this.setState({ table: true });
+//   };
+//   handleEditFormClose = () => {
+//     console.log("clicked5");
+//     this.setState({ editForm: false });
+//   };
+//   handleFormClose = () => {
+//     console.log("clicked1");
+//     this.setState({ table: true });
+//   };
+//   handleDepartmentEditUpdate = (info, newInfo) => {
+//     newInfo.preventDefault();
+//     // this.setState({ table: true });
+//     let body = {
+//       // ...info,CompanyID:formData1,Department:formData2
+
+//       CompanyID: newInfo.target[0].value,
+//       DepartmentName: newInfo.target[1].value
+//     };
+//     console.log("update", body);
+//     axios
+//       .put(`${BASE_URL}/api/department/` + info["_id"], body, {
+//         headers: {
+//           authorization: localStorage.getItem("token") || ""
+//         }
+//       })
+//       .then((res) => {
+//         // this.componentDidMount();
+//         this.setState({ table: false });
+//         this.setState({ table: true });
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+
+//     this.setState({ editForm: false });
+//   };
+// }
+
+// export default Department;

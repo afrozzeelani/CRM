@@ -4,13 +4,14 @@ import axios from "axios";
 // import "./LeaveApplicationEmpForm.css";
 import LeaveImg from "./Leave.svg";
 import InnerDashContainer from "../../Component/InnerDashContainer";
+import BASE_URL from "../config/config";
 
 const LeaveApplicationEmpForm = (props) => {
   const id = localStorage.getItem("_id");
   const [empData, setEmpData] = useState([]);
   const loadEmployeeData = () => {
     axios
-      .get(`http://localhost:4000/api/particularEmployee/${id}`, {
+      .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }

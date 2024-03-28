@@ -5,6 +5,7 @@ import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
+import BASE_URL from "../config/config";
 
 const override = css`
   display: block;
@@ -23,7 +24,7 @@ const AdminCompanyTable = (props) => {
 
   const loadCompanyData = () => {
     axios
-      .get("http://localhost:4000/api/company", {
+      .get(`${BASE_URL}/api/company`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -40,7 +41,7 @@ const AdminCompanyTable = (props) => {
   const onCompanyDelete = (id) => {
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/company/${id}`, {
+        .delete(`${BASE_URL}/api/company/${id}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }

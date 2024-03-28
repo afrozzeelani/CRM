@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
+import { RxCounterClockwiseClock } from "react-icons/rx";
+import { FaUserClock } from "react-icons/fa6";
 
 const AttendanceDetails = () => {
   const [employeeId, setEmployeeId] = useState("");
@@ -127,7 +130,6 @@ const AttendanceDetails = () => {
                 borderRadius: "50%",
                 backgroundColor: "green"
               }}
-              className="spinner-grow"
             ></div>
             Login
           </span>
@@ -145,7 +147,6 @@ const AttendanceDetails = () => {
                 borderRadius: "50%",
                 backgroundColor: "red"
               }}
-              className="spinner-grow"
             ></div>
             Logout
           </span>
@@ -163,7 +164,6 @@ const AttendanceDetails = () => {
                 borderRadius: "50%",
                 backgroundColor: "orange"
               }}
-              className="spinner-grow"
             ></div>
             Break
           </span>
@@ -181,7 +181,6 @@ const AttendanceDetails = () => {
                 borderRadius: "50%",
                 backgroundColor: "green"
               }}
-              className="spinner-grow"
             ></div>
             Login
           </span>
@@ -199,7 +198,6 @@ const AttendanceDetails = () => {
                 borderRadius: "50%",
                 backgroundColor: "red"
               }}
-              className="spinner-grow"
             ></div>
             Logout
           </span>
@@ -217,9 +215,25 @@ const AttendanceDetails = () => {
                 borderRadius: "50%",
                 backgroundColor: "green"
               }}
-              className="spinner-grow"
             ></div>
             Resume
+          </span>
+        );
+      case "WO":
+        return (
+          <span
+            className="d-flex flex-nowrap align-items-center gap-2 fw-bold justify-content-end rounded-5 py-1 px-3 shadow-sm "
+            style={{ color: "red", width: "fit-content" }}
+          >
+            <div
+              style={{
+                height: "12px",
+                width: "12px",
+                borderRadius: "50%",
+                backgroundColor: "red"
+              }}
+            ></div>
+            Logout
           </span>
         );
       default:
@@ -269,6 +283,20 @@ const AttendanceDetails = () => {
     return loginTime ? "Present" : "Absent";
   };
 
+  const GetDay = (s) => {
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    return days[s];
+  };
+
+  function convertMinutesToHoursAndMinutes(minutes) {
+    // Calculate hours
+    var hours = Math.floor(minutes / 60);
+    // Calculate remaining minutes
+    var remainingMinutes = minutes % 60;
+
+    return hours + " Hrs " + remainingMinutes + " Min";
+  }
+
   return (
     <div className="d-flex flex-column p-5 gap-3">
       <div className="d-flex gap-3 ">
@@ -280,7 +308,7 @@ const AttendanceDetails = () => {
             onChange={handleEmployeeChange}
           >
             <option value="" disabled>
-              --Select an employee--
+              --SELECT ANY EMPLOYEE--
             </option>
 
             {employees
@@ -291,7 +319,8 @@ const AttendanceDetails = () => {
                   key={employee._id}
                   value={employee._id}
                 >
-                  🪪 ({employee.empID}) {employee.FirstName}-{employee.LastName}
+                  🪪 ({employee.empID}) {employee.FirstName.toUpperCase()}-
+                  {employee.LastName.toUpperCase()}
                 </option>
               ))}
           </select>
@@ -356,7 +385,7 @@ const AttendanceDetails = () => {
                     cursor: "pointer"
                   }}
                 >
-                  Date
+                  Date | Day
                 </th>
                 <th
                   style={{
@@ -365,7 +394,7 @@ const AttendanceDetails = () => {
                     cursor: "pointer"
                   }}
                 >
-                  Attendance Status
+                  Status
                 </th>
                 <th
                   style={{
@@ -374,6 +403,7 @@ const AttendanceDetails = () => {
                     cursor: "pointer"
                   }}
                 >
+                  <HiOutlineLogin />
                   Login Time
                 </th>
                 <th
@@ -383,7 +413,7 @@ const AttendanceDetails = () => {
                     cursor: "pointer"
                   }}
                 >
-                  Logout Time
+                  Logout Time <HiOutlineLogout />
                 </th>
                 <th
                   style={{
@@ -392,7 +422,8 @@ const AttendanceDetails = () => {
                     cursor: "pointer"
                   }}
                 >
-                  Break
+                  <RxCounterClockwiseClock />
+                  Log Count
                 </th>
                 <th
                   style={{
@@ -401,8 +432,19 @@ const AttendanceDetails = () => {
                     cursor: "pointer"
                   }}
                 >
-                  Log Status
+                  <FaUserClock />
+                  Total Login
                 </th>
+                {/* <th style={{
+                  background: "var(--primaryDashColorDark)",
+                  color: "var(--primaryDashMenuColor)",
+                  cursor: "pointer",
+                }}>Break</th> */}
+                {/* <th style={{
+                  background: "var(--primaryDashColorDark)",
+                  color: "var(--primaryDashMenuColor)",
+                  cursor: "pointer",
+                }}>Log Status</th> */}
               </tr>
             </thead>
             <tbody>
@@ -420,13 +462,28 @@ const AttendanceDetails = () => {
                           onMouseEnter={() => handleMouseEnter(date.date)}
                           onMouseLeave={() => handleMouseLeave()}
                         >
-                          <td className="">
-                            <span
-                              style={{ height: "30px", width: "30px" }}
-                              className="fw-bold d-flex justify-content-center align-items-center bg-info rounded-circle shadow-sm text-white"
+                          <td className="d-flex">
+                            <div
+                              style={{
+                                overflow: "hidden",
+                                boxShadow:
+                                  "0 0 3px 2px rgba(180, 179, 179, 0.863) inset"
+                              }}
+                              className="d-flex rounded-5 justify-content-center align-items-center bg-white border"
                             >
-                              {String(date.date).padStart(2, "0")}
-                            </span>
+                              <span
+                                style={{ height: "30px", width: "30px" }}
+                                className="fw-bold d-flex justify-content-center align-items-center bg-primary shadow-sm text-white"
+                              >
+                                {String(date.date).padStart(2, "0")}
+                              </span>
+                              <span
+                                style={{ width: "3rem" }}
+                                className="fw-bold px-1 text-muted"
+                              >
+                                {GetDay(date.day)}
+                              </span>
+                            </div>
                           </td>
                           <td
                             style={{ verticalAlign: "middle" }}
@@ -468,15 +525,20 @@ const AttendanceDetails = () => {
                                 style={{ fontSize: ".9rem" }}
                                 className="fw-bold text-muted"
                               >
-                                {millisecondsToTime(date.totalBrake)}
-                              </span>{" "}
+                                ( {date.loginTime.length} )
+                              </span>
                               <IoMdInformationCircleOutline
                                 style={{ fontSize: "1.1rem" }}
                                 className="text-dark "
                               />
                             </div>
                             <div
-                              style={{ zIndex: "5", right: "0%" }}
+                              style={{
+                                zIndex: "5",
+                                right: "0%",
+                                maxHeight: "30vh",
+                                overflow: "auto"
+                              }}
                               className="position-absolute"
                             >
                               {isInfoHovering && hoveredDate === date.date && (
@@ -491,7 +553,7 @@ const AttendanceDetails = () => {
                                           color: "var(--primaryDashMenuColor)"
                                         }}
                                       >
-                                        Break
+                                        Login
                                       </th>
                                       <th
                                         style={{
@@ -501,7 +563,7 @@ const AttendanceDetails = () => {
                                           color: "var(--primaryDashMenuColor)"
                                         }}
                                       >
-                                        Resume
+                                        Logout
                                       </th>
                                       <th
                                         style={{
@@ -511,31 +573,18 @@ const AttendanceDetails = () => {
                                           color: "var(--primaryDashMenuColor)"
                                         }}
                                       >
-                                        Total Break
+                                        Total Login
                                       </th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {date.breakTime.map((breakTime, index) => (
-                                      <tr className="shadow-sm" key={index}>
-                                        <td
-                                          className="text-uppercase text-center"
-                                          style={{ whiteSpace: "pre" }}
-                                        >
-                                          {breakTime}
-                                        </td>
-                                        <td
-                                          className="text-uppercase text-center"
-                                          style={{ whiteSpace: "pre" }}
-                                        >
-                                          {date.ResumeTime[index]}
-                                        </td>
-                                        <td
-                                          className="text-end"
-                                          style={{ whiteSpace: "pre" }}
-                                        >
-                                          {millisecondsToTime(
-                                            date.BreakData[index]
+                                    {date.loginTime.map((loginTime, index) => (
+                                      <tr key={index}>
+                                        <td>{loginTime}</td>
+                                        <td>{date.logoutTime[index]}</td>
+                                        <td>
+                                          {convertMinutesToHoursAndMinutes(
+                                            date.LogData[index]
                                           )}
                                         </td>
                                       </tr>
@@ -545,7 +594,12 @@ const AttendanceDetails = () => {
                               )}
                             </div>
                           </td>
-                          <td>{getLogStatus(date.status)}</td>
+                          <td>
+                            {convertMinutesToHoursAndMinutes(
+                              date.totalLogAfterBreak
+                            )}
+                          </td>
+                          {/* <td>{getLogStatus(date.status)}</td> */}
                         </tr>
                       ))
                   )

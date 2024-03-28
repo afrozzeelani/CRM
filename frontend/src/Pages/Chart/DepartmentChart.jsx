@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 import "./chart.css";
 import axios from "axios";
+import BASE_URL from "../config/config";
 
 const DepartmentChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
@@ -39,7 +40,7 @@ const DepartmentChart = () => {
 
   const loadEmployeeData = () => {
     axios
-      .get("http://localhost:4000/api/employee", {
+      .get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }

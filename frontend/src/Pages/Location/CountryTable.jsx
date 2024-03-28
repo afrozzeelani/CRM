@@ -7,6 +7,7 @@ import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
+import BASE_URL from "../config/config";
 
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -65,7 +66,7 @@ class CountryTable extends Component {
   // countryDataArray;
   loadCountryData = () => {
     axios
-      .get("http://localhost:4000/api/country", {
+      .get(`${BASE_URL}/api/country`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -100,7 +101,7 @@ class CountryTable extends Component {
     // let body= "ID=" + e;
     if (window.confirm("Are you sure to delete this record ? ") == true) {
       axios
-        .delete("http://localhost:4000/api/country/" + e, {
+        .delete(`${BASE_URL}/api/country/` + e, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }
@@ -188,7 +189,7 @@ class CountryTable extends Component {
                 <th
                   style={{
                     background: "var(--primaryDashColorDark)",
-                    color: "var(--primaryDashMenuColor)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   className="py-1"
                 >

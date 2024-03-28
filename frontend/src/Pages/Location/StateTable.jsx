@@ -7,6 +7,7 @@ import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
+import BASE_URL from "../config/config";
 
 // var FontAwesome = require('react-fontawesome');
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -28,7 +29,7 @@ class StateTable extends Component {
   // stateDataArray;
   loadStateData = () => {
     axios
-      .get("http://localhost:4000/api/state", {
+      .get(`${BASE_URL}/api/state`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -64,7 +65,7 @@ class StateTable extends Component {
     // let body= "ID=" + e;
     if (window.confirm("Are you sure to delete this record ? ") == true) {
       axios
-        .delete("http://localhost:4000/api/state/" + e, {
+        .delete(`${BASE_URL}/api/state/` + e, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }
@@ -133,7 +134,7 @@ class StateTable extends Component {
                 <th
                   style={{
                     background: "var(--primaryDashColorDark)",
-                    color: "var(--primaryDashMenuColor)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                 >
                   Country
@@ -141,7 +142,7 @@ class StateTable extends Component {
                 <th
                   style={{
                     background: "var(--primaryDashColorDark)",
-                    color: "var(--primaryDashMenuColor)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                 >
                   State

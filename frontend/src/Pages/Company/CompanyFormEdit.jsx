@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import "./CompanyFormEdit.css";
+import BASE_URL from "../config/config";
 
 class CompanyFormEdit extends Component {
   state = {
@@ -61,7 +62,7 @@ class CompanyFormEdit extends Component {
 
   loadCountryInfo = () => {
     axios
-      .get("http://localhost:4000/api/country", {
+      .get(`${BASE_URL}/api/country`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -75,7 +76,7 @@ class CompanyFormEdit extends Component {
   };
   loadStateInfo = () => {
     axios
-      .get("http://localhost:4000/api/state", {
+      .get(`${BASE_URL}/api/state`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -89,7 +90,7 @@ class CompanyFormEdit extends Component {
   };
   loadCityInfo = () => {
     axios
-      .get("http://localhost:4000/api/city", {
+      .get(`${BASE_URL}/api/city`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }

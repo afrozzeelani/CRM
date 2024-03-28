@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { TfiReload } from "react-icons/tfi";
 import { FaCircleInfo } from "react-icons/fa6";
+import BASE_URL from "../../../Pages/config/config";
 
 const AttendanceDetails = (props) => {
   // const [employeeId, setEmployeeId] = useState("");
@@ -36,7 +37,7 @@ const AttendanceDetails = (props) => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/employee/" + props.data["_id"],
+        `${BASE_URL}/api/employee/` + props.data["_id"],
         {
           headers: {
             authorization: localStorage.getItem("token") || ""
@@ -52,7 +53,7 @@ const AttendanceDetails = (props) => {
   // const handleFetchAttendance = async () => {
   //   try {
   //     const response = await axios.get(
-  //       `http://localhost:4000/api/attendance/${employeeId}`,
+  //       `${BASE_URL}/api/attendance/${employeeId}`,
   //       {
   //         headers: {
   //           Authorization: `Bearer ${localStorage.getItem("token") || ""}`
@@ -71,7 +72,7 @@ const AttendanceDetails = (props) => {
   const handleFetchAttendance = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/attendance/${employeeId}`,
+        `${BASE_URL}/api/attendance/${employeeId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token") || ""}`

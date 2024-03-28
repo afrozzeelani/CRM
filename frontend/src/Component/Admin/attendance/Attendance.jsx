@@ -3,6 +3,7 @@ import axios from "axios";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import SelfAttendance from "./SelfAttendance";
 import Moment from "moment";
+import BASE_URL from "../../../Pages/config/config";
 
 function SetLog(props) {
   // const [employees, setEmployees] = useState([]);
@@ -25,7 +26,7 @@ function SetLog(props) {
   useEffect(() => {
     const loadEmployeeData = async (email) => {
       await axios
-        .get("http://localhost:4000/api/employee", {
+        .get(`${BASE_URL}/api/employee`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }
@@ -49,7 +50,7 @@ function SetLog(props) {
     const loadPersonalInfoData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/personal-info/" + props.data["_id"],
+          `${BASE_URL}/api/personal-info/` + props.data["_id"],
           {
             headers: {
               authorization: localStorage.getItem("token") || ""
@@ -82,7 +83,7 @@ function SetLog(props) {
   const getMessage = async (employeeID) => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/attendance/${employeeID}`
+        `${BASE_URL}/api/attendance/${employeeID}`
       );
       const lastEntry = response.data[response.data.length - 1];
 
@@ -111,7 +112,7 @@ function SetLog(props) {
       }
 
       const currentTime = Moment().filter("HH:mm:ss");
-      await axios.post(`http://localhost:4000/api/attendance/${attencenceID}`, {
+      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
         employeeId: selectedEmployee,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
@@ -139,7 +140,7 @@ function SetLog(props) {
       }
 
       const currentTime = Moment().filter("HH:mm:ss");
-      await axios.post(`http://localhost:4000/api/attendance/${attencenceID}`, {
+      await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
         employeeId: selectedEmployee,
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
@@ -171,18 +172,15 @@ function SetLog(props) {
         const currentTime = Moment().filter("HH:mm:ss");
         const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
 
-        await axios.post(
-          `http://localhost:4000/api/attendance/${attencenceID}`,
-          {
-            employeeId: selectedEmployee,
-            year: new Date().getFullYear(),
-            month: new Date().getMonth() + 1,
-            date: new Date().getDate(),
-            ResumeTime: [currentTime],
-            resumeTimeMS: [currentTimeMs],
-            status: "resume"
-          }
-        );
+        await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
+          employeeId: selectedEmployee,
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          date: new Date().getDate(),
+          ResumeTime: [currentTime],
+          resumeTimeMS: [currentTimeMs],
+          status: "resume"
+        });
 
         setMessage("Resumed time recorded successfully");
       } catch (error) {
@@ -210,18 +208,15 @@ function SetLog(props) {
         const currentTime = Moment().filter("HH:mm:ss");
         const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
 
-        await axios.post(
-          `http://localhost:4000/api/attendance/${attencenceID}`,
-          {
-            employeeId: selectedEmployee,
-            year: new Date().getFullYear(),
-            month: new Date().getMonth() + 1,
-            date: new Date().getDate(),
-            breakTime: [currentTime],
-            breakTimeMs: [currentTimeMs],
-            status: "break"
-          }
-        );
+        await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
+          employeeId: selectedEmployee,
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          date: new Date().getDate(),
+          breakTime: [currentTime],
+          breakTimeMs: [currentTimeMs],
+          status: "break"
+        });
         setMessage("Break time recorded successfully");
       } catch (error) {
         console.error("Error recording break time:", error);

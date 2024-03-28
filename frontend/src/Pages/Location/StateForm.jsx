@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./StateForm.css";
 import axios from "axios";
+import BASE_URL from "../config/config";
 
 import { Form, Button, Col, Row } from "react-bootstrap";
 
@@ -11,17 +12,17 @@ class StateForm extends Component {
   countryData = [];
   loadCountryInfo = () => {
     axios
-      .get("http://localhost:4000/api/country", {
+      .get(`${BASE_URL}/api/country`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.countryData = response.data;
 
         this.setState({ countryInfo: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };

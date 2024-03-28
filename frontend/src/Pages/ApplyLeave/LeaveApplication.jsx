@@ -6,6 +6,8 @@ import LeaveApplicationEmpForm from "./LeaveApplicationForm.jsx";
 import LeaveApplicationEmpFormEdit from "./LeaveApplicationFormEdit.jsx";
 import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceContext.js";
 import { v4 as uuid } from "uuid";
+import BASE_URL from "../config/config.js";
+
 const LeaveApplicationEmp = (props) => {
   const [table, setTable] = useState(true);
   const [editForm, setEditForm] = useState(false);
@@ -30,8 +32,7 @@ const LeaveApplicationEmp = (props) => {
     console.log(body);
     axios
       .post(
-        "http://localhost:4000/api/leave-application-emp/" +
-          localStorage.getItem("_id"),
+        `${BASE_URL}/api/leave-application-emp/` + localStorage.getItem("_id"),
         body,
         {
           headers: {
@@ -98,8 +99,7 @@ const LeaveApplicationEmp = (props) => {
 
     axios
       .put(
-        "http://localhost:4000/api/leave-application-emp/" +
-          localStorage.getItem("_id"),
+        `${BASE_URL}/api/leave-application-emp/` + localStorage.getItem("_id"),
         body,
         {
           headers: {
@@ -178,7 +178,7 @@ export default LeaveApplicationEmp;
 
 //     axios
 //       .post(
-//         "http://localhost:4000/api/leave-application-emp/" +
+//         "${BASE_URL}/api/leave-application-emp/" +
 //           localStorage.getItem("_id"),
 //         body,
 //         {
@@ -233,7 +233,7 @@ export default LeaveApplicationEmp;
 
 //     axios
 //       .put(
-//         "http://localhost:4000/api/leave-application-emp/" + info["_id"],
+//         "${BASE_URL}/api/leave-application-emp/" + info["_id"],
 //         body,
 //         {
 //           headers: {

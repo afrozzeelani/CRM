@@ -10,6 +10,7 @@ import { LuSearch } from "react-icons/lu";
 import { GrFormPrevious } from "react-icons/gr";
 import { RxCaretSort } from "react-icons/rx";
 import { MdNearbyError } from "react-icons/md";
+import BASE_URL from "../config/config";
 
 const override = css`
   display: block;
@@ -29,7 +30,7 @@ const AdminSalaryTable = (props) => {
 
   const loadSalaryData = () => {
     axios
-      .get("http://localhost:4000/api/salary", {
+      .get(`${BASE_URL}/api/salary`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -63,7 +64,7 @@ const AdminSalaryTable = (props) => {
     console.log(e);
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/salary/${e}`, {
+        .delete(`${BASE_URL}/api/salary/${e}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }
@@ -214,9 +215,8 @@ const AdminSalaryTable = (props) => {
                         whiteSpace: "pre"
                       }}
                       className="py-2"
-                      onClick={() => handleSort("BasicSalary")}
+                      // onClick={() => handleSort("BasicSalary")}
                     >
-                      <RxCaretSort />
                       Designation {renderSortIcon("BasicSalary")}
                     </th>
                     <th
@@ -240,9 +240,8 @@ const AdminSalaryTable = (props) => {
                         whiteSpace: "pre"
                       }}
                       className="py-2"
-                      onClick={() => handleSort("BankName")}
+                      // onClick={() => handleSort("BankName")}
                     >
-                      <RxCaretSort />
                       Bank Name {renderSortIcon("BankName")}
                     </th>
                     <th
@@ -253,9 +252,8 @@ const AdminSalaryTable = (props) => {
                         whiteSpace: "pre"
                       }}
                       className="py-2"
-                      onClick={() => handleSort("AccountNo")}
+                      // onClick={() => handleSort("AccountNo")}
                     >
-                      <RxCaretSort />
                       Account No {renderSortIcon("AccountNo")}
                     </th>
                     <th
@@ -266,9 +264,8 @@ const AdminSalaryTable = (props) => {
                         whiteSpace: "pre"
                       }}
                       className="py-2"
-                      onClick={() => handleSort("AccountHolderName")}
+                      // onClick={() => handleSort("AccountHolderName")}
                     >
-                      <RxCaretSort />
                       Account Holder Name {renderSortIcon("AccountHolderName")}
                     </th>
 
@@ -280,9 +277,8 @@ const AdminSalaryTable = (props) => {
                         whiteSpace: "pre"
                       }}
                       className="py-2"
-                      onClick={() => handleSort("IFSCcode")}
+                      // onClick={() => handleSort("IFSCcode")}
                     >
-                      <RxCaretSort />
                       IFSC Code {renderSortIcon("IFSCcode")}
                     </th>
                     <th
@@ -293,9 +289,8 @@ const AdminSalaryTable = (props) => {
                         whiteSpace: "pre"
                       }}
                       className="py-2"
-                      onClick={() => handleSort("TaxDeduction")}
+                      // onClick={() => handleSort("TaxDeduction")}
                     >
-                      <RxCaretSort />
                       Tax Deduction {renderSortIcon("TaxDeduction")}
                     </th>
                     <th

@@ -8,6 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { BsFiletypeDoc } from "react-icons/bs";
+import BASE_URL from "../../../Pages/config/config";
 
 const AdminTaskStatus = () => {
   const [tasks, setTasks] = useState([]);
@@ -53,7 +54,7 @@ const AdminTaskStatus = () => {
     getPdf();
   }, []);
   const getPdf = async () => {
-    const result = await axios.get("http://localhost:4000/api/getTask");
+    const result = await axios.get(`${BASE_URL}/api/getTask`);
     console.log(result.data.data);
     setAllImage(result.data.data);
   };
@@ -64,16 +65,12 @@ const AdminTaskStatus = () => {
         return val._id === id;
       });
     console.log(require[0].pdf);
-    window.open(
-      `http://localhost:4000/${require[0].pdf}`,
-      "_blank",
-      "noreferrer"
-    );
+    window.open(`${BASE_URL}/${require[0].pdf}`, "_blank", "noreferrer");
   };
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/tasks");
+      const response = await axios.get(`${BASE_URL}/api/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error.message);
@@ -106,7 +103,7 @@ const AdminTaskStatus = () => {
       }
 
       // Update the task status to "Cancelled" in the database
-      await axios.put(`http://localhost:4000/api/tasks/${taskId}`, {
+      await axios.put(`${BASE_URL}/api/tasks/${taskId}`, {
         status: "Cancelled",
         comment: cancellationRemarks
       });
@@ -150,7 +147,7 @@ const AdminTaskStatus = () => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:4000/api/tasks/${updatedTask.id}`, {
+      await axios.put(`${BASE_URL}/api/tasks/${updatedTask.id}`, {
         Taskname: updatedTask.Taskname,
         description: updatedTask.description,
         startDate: updatedTask.startDate,
@@ -181,7 +178,7 @@ const AdminTaskStatus = () => {
     try {
       const CompleteMassage = prompt("Enter remarks for task cancellation:");
 
-      await axios.put(`http://localhost:4000/api/tasks/${taskId}`, {
+      await axios.put(`${BASE_URL}/api/tasks/${taskId}`, {
         status: "Completed",
         comment: CompleteMassage
       });

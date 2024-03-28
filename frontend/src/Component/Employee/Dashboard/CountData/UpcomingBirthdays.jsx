@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { GiPartyPopper } from "react-icons/gi";
 import HappyBirthday from "./HappyBirthday.svg";
+import BASE_URL from "../../../../Pages/config/config";
 
 const UpcomingBirthdays = () => {
   const [employeeData, setEmployeeData] = useState([]);
@@ -14,7 +15,7 @@ const UpcomingBirthdays = () => {
 
   const loadEmployeeData = () => {
     axios
-      .get("http://localhost:4000/api/employee/" + localStorage.getItem("_id"),{
+      .get(`${BASE_URL}/api/employee/` + localStorage.getItem("_id"), {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }

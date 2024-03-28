@@ -29,15 +29,19 @@ const Login = (props) => {
       >
         <div
           style={{ height: "100%" }}
-          className="col-12 col-md-6  px-0 p-md-5 d-flex bg-white flex-column justify-content-center aline-center"
+          className="col-12 col-md-6 position-relative  px-0 p-md-5 d-flex bg-white flex-column justify-content-center aline-center"
         >
           <form
             style={{ height: "100%" }}
             onSubmit={props.onSubmit}
             className="form  my-auto  w-75  p-0 p-md-3 pb-4 rounded text-black fw-bold d-flex flex-column justify-content-center"
           >
-            <h2 className="fw-bolder text-success mb-4 text-center text-md-start">
-              {" "}
+            <h2
+              style={{
+                color: "var(--primaryDashColorDark)"
+              }}
+              className="fw-bolder mb-4 text-center text-md-start gap-2"
+            >
               <FaUserCircle /> Log in
             </h2>
             <div className="d-flex flex-column my-3">
@@ -113,8 +117,12 @@ const Login = (props) => {
 
             <div className="row mx-auto w-100 justify-content-between my-3 row-gap-4">
               <input
+                style={{
+                  background: "var(--primaryDashColorDark)",
+                  color: "var(--primaryDashMenuColor)"
+                }}
                 type="submit"
-                className="btn col-12 col-md-5 btn-success shadow rounded-5 fw-bolder shadow-sm"
+                className="btn col-12 col-md-5  shadow rounded-5 fw-bolder shadow-sm"
                 value=" Login"
               />
               <Link
@@ -142,19 +150,22 @@ const Login = (props) => {
           </form>
         </div>
         <div
-          style={{ height: "100%", backgroundColor: "#a6ecdec7" }}
+          style={{
+            height: "100%",
+            backgroundColor: "var(--primaryDashColorDark)"
+          }}
           className="col-12 col-md-6 p-5 d-flex flex-column justify-content-center gap-4 "
         >
           <div className="pt-5">
             <h5
               style={{ wordSpacing: "5px" }}
-              className="text-muted text-center"
+              className="text-white text-center"
             >
               👋 Nice to se you again
             </h5>
             <h1
               style={{ letterSpacing: "5px" }}
-              className="fw-bolder text-success text-center"
+              className="fw-bolder text-white text-center"
             >
               Welcome Back
             </h1>
@@ -164,7 +175,7 @@ const Login = (props) => {
             src={LoginIMG}
             alt=""
           />
-          <p className="text-center pt-5 text-muted">www.kasperinfotech.org</p>
+          <p className="text-center pt-5 text-white">www.kasperinfotech.org</p>
         </div>
       </div>
     </div>

@@ -27,6 +27,7 @@ import { FcNumericalSorting12 } from "react-icons/fc";
 import { FcNumericalSorting21 } from "react-icons/fc";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import BASE_URL from "../config/config";
 
 // *************csv & pdf **************//
 import jsPDF from "jspdf";
@@ -55,7 +56,7 @@ const AdminEmployeeTable = (props) => {
 
   const loadEmployeeData = () => {
     axios
-      .get("http://localhost:4000/api/employee", {
+      .get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -117,7 +118,7 @@ const AdminEmployeeTable = (props) => {
   const onEmployeeDelete = (e) => {
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/employee/${e}`, {
+        .delete(`${BASE_URL}/api/employee/${e}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }

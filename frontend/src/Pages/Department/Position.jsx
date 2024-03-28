@@ -4,6 +4,7 @@ import axios from "axios";
 import PositionTable from "./PositionTable.jsx";
 import PositionForm from "./PositionForm.jsx";
 import PositionFormEdit from "./PositionFormEdit.jsx";
+import BASE_URL from "../config/config.js";
 // import { HashRouter as Router, Route, Link } from "react-router-dom";
 
 // function PositionTableF() {
@@ -39,17 +40,17 @@ class Position extends Component {
               editData={this.state.editData}
             />
           ) : (
-              <PositionTable
-                onAddPosition={this.handleAddPosition}
-                onEditPosition={this.handleEditPosition}
-              />
-            )
-        ) : (
-            <PositionForm
-              onPositionSubmit={this.handlePositionSubmit}
-              onFormClose={this.handleFormClose}
+            <PositionTable
+              onAddPosition={this.handleAddPosition}
+              onEditPosition={this.handleEditPosition}
             />
-          )}
+          )
+        ) : (
+          <PositionForm
+            onPositionSubmit={this.handlePositionSubmit}
+            onFormClose={this.handleFormClose}
+          />
+        )}
 
         {/* <div>debru</div> */}
         {/* <Route path="/admin/Position/table" exact component={PositionTable} /> */}
@@ -61,7 +62,7 @@ class Position extends Component {
       //  </Router>
     );
   }
-  handlePositionSubmit = event => {
+  handlePositionSubmit = (event) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
     this.setState({ table: true });
@@ -73,16 +74,16 @@ class Position extends Component {
     //  let body= "CompanyID=" + event.target[0].value + "&Position=" + event.target[1].value;
     //  let body= "debru";
     axios
-      .post("http://localhost:4000/api/position", body, {
+      .post(`${BASE_URL}/api/position`, body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(res => {
+      .then((res) => {
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
     // this.setState({ loading: true });
@@ -93,7 +94,7 @@ class Position extends Component {
     console.log("clicked1");
     this.setState({ table: false });
   };
-  handleEditPosition = e => {
+  handleEditPosition = (e) => {
     console.log(e);
     console.log("clicked6");
     this.setState({ editForm: true });
@@ -114,26 +115,22 @@ class Position extends Component {
   handlePositionEditUpdate = (info, formData1, formData2) => {
     // this.setState({ table: true });
     let body = {
-
       CompanyID: formData1,
-      PositionName: formData2,
+      PositionName: formData2
     };
     console.log("update", body);
     axios
-      .put(
-        "http://localhost:4000/api/position/" + info["_id"],
-        body, {
+      .put(`${BASE_URL}/api/position/` + info["_id"], body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
-      }
-      )
-      .then(res => {
+      })
+      .then((res) => {
         // this.componentDidMount();
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 

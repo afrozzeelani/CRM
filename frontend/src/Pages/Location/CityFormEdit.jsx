@@ -4,6 +4,7 @@ import { HashRouter as Router, Route, Link } from "react-router-dom";
 // import { Form,Button } from "react-bootstrap";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
+import BASE_URL from "../config/config";
 
 class CityForm extends Component {
   state = {
@@ -19,29 +20,29 @@ class CityForm extends Component {
   }
   loadCountryInfo = () => {
     axios
-      .get("http://localhost:4000/api/country", {
+      .get(`${BASE_URL}/api/country`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ countryData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
   loadStateInfo = () => {
     axios
-      .get("http://localhost:4000/api/state", {
+      .get(`${BASE_URL}/api/state`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.setState({ stateData: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -54,7 +55,7 @@ class CityForm extends Component {
     console.log(e.target.value);
     let currentCountry = e.target.value;
     let filteredState = this.state.stateData.filter(
-      data => data["country"][0]["_id"] == currentCountry
+      (data) => data["country"][0]["_id"] == currentCountry
     );
     this.setState({ filteredStateData: filteredState });
   }
@@ -71,7 +72,9 @@ class CityForm extends Component {
         <div id="role-form-outer-div">
           <Form
             id="form"
-            onSubmit={e => this.props.onCityEditUpdate(this.props.editData, e)}
+            onSubmit={(e) =>
+              this.props.onCityEditUpdate(this.props.editData, e)
+            }
           >
             <Form.Group as={Row}>
               <Form.Label column sm={2}>
@@ -126,7 +129,7 @@ class CityForm extends Component {
                   placeholder="City"
                   name="City"
                   required
-                  onChange={value => this.onChange(value)}
+                  onChange={(value) => this.onChange(value)}
                   value={this.state.CityData}
                 />
               </Col>

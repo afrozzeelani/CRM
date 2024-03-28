@@ -1,0 +1,60 @@
+.hrdashgrid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas:
+        "c1 c1 c1 c1 c1 c1 c2 c2"
+        "c3 c3 c3 c3 c3 c3 c2 c2"
+        "c7 c7 c7 c5 c5 c5 c6 c6"
+        "c4 c4 c4 c4 c8 c8 c8 c8";
+    gap: 1rem;
+    height: 100%;
+    padding: .5rem;
+    background: linear-gradient(rgba(255, 166, 0, 0.219), rgba(0, 0, 255, 0.24));
+}
+
+.hrdashgrid {
+    border-radius: 10px;
+    background-color: transparent;
+    /* overflow: hidden; */
+}
+
+
+.hrdashgrid-container .dash-1 {
+    grid-area: c1;
+}
+
+.hrdashgrid-container .dash-2 {
+    grid-area: c2;
+}
+
+.hrdashgrid-container .dash-3 {
+    grid-area: c3;
+}
+
+.hrdashgrid-container .dash-4 {
+    grid-area: c4;
+}
+
+.hrdashgrid-container .dash-5 {
+    grid-area: c5;
+}
+
+.hrdashgrid-container .dash-6 {
+    grid-area: c6;
+}
+
+.hrdashgrid-container .dash-7 {
+    grid-area: c7;
+}
+
+@media (max-width : 900px) {
+    .hrdashgrid-container {
+        grid-template-columns: 1fr;
+        /* grid-template-rows: repeat(6, 200px); */
+        grid-template-areas: initial;
+    }
+
+    .hrdashgrid {
+        grid-area: initial !important;
+    }
+}

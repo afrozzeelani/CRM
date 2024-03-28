@@ -11,6 +11,7 @@ import PersonalInfo from "../../Component/Employee/EmpPresonal/PersonalInfo.jsx"
 import Education from "../../Component/Employee/EmpEducation/Education.jsx";
 import FamilyInfo from "../../Component/Employee/EmpFamily/FamilyInfo.jsx";
 import WorkExperience from "../../Component/Employee/EmpWorkExp/WorkExperience.jsx";
+import BASE_URL from "../config/config.js";
 
 const Employee = () => {
   const [table, setTable] = useState(true);
@@ -128,7 +129,7 @@ const Employee = () => {
     formData.append("reportManager", event.target[14].value);
     formData.append("reportHr", event.target[15].value);
     await axios
-      .post("http://localhost:4000/api/employee", formData, {
+      .post(`${BASE_URL}/api/employee`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           authorization: localStorage.getItem("token") || ""
@@ -230,7 +231,7 @@ const Employee = () => {
     // formData.append("TerminateDate", newInfo.target[14].value);
 
     axios
-      .put(`http://localhost:4000/api/employee/${info["_id"]}`, formData, {
+      .put(`${BASE_URL}/api/employee/${info["_id"]}`, formData, {
         headers: {
           authorization: localStorage.getItem("token") || "",
           "Content-Type": "multipart/form-data" // Set content type explicitly for FormData

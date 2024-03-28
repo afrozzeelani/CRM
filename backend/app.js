@@ -802,14 +802,17 @@ io.on("connection", (socket) => {
 
 /* document */
 const documentSchema = new mongoose.Schema({
+  title: String,
+  number: Number,
   files: [String]
 });
 const Document = mongoose.model("Document", documentSchema);
 
 app.post("/upload", upload.array("files"), async (req, res) => {
   try {
+    const { title, number } = req.body;
     const files = req.files.map((file) => file.originalname);
-    const newDocument = new Document({ files });
+    const newDocument = new Document({ title, number, files });
     await newDocument.save();
     res.status(201).send("Document uploaded successfully.");
   } catch (error) {
@@ -817,7 +820,6 @@ app.post("/upload", upload.array("files"), async (req, res) => {
     res.status(500).send("Error uploading document.");
   }
 });
-
 app.get("/documents", async (req, res) => {
   try {
     const documents = await Document.find();

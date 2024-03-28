@@ -3,6 +3,7 @@ import React, { Component } from "react";
 // import { Form,Button } from "react-bootstrap";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
+import BASE_URL from "../config/config";
 
 class DepartmentForm extends Component {
   state = {
@@ -15,12 +16,12 @@ class DepartmentForm extends Component {
   companyData = [];
   loadCompanyInfo = () => {
     axios
-      .get("http://localhost:4000/api/company", {
+      .get(`${BASE_URL}/api/company`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         // if(response.data.length==0){this.roleObj=["temp"];}
         // else{
 
@@ -31,7 +32,7 @@ class DepartmentForm extends Component {
 
         this.setState({ companyInfo: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -48,7 +49,7 @@ class DepartmentForm extends Component {
         <div id="role-form-outer-div">
           <Form
             id="form"
-            onSubmit={e =>
+            onSubmit={(e) =>
               this.props.onDepartmentEditUpdate(this.props.editData, e)
             }
           >
@@ -86,7 +87,7 @@ class DepartmentForm extends Component {
                   name="DepartmentName"
                   required
                   value={this.state.DepartmentData}
-                  onChange={value => this.onChange(value)}
+                  onChange={(value) => this.onChange(value)}
                 />
               </Col>
             </Form.Group>

@@ -12,6 +12,7 @@ import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceCon
 import { useHistory } from "react-router-dom";
 import addNotification from "react-push-notification";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
+import BASE_URL from "../config/config";
 
 const NavBar = (props) => {
   const [activeProfile, setActiveProfile] = useState(null);
@@ -35,7 +36,7 @@ const NavBar = (props) => {
   };
   const loadEmployeeData = () => {
     axios
-      .get(`http://localhost:4000/api/particularEmployee/${id}`, {
+      .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -55,7 +56,7 @@ const NavBar = (props) => {
   const notificationDeleteHandler = (id) => {
     axios
       .post(
-        `http://localhost:4000/api/notificationDeleteHandler/${id}`,
+        `${BASE_URL}/api/notificationDeleteHandler/${id}`,
         { email },
         {
           headers: {
@@ -76,7 +77,7 @@ const NavBar = (props) => {
     console.log(id);
     axios
       .post(
-        `http://localhost:4000/api/notificationStatusUpdate/${id}`,
+        `${BASE_URL}/api/notificationStatusUpdate/${id}`,
         { email },
         {
           headers: {
@@ -196,7 +197,7 @@ const NavBar = (props) => {
     if (notification.length > 0) {
       axios
         .post(
-          `http://localhost:4000/api/selectedNotificationDelete`,
+          `${BASE_URL}/api/selectedNotificationDelete`,
           { email },
           {
             headers: {

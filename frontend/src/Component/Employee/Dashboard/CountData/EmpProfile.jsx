@@ -11,6 +11,7 @@ import { IoMdDownload } from "react-icons/io";
 import FloralAbstract from "../../EmpPresonal/FloralAbstract.jpg";
 import { GoDotFill } from "react-icons/go";
 import { IoArrowBackCircle, IoEye } from "react-icons/io5";
+import BASE_URL from "../../../../Pages/config/config";
 
 const override = css`
   display: block;
@@ -29,15 +30,11 @@ const EmpProfile = (props) => {
 
   const loadPersonalInfoData = () => {
     axios
-      .get(
-        `http://localhost:4000/api/personal-info/` +
-          localStorage.getItem("_id"),
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+      .get(`${BASE_URL}/api/personal-info/` + localStorage.getItem("_id"), {
+        headers: {
+          authorization: localStorage.getItem("token") || ""
         }
-      )
+      })
       .then((response) => {
         const data = response.data;
         setPersonalInfoData(data);
@@ -99,7 +96,7 @@ const EmpProfile = (props) => {
     console.log(e);
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/personalInfo/${e}`, {
+        .delete(`${BASE_URL}/api/personalInfo/${e}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }

@@ -4,6 +4,7 @@ import "./Education.css";
 import EducationTable from "./EducationTable.jsx";
 import EducationForm from "./EducationForm.jsx";
 import EducationFormEdit from "./EducationFormEdit.jsx";
+import BASE_URL from "../../../Pages/config/config.js";
 
 const Education = (props) => {
   const [table, setTable] = useState(true);
@@ -22,7 +23,7 @@ const Education = (props) => {
     };
 
     axios
-      .post(`http://localhost:4000/api/education/${props.data["_id"]}`, body, {
+      .post(`${BASE_URL}/api/education/${props.data["_id"]}`, body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -64,7 +65,7 @@ const Education = (props) => {
     };
 
     axios
-      .put(`http://localhost:4000/api/education/${info["_id"]}`, body, {
+      .put(`${BASE_URL}/api/education/${info["_id"]}`, body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }

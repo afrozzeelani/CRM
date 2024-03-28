@@ -4,6 +4,7 @@ import "./Salary.css";
 import SalaryTable from "./SalaryTable.jsx";
 import SalaryForm from "./SalaryForm.jsx";
 import SalaryFormEdit from "./SalaryFormEdit.jsx";
+import BASE_URL from "../config/config.js";
 
 const Salary = () => {
   const [table, setTable] = useState(true);
@@ -25,15 +26,11 @@ const Salary = () => {
       };
 
       axios
-        .post(
-          "http://localhost:4000/api/salary/" + event.target[0].value,
-          body,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+        .post(`${BASE_URL}/api/salary/` + event.target[0].value, body, {
+          headers: {
+            authorization: localStorage.getItem("token") || ""
           }
-        )
+        })
         .then((res) => {
           setTable(false);
           setTable(true);
@@ -86,15 +83,11 @@ const Salary = () => {
       };
 
       axios
-        .put(
-          "http://localhost:4000/api/salary/" + info["salary"][0]["_id"],
-          body,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+        .put(`${BASE_URL}/api/salary/` + info["salary"][0]["_id"], body, {
+          headers: {
+            authorization: localStorage.getItem("token") || ""
           }
-        )
+        })
         .then((res) => {
           setTable(false);
           setTable(true);

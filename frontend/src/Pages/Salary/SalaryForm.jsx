@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Form, Button, Col } from "react-bootstrap";
+import BASE_URL from "../config/config";
 
 const SalaryForm = (props) => {
   const [employeeData, setEmployeeData] = useState([]);
@@ -8,7 +9,7 @@ const SalaryForm = (props) => {
   useEffect(() => {
     const loadEmployeeInfo = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/employee", {
+        const response = await axios.get(`${BASE_URL}/api/employee`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }

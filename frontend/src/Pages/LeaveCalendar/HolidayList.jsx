@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { GiIndianPalace, GiPartyPopper } from "react-icons/gi"; // Importing necessary icons
 import { PiBankBold } from "react-icons/pi";
-import { FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
+import { MdCreateNewFolder } from "react-icons/md";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 function HolidayList() {
   const [holidaysData, setHolidaysData] = useState([]);
@@ -123,29 +124,38 @@ function HolidayList() {
   };
 
   return (
-    <div className="container">
-      <div style={{ overflow: "hidden" }} className="shadow p-0 rounded-4 ">
+    <div>
+      <div
+        style={{ overflow: "hidden" }}
+        className="shadow bg-white p-0 rounded-4 "
+      >
         <h5
           style={{
             backgroundColor: "var(--primaryDashColorDark)",
             color: "var(--primaryDashMenuColor)"
           }}
-          className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center"
+          className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center align-items-center"
         >
-          Holiday List
+          Holiday List{" "}
+          <Link to="/hr/holiday">
+            <span className="fs-4 d-flex">
+              <MdCreateNewFolder />
+            </span>
+          </Link>
         </h5>
-        <div className="row mx-auto shadow-sm pb-1">
-          <div className="col-12">
+
+        <div className="row mx-auto shadow-sm p-0 pb-1">
+          <div className="col-12 p-0">
             <input
               type="text"
-              className="form-control"
+              className="form-control rounded-0"
               placeholder="Search holiday..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
-        <div style={{ height: "20rem", overflow: "auto" }}>
+        <div style={{ height: "18.3rem", overflow: "auto" }}>
           {filteredHolidays.map((holiday, index) => (
             <div className="row p-2 mx-auto" key={index}>
               <span className="col-3 border-0 text-center">

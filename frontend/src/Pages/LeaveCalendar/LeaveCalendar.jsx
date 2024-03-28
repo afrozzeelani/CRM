@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios"; // Import Axios
 import "./leave.css";
 import Container from "./Container";
+import BASE_URL from "../config/config";
 
 const LeaveCalendar = () => {
   const [date, setDate] = useState(new Date());
@@ -30,7 +31,7 @@ const LeaveCalendar = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/Create-holiday",
+          `${BASE_URL}/api/Create-holiday`,
           newHoliday
         );
 
@@ -56,7 +57,7 @@ const LeaveCalendar = () => {
     // Fetch holiday data when the component mounts
     const fetchHolidays = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/holidays");
+        const response = await axios.get(`${BASE_URL}/api/holidays`);
 
         if (response.status === 200) {
           const data = response.data;

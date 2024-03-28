@@ -1,7 +1,6 @@
-const Joi = require('joi');
+const Joi = require("joi");
 const Department = require("../models/departmentModel");
 const DepartmentValidation = require("../validations/departmentValideton");
-
 
 const getAllDepartment = async (req, res) => {
   Department.find()
@@ -21,7 +20,7 @@ const createDepartment = async (req, res) => {
 
       newDepartment = {
         DepartmentName: req.body.DepartmentName,
-        company: req.body.CompanyID,
+        company: req.body.CompanyID
       };
 
       Department.create(newDepartment, function (err, department) {
@@ -37,39 +36,39 @@ const createDepartment = async (req, res) => {
   });
 };
 
-const deleteDepartment = async (req, res) => {
-  Employee.find({ department: req.params.id }, function (err, d) {
-    if (err) {
-      console.log(err);
-      res.send(err);
-    } else {
-      if (d.length == 0) {
-        Department.findByIdAndRemove(
-          { _id: req.params.id },
-          function (err, department) {
-            if (!err) {
-              console.log("department deleted");
-              res.send(department);
-              // });
-              console.log("new Department Saved");
-            } else {
-              console.log("error");
-              res.send("err");
-            }
-          }
-        );
-        console.log("delete");
-        console.log(req.params.id);
-      } else {
-        res
-          .status(403)
-          .send(
-            "This department is associated with Employee so you can not delete this"
-          );
-      }
-    }
-  });
-};
+// const deleteDepartment = async (req, res) => {
+//   Employee.find({ department: req.params.id }, function (err, d) {
+//     if (err) {
+//       console.log(err);
+//       res.send(err);
+//     } else {
+//       if (d.length == 0) {
+//         Department.findByIdAndRemove(
+//           { _id: req.params.id },
+//           function (err, department) {
+//             if (!err) {
+//               console.log("department deleted");
+//               res.send(department);
+//               // });
+//               console.log("new Department Saved");
+//             } else {
+//               console.log("error");
+//               res.send("err");
+//             }
+//           }
+//         );
+//         console.log("delete");
+//         console.log(req.params.id);
+//       } else {
+//         res
+//           .status(403)
+//           .send(
+//             "This department is associated with Employee so you can not delete this"
+//           );
+//       }
+//     }
+//   });
+// };
 
 const updateDepartment = async (req, res) => {
   Joi.validate(req.body, DepartmentValidation, (err, result) => {
@@ -81,7 +80,7 @@ const updateDepartment = async (req, res) => {
 
       updateDepartment = {
         DepartmentName: req.body.DepartmentName,
-        company: req.body.CompanyID,
+        company: req.body.CompanyID
       };
 
       Department.findByIdAndUpdate(
@@ -102,6 +101,6 @@ const updateDepartment = async (req, res) => {
 module.exports = {
   getAllDepartment,
   createDepartment,
-  deleteDepartment,
-  updateDepartment,
+  // deleteDepartment,
+  updateDepartment
 };

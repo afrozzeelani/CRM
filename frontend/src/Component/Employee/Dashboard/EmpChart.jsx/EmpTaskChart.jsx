@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Chart from "react-apexcharts";
 import { FaChartLine } from "react-icons/fa";
 import "./chart.css";
+import BASE_URL from "../../../../Pages/config/config";
 
 const EmpTaskChart = (props) => {
   const [tasks, setTasks] = useState([]);
@@ -18,7 +19,7 @@ const EmpTaskChart = (props) => {
     const loadPersonalInfoData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/personal-info/${id}`,
+          `${BASE_URL}/api/personal-info/${id}`,
           {
             headers: {
               authorization: localStorage.getItem("token") || ""
@@ -56,7 +57,7 @@ const EmpTaskChart = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/tasks");
+      const response = await axios.get("${BASE_URL}/api/tasks");
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error.message);

@@ -4,6 +4,8 @@ import axios from "axios";
 import StateTable from "./StateTable.jsx";
 import StateForm from "./StateForm.jsx";
 import StateFormEdit from "./StateFormEdit.jsx";
+import BASE_URL from "../config/config.js";
+
 // import { HashRouter as Router, Route, Link } from "react-router-dom";
 
 // function StateTableF() {
@@ -56,12 +58,12 @@ class State extends Component {
         {/* <Route path="/admin/state/form" exact component={() => <StateForm onStateSubmit={this.handleStateSubmit} />} /> */}
 
         {/* <StateTable/> */}
-        </React.Fragment>
+      </React.Fragment>
 
       //  </Router>
     );
   }
-  handleStateSubmit = event => {
+  handleStateSubmit = (event) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
     this.setState({ table: true });
@@ -73,16 +75,16 @@ class State extends Component {
     //  let body= "CompanyID=" + event.target[0].value + "&State=" + event.target[1].value;
     //  let body= "debru";
     axios
-      .post("http://localhost:4000/api/state", body, {
+      .post(`${BASE_URL}/api/state`, body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(res => {
+      .then((res) => {
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
     // this.setState({ loading: true });
@@ -93,7 +95,7 @@ class State extends Component {
     console.log("clicked1");
     this.setState({ table: false });
   };
-  handleEditState = e => {
+  handleEditState = (e) => {
     console.log(e);
     console.log("clicked6");
     this.setState({ editForm: true });
@@ -120,17 +122,17 @@ class State extends Component {
     };
     console.log("update", body);
     axios
-      .put("http://localhost:4000/api/state/" + info["_id"], body, {
+      .put(`${BASE_URL}/api/state/` + info["_id"], body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(res => {
+      .then((res) => {
         // this.componentDidMount();
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 

@@ -6,6 +6,7 @@ import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 // import { Button } from "react-bootstrap";
+import BASE_URL from "../config/config";
 import {
   Form,
   Button,
@@ -13,12 +14,8 @@ import {
   Row,
   Table,
   Dropdown,
-  DropdownButton,
+  DropdownButton
 } from "react-bootstrap";
-
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-balham.css";
 
 const override = css`
   display: block;
@@ -36,17 +33,17 @@ class PositionTable extends Component {
 
     getRowHeight: function (params) {
       return 35;
-    },
+    }
   };
   positionObj = [];
   rowDataT = [];
 
   loadPositionData = () => {
     axios
-      .get("http://localhost:4000/api/position", {
+      .get(`${BASE_URL}/api/position`, {
         headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((response) => {
         this.positionObj = response.data;
@@ -59,7 +56,7 @@ class PositionTable extends Component {
           let temp = {
             data,
             CompanyName: data["company"][0]["CompanyName"],
-            PositionName: data["PositionName"],
+            PositionName: data["PositionName"]
           };
 
           this.rowDataT.push(temp);
@@ -76,10 +73,10 @@ class PositionTable extends Component {
     console.log(e);
     if (window.confirm("Are you sure to delete this record ? ") == true) {
       axios
-        .delete("http://localhost:4000/api/position/" + e, {
+        .delete(`${BASE_URL}/api/position/` + e, {
           headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
+            authorization: localStorage.getItem("token") || ""
+          }
         })
         .then((res) => {
           this.componentDidMount();
@@ -141,20 +138,18 @@ class PositionTable extends Component {
               <th
                 style={{
                   background: "var(--primaryDashColorDark)",
-                  color: "var(--primaryDashMenuColor)",
+                  color: "var(--primaryDashMenuColor)"
                 }}
                 className="py-1"
-
               >
                 Company
               </th>
               <th
                 style={{
                   background: "var(--primaryDashColorDark)",
-                  color: "var(--primaryDashMenuColor)",
+                  color: "var(--primaryDashMenuColor)"
                 }}
                 className="py-1"
-
               >
                 Position
               </th>
@@ -162,10 +157,9 @@ class PositionTable extends Component {
                 style={{
                   background: "var(--primaryDashColorDark)",
                   color: "var(--primaryDashMenuColor)",
-                  textAlign: "center",
+                  textAlign: "center"
                 }}
                 className="py-1"
-
               >
                 {" "}
                 Action
@@ -175,10 +169,14 @@ class PositionTable extends Component {
           <tbody>
             {this.positionObj.map((data, index) => (
               <tr key={index}>
-                <td className="text-capitalize fw-bold">{data["company"][0]["CompanyName"]}</td>
-                <td className="text-capitalize fw-bold">{data["PositionName"]}</td>
+                <td className="text-capitalize fw-bold">
+                  {data["company"][0]["CompanyName"]}
+                </td>
+                <td className="text-capitalize fw-bold">
+                  {data["PositionName"]}
+                </td>
 
-                <td >
+                <td>
                   <div className="d-flex wrap-nowrap justify-content-end gap-3">
                     <span
                       onClick={() => this.props.onEditPosition(data)}
@@ -186,10 +184,7 @@ class PositionTable extends Component {
                       title="Update"
                       className="text-primary d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                     >
-                      <FontAwesomeIcon
-                        icon={faEdit}
-
-                      />
+                      <FontAwesomeIcon icon={faEdit} />
                       <span>Edit</span>
                     </span>
                     <span
@@ -198,10 +193,7 @@ class PositionTable extends Component {
                       title="Delete"
                       className="text-danger d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                     >
-                      <FontAwesomeIcon
-                        icon={faTrash}
-
-                      />
+                      <FontAwesomeIcon icon={faTrash} />
                       <span>Delete</span>
                     </span>
                   </div>

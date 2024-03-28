@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Form, Button, Col, Row } from "react-bootstrap";
+import BASE_URL from "../config/config";
 
 class StateForm extends Component {
   state = {
@@ -10,17 +11,17 @@ class StateForm extends Component {
   countryData = [];
   loadCountryInfo = () => {
     axios
-      .get("http://localhost:4000/api/country", {
+      .get(`${BASE_URL}/api/country`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         this.countryData = response.data;
 
         this.setState({ portalsInfo: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -39,7 +40,9 @@ class StateForm extends Component {
         <div id="role-form-outer-div">
           <Form
             id="form"
-            onSubmit={e => this.props.onStateEditUpdate(this.props.editData, e)}
+            onSubmit={(e) =>
+              this.props.onStateEditUpdate(this.props.editData, e)
+            }
           >
             <Form.Group as={Row}>
               <Form.Label column sm={2}>
@@ -75,7 +78,7 @@ class StateForm extends Component {
                   name="StateName"
                   required
                   value={this.state.StateData}
-                  onChange={value => this.onChange(value)}
+                  onChange={(value) => this.onChange(value)}
                 />
               </Col>
             </Form.Group>

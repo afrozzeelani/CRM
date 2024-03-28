@@ -9,6 +9,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
 import { LuSearch } from "react-icons/lu";
+import { MdNearbyError } from "react-icons/md";
 
 const override = css`
   display: block;
@@ -196,7 +197,7 @@ const LeaveApplicationHRTable = (props) => {
       <div className="d-flex flex-column justify-between">
         <div className="d-flex justify-content-between aline-items-center">
           <h4 className="fw-bold  my-auto text-muted">
-            Approved Leaves{" "}
+            Rejected Leaves{" "}
             <span className="text-danger">({approvedLeaves})</span>
           </h4>
           <div className="d-flex gap-2 justify-content-between py-3">
@@ -314,107 +315,126 @@ const LeaveApplicationHRTable = (props) => {
               </tr>
             </thead>
             <tbody>
-              {filteredData
-                .filter((e) => e.Status == "Rejected")
-                .map((data, index) => (
-                  <tr className="fw-bold" key={index}>
-                    <td className="py-1">
-                      <div className="d-flex aline-center gap-2">
-                        <div style={{ height: "40px", width: "40px" }}>
-                          <img
-                            style={{
-                              height: "100%",
-                              width: "100%",
-                              borderRadius: "50%",
-                              overflow: "hidden",
-                              objectFit: "cover"
-                            }}
-                            src={
-                              data?.data?.profile?.image_url
-                                ? data?.data?.profile?.image_url
-                                : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
-                            }
-                            alt=""
-                          />
+              {filteredData.length > 0 ? (
+                filteredData
+                  .filter((e) => e.Status == "Rejected")
+                  .map((data, index) => (
+                    <tr className="fw-bold" key={index}>
+                      <td className="py-1">
+                        <div className="d-flex aline-center gap-2">
+                          <div style={{ height: "40px", width: "40px" }}>
+                            <img
+                              style={{
+                                height: "100%",
+                                width: "100%",
+                                borderRadius: "50%",
+                                overflow: "hidden",
+                                objectFit: "cover"
+                              }}
+                              src={
+                                data?.data?.profile?.image_url
+                                  ? data?.data?.profile?.image_url
+                                  : "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp"
+                              }
+                              alt=""
+                            />
+                          </div>
+                          <div className="d-flex flex-column">
+                            <span
+                              style={{ fontSize: "12px" }}
+                              className="fw-bold"
+                            >
+                              {data.empID}
+                            </span>
+                            <span
+                              style={{ fontSize: "15px" }}
+                              className="fw-bold text-capitalize text-primary"
+                            >
+                              {data.Name}
+                            </span>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column">
-                          <span
-                            style={{ fontSize: "12px" }}
-                            className="fw-bold"
-                          >
-                            {data.empID}
-                          </span>
-                          <span
-                            style={{ fontSize: "15px" }}
-                            className="fw-bold text-capitalize text-primary"
-                          >
-                            {data.Name}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-                    <td
-                      style={{ verticalAlign: "middle" }}
-                      className="py-1 text-muted"
-                    >
-                      {data.Leavetype}
-                    </td>
-                    <td
-                      style={{ verticalAlign: "middle" }}
-                      className="py-1 text-muted"
-                    >
-                      {data.FromDate}
-                    </td>
-                    <td
-                      style={{ verticalAlign: "middle" }}
-                      className="py-1 text-muted"
-                    >
-                      {data.ToDate}
-                    </td>
-                    <td style={{ verticalAlign: "middle" }} className="py-1  ">
-                      <span className="bg-danger text-white px-2 py-1 rounded-5">
-                        {data.Status}
-                      </span>
-                    </td>
-                    <td
-                      style={{ verticalAlign: "middle" }}
-                      className="py-1 text-muted"
-                    >
-                      {data.Reasonforleave}
-                    </td>
-                    <td
-                      style={{ verticalAlign: "middle" }}
-                      className="py-1 text-muted"
-                    >
-                      <div
-                        className="d-flex gap-3 py-2"
-                        style={{ cursor: "pointer" }}
+                      </td>
+                      <td
+                        style={{ verticalAlign: "middle" }}
+                        className="py-1 text-muted"
                       >
-                        <p title="Update" className="m-auto text-primary">
-                          <FontAwesomeIcon
-                            className="m-auto"
-                            icon={faEdit}
-                            onClick={() =>
-                              props.onEditLeaveApplicationHR(data.data)
-                            }
-                          />
-                        </p>
-                        <p title="Delete" className="m-auto text-danger">
-                          <FontAwesomeIcon
-                            className="m-auto"
-                            icon={faTrash}
-                            onClick={() =>
-                              onLeaveApplicationHRDelete(
-                                data.data["employee"][0]["_id"],
-                                data.data["_id"]
-                              )
-                            }
-                          />
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        {data.Leavetype}
+                      </td>
+                      <td
+                        style={{ verticalAlign: "middle" }}
+                        className="py-1 text-muted"
+                      >
+                        {data.FromDate}
+                      </td>
+                      <td
+                        style={{ verticalAlign: "middle" }}
+                        className="py-1 text-muted"
+                      >
+                        {data.ToDate}
+                      </td>
+                      <td
+                        style={{ verticalAlign: "middle" }}
+                        className="py-1  "
+                      >
+                        <span className="bg-danger text-white px-2 py-1 rounded-5">
+                          {data.Status}
+                        </span>
+                      </td>
+                      <td
+                        style={{ verticalAlign: "middle" }}
+                        className="py-1 text-muted"
+                      >
+                        {data.Reasonforleave}
+                      </td>
+                      <td
+                        style={{ verticalAlign: "middle" }}
+                        className="py-1 text-muted"
+                      >
+                        <div
+                          className="d-flex gap-3 py-2"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <p title="Update" className="m-auto text-primary">
+                            <FontAwesomeIcon
+                              className="m-auto"
+                              icon={faEdit}
+                              onClick={() =>
+                                props.onEditLeaveApplicationHR(data.data)
+                              }
+                            />
+                          </p>
+                          <p title="Delete" className="m-auto text-danger">
+                            <FontAwesomeIcon
+                              className="m-auto"
+                              icon={faTrash}
+                              onClick={() =>
+                                onLeaveApplicationHRDelete(
+                                  data.data["employee"][0]["_id"],
+                                  data.data["_id"]
+                                )
+                              }
+                            />
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+              ) : (
+                <div
+                  style={{ height: "30vh", width: "94%", position: "absolute" }}
+                  className="d-flex flex-column justify-content-center align-items-center gap-1"
+                >
+                  <span className="fw-bolder " style={{ fontSize: "2rem" }}>
+                    <MdNearbyError
+                      className="text-danger"
+                      style={{ fontSize: "2.3rem" }}
+                    />{" "}
+                    OOPS!
+                  </span>
+                  <h6 className="p-0 m-0">Record not found.</h6>
+                </div>
+              )}
             </tbody>
           </table>
         </div>

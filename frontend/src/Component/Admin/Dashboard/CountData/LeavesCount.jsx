@@ -6,7 +6,7 @@ import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
-
+import BASE_URL from "../../../../Pages/config/config";
 import { css } from "@emotion/core";
 import {
   Form,
@@ -47,7 +47,7 @@ const LeaveApplicationHRTable = (props) => {
 
   const loadLeaveApplicationHRData = () => {
     axios
-      .get("http://localhost:4000/api/leave-application-hr/", {
+      .get(`${BASE_URL}/api/leave-application-hr/`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -99,14 +99,11 @@ const LeaveApplicationHRTable = (props) => {
     console.log(e1, e2);
     if (window.confirm("Are you sure to delete this record? ") == true) {
       axios
-        .delete(
-          "http://localhost:4000/api/leave-application-hr/" + e1 + "/" + e2,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+        .delete("${BASE_URL}/api/leave-application-hr/" + e1 + "/" + e2, {
+          headers: {
+            authorization: localStorage.getItem("token") || ""
           }
-        )
+        })
         .then((res) => {
           loadLeaveApplicationHRData();
         })

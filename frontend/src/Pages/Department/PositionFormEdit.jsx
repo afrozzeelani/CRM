@@ -4,6 +4,7 @@ import { HashRouter as Router, Route, Link } from "react-router-dom";
 // import { Form,Button } from "react-bootstrap";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
+import BASE_URL from "../config/config";
 
 class PositionForm extends Component {
   state = {
@@ -16,12 +17,12 @@ class PositionForm extends Component {
   companyData = [];
   loadCompanyInfo = () => {
     axios
-      .get("http://localhost:4000/api/company", {
+      .get(`${BASE_URL}/api/company`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(response => {
+      .then((response) => {
         // if(response.data.length==0){this.roleObj=["temp"];}
         // else{
 
@@ -32,7 +33,7 @@ class PositionForm extends Component {
 
         this.setState({ companyInfo: response.data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -49,7 +50,7 @@ class PositionForm extends Component {
         <div id="role-form-outer-div">
           <Form
             id="form"
-            onSubmit={e =>
+            onSubmit={(e) =>
               this.props.onPositionEditUpdate(
                 this.props.editData,
                 e.target[0].value,
@@ -91,7 +92,7 @@ class PositionForm extends Component {
                   name="PositionName"
                   required
                   value={this.state.PositionData}
-                  onChange={value => this.onChange(value)}
+                  onChange={(value) => this.onChange(value)}
                 />
               </Col>
             </Form.Group>

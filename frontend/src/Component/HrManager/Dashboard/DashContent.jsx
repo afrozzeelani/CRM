@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "../DashboardHR.css";
 import { Link } from "react-router-dom";
-import AdminEmployeeTable from "../../../Pages/AddEmployee/EmployeeTable";
-import LeaveApplicationHRTable from "../LeaveApplicationHRTable";
-import PositionTable from "../../../Pages/Department/PositionTable";
-import RoleTable from "../../../Pages/Department/RoleTable";
+// import AdminEmployeeTable from "../../../Pages/AddEmployee/EmployeeTable";
+// import LeaveApplicationHRTable from "../LeaveApplicationHRTable";
+// import PositionTable from "../../../Pages/Department/PositionTable";
+// import RoleTable from "../../../Pages/Department/RoleTable";
 // import EmpCharts from "../../Pages/Charts/EmpCharts";
-import HrCharts from "../../../Pages/Chart/TaskChart";
-import HolidayList from "../../../Pages/LeaveCalendar/HolidayList";
-import ManagerCompletedTask from "../ManagerTaskManagement/ManagerCompletedTask";
-import UpcomingBirthdays from "../../../Pages/AddEmployee/UpcomingBirthdays";
+// import HrCharts from "../../../Pages/Chart/TaskChart";
+// import HolidayList from "../../../Pages/LeaveCalendar/HolidayList";
+// import ManagerCompletedTask from "../ManagerTaskManagement/ManagerCompletedTask";
+// import UpcomingBirthdays from "../../../Pages/AddEmployee/UpcomingBirthdays";
 
-import Chart from "react-apexcharts";
+// import Chart from "react-apexcharts";
 
 import { IoIosArrowDroprightCircle } from "react-icons/io";
-import Login from "../../../Pages/Login/Login";
-import axios from "axios";
+// import Login from "../../../Pages/Login/Login";
+// import axios from "axios";
 
 const HRDash = (props) => {
   const [totalEmployees, setTotalEmployees] = useState(0);
@@ -30,7 +30,7 @@ const HRDash = (props) => {
 
   return (
     <div>
-      <div className="container-fluid  mt-4">
+      <div className="container-fluid">
         <div className="row row-gap-4">
           <div className="col-md-3">
             <div

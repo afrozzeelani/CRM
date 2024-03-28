@@ -4,6 +4,7 @@ import axios from "axios";
 import Chart from "react-apexcharts";
 import "./chart.css";
 import { FaChartLine } from "react-icons/fa6";
+import BASE_URL from "../../../../Pages/config/config";
 
 const TaskChart = () => {
   const [departmentData, setDepartmentData] = useState([]);
@@ -13,7 +14,7 @@ const TaskChart = () => {
 
   const loadEmployeeData = () => {
     axios
-      .get("http://localhost:4000/api/employee", {
+      .get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -36,7 +37,7 @@ const TaskChart = () => {
 
   const loadTaskData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/tasks");
+      const response = await axios.get(`${BASE_URL}/api/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error.message);

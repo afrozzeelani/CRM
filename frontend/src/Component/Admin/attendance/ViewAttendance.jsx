@@ -3,6 +3,7 @@ import axios from "axios";
 import { TfiReload } from "react-icons/tfi";
 import { FaCircleInfo } from "react-icons/fa6";
 import { MdOutlineRefresh } from "react-icons/md";
+import BASE_URL from "../../../Pages/config/config";
 
 const AttendanceDetails = () => {
   const [employeeId, setEmployeeId] = useState("");
@@ -36,7 +37,7 @@ const AttendanceDetails = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/employee", {
+      const response = await axios.get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -54,7 +55,7 @@ const AttendanceDetails = () => {
   // const handleFetchAttendance = async () => {
   //   try {
   //     const response = await axios.get(
-  //       `http://localhost:4000/api/attendance/${employeeId}`,
+  //       `${BASE_URL}/api/attendance/${employeeId}`,
   //       {
   //         headers: {
   //           Authorization: `Bearer ${localStorage.getItem("token") || ""}`
@@ -74,7 +75,7 @@ const AttendanceDetails = () => {
     setIsButtonClicked(true);
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/attendance/${employeeId}`,
+        `${BASE_URL}/api/attendance/${employeeId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token") || ""}`

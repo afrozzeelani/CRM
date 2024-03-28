@@ -6,6 +6,7 @@ import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
+import BASE_URL from "../config/config";
 
 const override = css`
   display: block;
@@ -24,17 +25,17 @@ class RoleTable extends Component {
 
     getRowHeight: function (params) {
       return 35;
-    },
+    }
   };
   roleObj = [];
   rowDataT = [];
 
   loadRoleData = () => {
     axios
-      .get("http://localhost:4000/api/role", {
+      .get(`${BASE_URL}/api/role`, {
         headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((response) => {
         this.roleObj = response.data;
@@ -48,7 +49,7 @@ class RoleTable extends Component {
           let temp = {
             data,
             CompanyName: data["company"][0]["CompanyName"],
-            RoleName: data["RoleName"],
+            RoleName: data["RoleName"]
           };
 
           this.rowDataT.push(temp);
@@ -65,10 +66,10 @@ class RoleTable extends Component {
     console.log(e);
     if (window.confirm("Are you sure to delete this record ? ") == true) {
       axios
-        .delete("http://localhost:4000/api/role/" + e, {
+        .delete(`${BASE_URL}/api/role/` + e, {
           headers: {
-            authorization: localStorage.getItem("token") || "",
-          },
+            authorization: localStorage.getItem("token") || ""
+          }
         })
         .then((res) => {
           this.componentDidMount();
@@ -133,7 +134,7 @@ class RoleTable extends Component {
                 <th
                   style={{
                     background: "var(--primaryDashColorDark)",
-                    color: "var(--primaryDashMenuColor)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   className="py-1"
                 >
@@ -142,7 +143,7 @@ class RoleTable extends Component {
                 <th
                   style={{
                     background: "var(--primaryDashColorDark)",
-                    color: "var(--primaryDashMenuColor)",
+                    color: "var(--primaryDashMenuColor)"
                   }}
                   className="py-1"
                 >
@@ -152,7 +153,7 @@ class RoleTable extends Component {
                   style={{
                     background: "var(--primaryDashColorDark)",
                     color: "var(--primaryDashMenuColor)",
-                    textAlign: "center",
+                    textAlign: "center"
                   }}
                   className="py-1"
                 >
@@ -166,10 +167,14 @@ class RoleTable extends Component {
                 {this.roleObj.map((data, index) => (
                   <tbody key={index}>
                     <tr>
-                      <td className="fw-bold text-capitalize">{data["company"][0]["CompanyName"]}</td>
-                      <td className="fw-bold text-capitalize">{data["RoleName"]}</td>
+                      <td className="fw-bold text-capitalize">
+                        {data["company"][0]["CompanyName"]}
+                      </td>
+                      <td className="fw-bold text-capitalize">
+                        {data["RoleName"]}
+                      </td>
 
-                      <td >
+                      <td>
                         <div className="d-flex wrap-nowrap justify-content-end gap-3">
                           <span
                             onClick={() => this.props.onEditRole(data)}
@@ -177,10 +182,7 @@ class RoleTable extends Component {
                             title="Update"
                             className="text-primary d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                           >
-                            <FontAwesomeIcon
-                              icon={faEdit}
-
-                            />
+                            <FontAwesomeIcon icon={faEdit} />
                             <span>Edit</span>
                           </span>
                           <span
@@ -189,10 +191,7 @@ class RoleTable extends Component {
                             title="Delete"
                             className="text-danger d-flex align-items-center gap-2 px-4 shadow-sm rounded-5"
                           >
-                            <FontAwesomeIcon
-                              icon={faTrash}
-
-                            />
+                            <FontAwesomeIcon icon={faTrash} />
                             <span>Delete</span>
                           </span>
                         </div>

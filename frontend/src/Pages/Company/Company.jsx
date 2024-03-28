@@ -3,6 +3,8 @@ import axios from "axios";
 import CompanyTable from "./CompanyTable.jsx";
 import CompanyForm from "./CompanyForm.jsx";
 import CompanyFormEdit from "./CompanyFormEdit.jsx";
+import BASE_URL from "../config/config.js";
+
 class Company extends Component {
   state = {
     table: true,
@@ -21,21 +23,21 @@ class Company extends Component {
               editData={this.state.editData}
             />
           ) : (
-              <CompanyTable
-                onAddCompany={this.handleAddCompany}
-                onEditCompany={this.handleEditCompany}
-              />
-            )
-        ) : (
-            <CompanyForm
-              onCompanySubmit={this.handleCompanySubmit}
-              onFormClose={this.handleFormClose}
+            <CompanyTable
+              onAddCompany={this.handleAddCompany}
+              onEditCompany={this.handleEditCompany}
             />
-          )}
+          )
+        ) : (
+          <CompanyForm
+            onCompanySubmit={this.handleCompanySubmit}
+            onFormClose={this.handleFormClose}
+          />
+        )}
       </React.Fragment>
     );
   }
-  handleCompanySubmit = event => {
+  handleCompanySubmit = (event) => {
     event.preventDefault();
     console.log("id", event.target[0].value, event.target[1].value);
     this.setState({ table: true });
@@ -52,19 +54,19 @@ class Company extends Component {
       FaxNo: event.target[10].value,
       PanNo: event.target[11].value,
       GSTNo: event.target[12].value,
-      CINNo: event.target[13].value,
+      CINNo: event.target[13].value
     };
     axios
-      .post("http://localhost:4000/api/company", body, {
+      .post(`${BASE_URL}/api/company`, body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
-      .then(res => {
+      .then((res) => {
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -72,7 +74,7 @@ class Company extends Component {
     console.log("clicked1");
     this.setState({ table: false });
   };
-  handleEditCompany = e => {
+  handleEditCompany = (e) => {
     console.log(e);
     console.log("clicked6");
     this.setState({ editForm: true });
@@ -104,24 +106,21 @@ class Company extends Component {
       FaxNo: newInfo.target[10].value,
       PanNo: newInfo.target[11].value,
       GSTNo: newInfo.target[12].value,
-      CINNo: newInfo.target[13].value,
+      CINNo: newInfo.target[13].value
     };
     console.log("update", body);
     axios
-      .put(
-        "http://localhost:4000/api/company/" + info["_id"],
-        body, {
+      .put(`${BASE_URL}/api/company/` + info["_id"], body, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
-      }
-      )
-      .then(res => {
+      })
+      .then((res) => {
         // this.componentDidMount();
         this.setState({ table: false });
         this.setState({ table: true });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 

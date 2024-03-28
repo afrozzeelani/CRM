@@ -4,6 +4,7 @@ import axios from "axios";
 import RoleTable from "./RoleTable.jsx";
 import RoleForm from "./RoleForm.jsx";
 import RoleFormEdit from "./RoleFormEdit.jsx";
+import BASE_URL from "../config/config.js";
 // import { HashRouter as Router, Route, Link } from "react-router-dom";
 
 // function RoleTableF() {
@@ -23,7 +24,7 @@ class Role extends Component {
   state = {
     table: true,
     editForm: false,
-    editData: {},
+    editData: {}
   };
 
   render() {
@@ -68,15 +69,15 @@ class Role extends Component {
 
     let body = {
       CompanyID: event.target[0].value,
-      RoleName: event.target[1].value,
+      RoleName: event.target[1].value
     };
     //  let body= "CompanyID=" + event.target[0].value + "&Role=" + event.target[1].value;
     //  let body= "debru";
     axios
-      .post("http://localhost:4000/api/role", body, {
+      .post(`${BASE_URL}/api/role`, body, {
         headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((res) => {
         this.setState({ table: false });
@@ -117,14 +118,14 @@ class Role extends Component {
       // ...info,CompanyID:formData1,Role:formData2
 
       CompanyID: formData1,
-      RoleName: formData2,
+      RoleName: formData2
     };
     console.log("update", body);
     axios
-      .put("http://localhost:4000/api/role/" + info["_id"], body, {
+      .put(`${BASE_URL}/api/role/` + info["_id"], body, {
         headers: {
-          authorization: localStorage.getItem("token") || "",
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((res) => {
         // this.componentDidMount();

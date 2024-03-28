@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { BsFiletypeDoc } from "react-icons/bs";
 import { Table } from "react-bootstrap";
+import BASE_URL from "../../../Pages/config/config";
 
 const EmployeeNewTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -17,7 +18,7 @@ const EmployeeNewTask = () => {
     const loadPersonalInfoData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/personal-info/${id}`,
+          `${BASE_URL}/api/personal-info/${id}`,
           {
             headers: {
               authorization: localStorage.getItem("token") || ""
@@ -57,7 +58,7 @@ const EmployeeNewTask = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/tasks");
+      const response = await axios.get(`${BASE_URL}/api/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error.message);

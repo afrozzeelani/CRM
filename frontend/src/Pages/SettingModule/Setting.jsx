@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import BASE_URL from "../config/config";
 
 const Settings = ({ setting, Setsetting }) => {
   const [logo, setLogo] = useState("");
@@ -21,7 +22,7 @@ const Settings = ({ setting, Setsetting }) => {
       };
 
       axios
-        .post("http://localhost:4000/api/logo/", formData, config)
+        .post(`${BASE_URL}/api/logo/`, formData, config)
         .then((res) => {
           Setsetting(false);
         })

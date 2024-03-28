@@ -4,6 +4,7 @@ import "./forgot.css";
 import { useHistory } from "react-router-dom";
 import logo from "../../img/logo.png";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import BASE_URL from "../config/config";
 
 const ForgetPass = () => {
   const history = useHistory();
@@ -12,23 +13,23 @@ const ForgetPass = () => {
     email: "",
     otp: "",
     pass: "",
-    confirm_pass: "",
+    confirm_pass: ""
   });
   const [formError, setFormError] = useState({
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
 
   useEffect(() => {
     setFormError({
       password: "",
-      confirmPassword: "",
+      confirmPassword: ""
     });
   }, [stage]);
 
   const [passMatch, setPassMatch] = useState({
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
 
   const [countDown, setCountDown] = useState(0);
@@ -55,7 +56,7 @@ const ForgetPass = () => {
   // verfy the email id
   const verfyEmail = async () => {
     await axios
-      .post("http://localhost:4000/api/verfy_email", data)
+      .post(`${BASE_URL}/api/verfy_email`, data)
       .then((res) => {
         localStorage.setItem("id", res.data.user._id);
         SendOtp();
@@ -77,7 +78,7 @@ const ForgetPass = () => {
   const SendOtp = async () => {
     const id = localStorage.getItem("id");
     await axios
-      .post(`http://localhost:4000/api/send_otp/${id}`, data)
+      .post(`${BASE_URL}/api/send_otp/${id}`, data)
       .then((res) => {
         let day = new Date();
         let secounds = day.getSeconds();
@@ -90,10 +91,7 @@ const ForgetPass = () => {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `http://localhost:4000/api/verfy_otp`,
-        data
-      );
+      const response = await axios.post(`${BASE_URL}/api/verfy_otp`, data);
     } catch (error) {
       console.log(error.response.data.message);
       if (error.response.data.message === "your requist is faild") {
@@ -112,12 +110,12 @@ const ForgetPass = () => {
 
     if (data.pass === "") {
       setFormError({
-        password: "Password should not be empty",
+        password: "Password should not be empty"
       });
     } else {
       const id = localStorage.getItem("id");
       await axios
-        .post(`http://localhost:4000/api/forgot_pass/${id}`, data)
+        .post(`${BASE_URL}/api/forgot_pass/${id}`, data)
         .then((res) => {
           console.log(res);
           localStorage.removeItem("id");
@@ -199,7 +197,7 @@ const ForgetPass = () => {
                   style={{
                     background: "none",
                     border: "none",
-                    fontSize: "14px",
+                    fontSize: "14px"
                   }}
                 >
                   Resend Otp
