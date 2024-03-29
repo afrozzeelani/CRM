@@ -281,7 +281,7 @@ const Employee = () => {
                       onEmpInfo={handleEmpInfo}
                     />
                   ) : (
-                    <EmployeeInfo data={empInfo} onBack={handleBack} />
+                    <PersonalInfo data={empInfo} onBack={handleBack} />
                   )}
                 </>
               )

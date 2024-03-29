@@ -30,6 +30,7 @@ import LeaveApplicationHRReject from "./LeaveStatus/LeaveApplicationHRReject.jsx
 import ManualAttendance from "./attendance/ManualAttendance.jsx";
 // import Main from "../../Pages/Profile/Main.jsx";
 import Notification from "./Notification/Notification.jsx";
+import Profile from "../Employee/EmpPresonal/PersonalInfoTable.jsx";
 const MainContent = () => {
   return (
     <InnerDashContainer>

@@ -6,7 +6,7 @@ import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import BASE_URL from "../../../Pages/config/config";
+import { FaRegEdit } from "react-icons/fa";
 
 import InnerDashContainer from "../../InnerDashContainer";
 
@@ -25,11 +25,15 @@ const EducationTable = (props) => {
   useEffect(() => {
     const loadEducationData = () => {
       axios
-        .get(`${BASE_URL}/api/education/${props.data["_id"]}`, {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
+        // .get(`http://localhost:4000/api/education/${props.data["_id"]}`,
+        .get(
+          "http://localhost:4000/api/education/" + localStorage.getItem("_id"),
+          {
+            headers: {
+              authorization: localStorage.getItem("token") || ""
+            }
           }
-        })
+        )
         .then((response) => {
           const educationObj = response.data;
           console.log("response", response.data);
@@ -52,13 +56,14 @@ const EducationTable = (props) => {
     };
 
     loadEducationData();
-  }, [props.data["_id"]]);
+  }, [localStorage.getItem("_id")]);
+  // [props.data["_id"]]);
 
   const onEducationDelete = (e1, e2) => {
     console.log(e1, e2);
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`${BASE_URL}/api/education/${e1}/${e2}`, {
+        .delete(`http://localhost:4000/api/education/${e1}/${e2}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }
@@ -101,106 +106,126 @@ const EducationTable = (props) => {
   };
 
   return (
-    <InnerDashContainer>
-      <h2 id="role-title">
-        Employee Education Details{" "}
-        {props.back
-          ? `of ${props.data["FirstName"]} ${props.data["LastName"]}`
-          : ""}
-      </h2>
-
-      {props.back ? (
-        <Link to="/hr/employee">
-          <Button variant="primary" id="add-button">
-            Back
+    <div className="container-fluid">
+      <InnerDashContainer>
+        <div className="py-1">
+          <Button variant="primary" onClick={props.onAddEducation}>
+            <FontAwesomeIcon icon={faPlus} id="plus-icon" />
+            Add Details
           </Button>
-        </Link>
-      ) : (
-        <Button
-          variant="primary"
-          id="add-button"
-          onClick={props.onAddEducation}
-        >
-          <FontAwesomeIcon icon={faPlus} id="plus-icon" />
-          Add
-        </Button>
-      )}
-
-      <div id="clear-both" />
-
-      {!loading ? (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th
-                style={{
-                  background: "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                  color: "white"
-                }}
-              >
-                School/University
-              </th>
-              <th
-                style={{
-                  background: "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                  color: "white"
-                }}
-              >
-                Degree
-              </th>
-              <th
-                style={{
-                  background: "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                  color: "white"
-                }}
-              >
-                Grade
-              </th>
-              <th
-                style={{
-                  background: "linear-gradient(165deg, #700B97, 90%, #C84B31)",
-                  color: "white"
-                }}
-              >
-                Passing Year
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rowData.map((items, index) => (
-              <tr key={index}>
-                <td className="text-uppercase">{items.SchoolUniversity}</td>
-                <td className="text-uppercase">{items.Degree}</td>
-                <td className="text-uppercase">{items.Grade}</td>
-                <td className="text-uppercase">{items.PassingOfYear}</td>
-                {/* <td>
-                  <button
-                    onClick={() => props.onEditEducation(items.data)}
-                    style={{
-                      zIndex: "1",
-                      cursor: "pointer"
-                    }}
-                    className="btn"
-                  >
-                    <FaRegEdit className="fs-4 text-primary bg-white p-1 rounded-5" />
-                  </button>
-                </td> */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div id="loading-bar">
-          <RingLoader
-            css={override}
-            sizeUnit={"px"}
-            size={50}
-            color={"#0000ff"}
-            loading={true}
-          />
         </div>
-      )}
-    </InnerDashContainer>
+
+        <div id="clear-both" />
+
+        {!loading ? (
+          <div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th
+                    style={{
+                      background: "var(--primaryDashColorDark)",
+                      color: "var(--primaryDashMenuColor)"
+                    }}
+                  >
+                    School/University
+                  </th>
+                  <th
+                    style={{
+                      background: "var(--primaryDashColorDark)",
+                      color: "var(--primaryDashMenuColor)"
+                    }}
+                  >
+                    Degree
+                  </th>
+                  <th
+                    style={{
+                      background: "var(--primaryDashColorDark)",
+                      color: "var(--primaryDashMenuColor)"
+                    }}
+                  >
+                    Grade
+                  </th>
+                  <th
+                    style={{
+                      background: "var(--primaryDashColorDark)",
+                      color: "var(--primaryDashMenuColor)"
+                    }}
+                    className="text-center"
+                  >
+                    Passing Year
+                  </th>
+                  <th
+                    style={{
+                      background:
+                        "linear-gradient(165deg, #700B97, 90%, #C84B31)",
+                      color: "white"
+                    }}
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rowData.map((items, index) => (
+                  <tr key={index}>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="text-uppercase fw-bold"
+                    >
+                      {items.SchoolUniversity}
+                    </td>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="text-uppercase fw-bold"
+                    >
+                      {items.Degree}
+                    </td>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="text-uppercase fw-bold"
+                    >
+                      <button className="btn btn-success w-100 fw-bold py-0 rounded-5">
+                        {items.Grade}
+                      </button>
+                    </td>
+                    <td
+                      style={{ verticalAlign: "middle" }}
+                      className="text-uppercase fw-bold text-center"
+                    >
+                      {items.PassingOfYear}
+                    </td>
+                    <td style={{ verticalAlign: "middle" }}>
+                      <button
+                        onClick={() => props.onEditEducation(items.data)}
+                        style={{
+                          zIndex: "1",
+                          cursor: "pointer"
+                        }}
+                        className="d-flex btn py-0 px-3 shadow-sm justify-content-around align-items-center"
+                      >
+                        <FaRegEdit className="fs-4 text-primary bg-white p-1 rounded-5" />
+                        <span className="fw-bold text-muted">Update</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div id="loading-bar">
+            <RingLoader
+              css={override}
+              sizeUnit={"px"}
+              size={50}
+              color={"#0000ff"}
+              loading={true}
+            />
+          </div>
+        )}
+      </InnerDashContainer>
+    </div>
   );
 };
 

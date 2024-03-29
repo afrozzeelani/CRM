@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import "./PersonalInfoTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
+
 import "./profilePage.css";
-import { FaCamera, FaEye, FaFilePdf, FaRegEdit } from "react-icons/fa";
+import {
+  FaCamera,
+  FaFileAudio,
+  FaFileImage,
+  FaRegFileImage,
+  FaRegFilePdf
+} from "react-icons/fa";
 import { IoMdDownload } from "react-icons/io";
 import FloralAbstract from "./FloralAbstract.jpg";
 import { GoDotFill } from "react-icons/go";
@@ -28,9 +36,8 @@ const PersonalInfoTable = (props) => {
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
   const [activeSection, setActiveSection] = useState("personalInfo");
-  const [showDownloadbtn, setShowDownloadbtn] = useState(false);
-  const [visibleDocs, setVisibleDocs] = useState(true);
-
+  const [showDownloadbtn, setShowDownloadbtn] = useState(null);
+  const [visibleDocs, setVisibleDocs] = useState([]);
   const loadPersonalInfoData = () => {
     axios
       .get(`http://localhost:4000/api/personal-info/${props.data["_id"]}`, {
@@ -137,8 +144,57 @@ const PersonalInfoTable = (props) => {
     }
   };
 
+  const documentDATA = [
+    {
+      docTitle: "Aadhar Card",
+      docURL:
+        "https://aadhar-uidai.in/wp-content/uploads/2018/07/main-qimg-4a3032007d087580af4a6eff50634659.png",
+      docNumber: "123456789",
+      docSize: "1.02"
+    },
+    {
+      docTitle: "PAN Card",
+      docURL:
+        "https://images.livemint.com/img/2019/10/25/1600x900/pan_card_1565610340828_1572021543426.PNG",
+      docNumber: "ADNPT5873H",
+      docSize: "1.02"
+    },
+    {
+      docTitle: "10th MarkSheet",
+      docURL:
+        "https://www.pastcart.com/wp-content/uploads/2019/07/10th-marksheet-1024x813.jpg",
+      docNumber: "201535400",
+      docSize: "1.02"
+    },
+    {
+      docTitle: "12th MarkSheet",
+      docURL:
+        "https://cdn.slidesharecdn.com/ss_thumbnails/bac93f03-6b88-4390-8643-eddc0804e020-160807132546-thumbnail-4.jpg?cb=1470576360",
+      docNumber: "545421000",
+      docSize: "1.02"
+    },
+    {
+      docTitle: "Graduation MarkSheet",
+      docURL: FloralAbstract,
+      docNumber: "212101215",
+      docSize: "1.02"
+    },
+    {
+      docTitle: "Graduation MarkSheet",
+      docURL: FloralAbstract,
+      docNumber: "212101215",
+      docSize: "1.02"
+    },
+    {
+      docTitle: "Graduation MarkSheet",
+      docURL: FloralAbstract,
+      docNumber: "212101215",
+      docSize: "1.02"
+    }
+  ];
+
   return (
-    <div style={{ minHeight: "50vh", overflow: "auto", marginTop: "-.5rem" }}>
+    <div>
       <div id="clear-both" />
       {!loading ? (
         <div style={{ position: "relative" }} className="row">
@@ -170,7 +226,7 @@ const PersonalInfoTable = (props) => {
               height: "35rem",
               position: "fixed",
               top: "20%",
-              zIndex: "5"
+              zIndex: "1"
             }}
             className="col-12 row mx-auto justify-content-center gap-4 w-100"
           >
@@ -323,13 +379,14 @@ const PersonalInfoTable = (props) => {
             </div>
             <div
               id="personalinfo"
-              style={{ height: "33rem" }}
+              style={{ height: "33rem", overflow: "hidden" }}
               className="col-12 rounded col-lg-7 p-0 m-0 bg-white shadow"
             >
               <div className="shift-pages w-100 shadow-sm d-flex gap-3 px-2 mb-1">
                 <span
                   onClick={() => onToggleSection("personalInfo")}
                   style={{
+                    whiteSpace: "pre",
                     borderBottom:
                       activeSection === "personalInfo"
                         ? "3px solid blue"
@@ -343,6 +400,7 @@ const PersonalInfoTable = (props) => {
                 <span
                   onClick={() => onToggleSection("companyInfo")}
                   style={{
+                    whiteSpace: "pre",
                     borderBottom:
                       activeSection === "companyInfo"
                         ? "3px solid blue"
@@ -356,6 +414,7 @@ const PersonalInfoTable = (props) => {
                 <span
                   onClick={() => onToggleSection("Educationalinfo")}
                   style={{
+                    whiteSpace: "pre",
                     borderBottom:
                       activeSection === "Educationalinfo"
                         ? "3px solid blue"
@@ -369,6 +428,7 @@ const PersonalInfoTable = (props) => {
                 <span
                   onClick={() => onToggleSection("documentDetails")}
                   style={{
+                    whiteSpace: "pre",
                     borderBottom:
                       activeSection === "documentDetails"
                         ? "3px solid blue"
@@ -382,6 +442,7 @@ const PersonalInfoTable = (props) => {
                 <span
                   onClick={() => onToggleSection("WorkExperience")}
                   style={{
+                    whiteSpace: "pre",
                     borderBottom:
                       activeSection === "WorkExperience"
                         ? "3px solid blue"
@@ -395,18 +456,20 @@ const PersonalInfoTable = (props) => {
                 <span
                   onClick={() => onToggleSection("otherInfo")}
                   style={{
+                    whiteSpace: "pre",
                     borderBottom:
                       activeSection === "otherInfo" ? "3px solid blue" : "none",
                     borderRadius: "0"
                   }}
                   className="btn py-3 px-3 fw-bold"
                 >
-                  Others
+                  Dependents
                 </span>
               </div>
               {activeSection === "personalInfo" && (
                 <div className="row">
                   <div
+                    className="pb-5"
                     id="companyinfo"
                     style={{
                       overflow: "hidden auto",
@@ -624,107 +687,121 @@ const PersonalInfoTable = (props) => {
                 </div>
               )}
               {activeSection === "Educationalinfo" && (
-                // <div className="w-100 container ">Education</div>
                 <div className="w-100 container ">
                   <Education />
                 </div>
               )}
               {activeSection === "documentDetails" && (
                 <div
-                  style={{ overflow: "hidden", height: "29rem" }}
-                  className=" row px-4  py-2 gap-2"
+                  style={{
+                    overflow: "hidden auto",
+                    height: "27rem",
+                    scrollbarWidth: "thin"
+                  }}
                 >
-                  <div
-                    onMouseEnter={() => setShowDownloadbtn(true)}
-                    onMouseLeave={() => setShowDownloadbtn(false)}
-                    className="col-12 col-sm-6 col-md-4 d-flex flex-column gap-2  rounded px-2 py-1 shadow"
-                    style={{ height: "fit-content" }}
-                  >
-                    <div
-                      style={{
-                        height: "150px",
-                        width: "100%",
-                        overflow: "hidden",
-                        background:
-                          "url(https://pdfimages.wondershare.com/pdfelement/7-guide/background.jpg)",
-                        backgroundPosition: "center",
-                        backgroundSize: "cover",
-                        opacity: "85%",
-                        boxShadow:
-                          "0 0 10px 1px rgba(192, 185, 185, 0.758) inset"
-                      }}
-                      className="bg-primary m-auto position-relative "
-                    >
+                  <div className="container-fluid">
+                    <Button variant="primary" onClick={props.onAddFamilyInfo}>
+                      <FontAwesomeIcon icon={faPlus} id="plus-icon" />
+                      Add Document
+                    </Button>
+                  </div>
+
+                  <div className="row mx-2 pb-3 column-gap-4 row-gap-4">
+                    {documentDATA.reverse().map((data, index) => (
                       <div
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                          position: "absolute",
-                          top: "0",
-                          left: "0",
-                          background: "rgba(0,0,0,.4)",
-                          display: showDownloadbtn ? "flex" : "none",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          gap: "1rem"
-                        }}
+                        key={index}
+                        onMouseEnter={() => setShowDownloadbtn("name")}
+                        onMouseLeave={() => setShowDownloadbtn(null)}
+                        className="d-flex flex-column gap-2 rounded px-2 py-1 shadow"
+                        style={{ height: "190px", width: "250px" }}
                       >
-                        <a
-                          target="_blank"
-                          href={FloralAbstract}
-                          style={{ height: "40px", width: "40px" }}
-                          className="btn p-0 btn bg-white text-primary shadow d-flex"
+                        <div
+                          style={{
+                            height: "150px",
+                            width: "100%",
+                            overflow: "hidden",
+                            background: `url(${data.docURL})`,
+                            backgroundPosition: "center",
+                            backgroundSize: "cover",
+                            opacity: "85%",
+                            boxShadow:
+                              "0 0 10px 1px rgba(192, 185, 185, 0.758) inset"
+                          }}
+                          className="bg-primary m-auto position-relative "
                         >
-                          <IoEye className="m-auto fs-4" />
-                        </a>
-                        <a
-                          download={"floraAbstract"}
-                          href={FloralAbstract}
-                          style={{ height: "40px", width: "40px" }}
-                          className="btn p-0 btn bg-white text-primary shadow d-flex"
-                        >
-                          <IoMdDownload className="m-auto fs-4" />
-                        </a>
+                          <div
+                            style={{
+                              height: "100%",
+                              width: "100%",
+                              position: "absolute",
+                              top: "0",
+                              left: "0",
+                              background: "rgba(0,0,0,.4)",
+                              display: showDownloadbtn ? "flex" : "none",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              gap: "1rem"
+                            }}
+                          >
+                            <a
+                              target="_blank"
+                              href={data.docURL}
+                              style={{ height: "40px", width: "40px" }}
+                              className="btn p-0 btn bg-white text-primary shadow d-flex"
+                            >
+                              <IoEye className="m-auto fs-4" />
+                            </a>
+                            <a
+                              download={data.docURL}
+                              href={data.docURL}
+                              style={{ height: "40px", width: "40px" }}
+                              className="btn p-0 btn bg-white text-primary shadow d-flex"
+                            >
+                              <IoMdDownload className="m-auto fs-4" />
+                            </a>
+                          </div>
+                          <div
+                            style={{
+                              height: "30px",
+                              width: "30px",
+                              position: "absolute",
+                              bottom: "0",
+                              right: "0",
+                              opacity: "100%"
+                            }}
+                            className="bg-white d-flex shadow-sm text-danger"
+                          >
+                            {data.docURL.toLowerCase().endsWith(".pdf") && (
+                              <FaRegFilePdf className="m-auto fs-3 text-black" />
+                            )}
+                            {(data.docURL.toLowerCase().endsWith(".jpeg") ||
+                              data.docURL.toLowerCase().endsWith(".jpg")) && (
+                              <FaFileImage className="m-auto fs-3" />
+                            )}
+                            {data.docURL.toLowerCase().endsWith(".png") && (
+                              <FaRegFileImage className="m-auto fs-3" />
+                            )}
+                            {data.docURL.toLowerCase().endsWith(".mp3") && (
+                              <FaFileAudio className="m-auto fs-3" />
+                            )}
+                          </div>
+                        </div>
+                        <div className="d-flex justify-content-between align-items-center">
+                          <p
+                            style={{ fontSize: ".9rem" }}
+                            className="text-muted fw-bold m-0"
+                          >
+                            {data.docTitle}
+                          </p>{" "}
+                          <p
+                            style={{ fontSize: ".7rem" }}
+                            className="text-primary fw-bold m-0"
+                          >
+                            {data.docSize} MB
+                          </p>
+                        </div>
                       </div>
-                      <div
-                        style={{
-                          height: "30px",
-                          width: "30px",
-                          position: "absolute",
-                          bottom: "0",
-                          right: "0",
-                          opacity: "100%"
-                        }}
-                        className="bg-white d-flex shadow-sm text-danger"
-                      >
-                        <FaFilePdf className="m-auto fs-3" />
-                      </div>
-                    </div>
-                    <p
-                      style={{ fontSize: ".9rem" }}
-                      className="text-muted fw-bold m-0"
-                    >
-                      Addhar Card
-                    </p>
-                    <div className="row m-auto">
-                      <input
-                        style={{ border: "none" }}
-                        type={visibleDocs ? "password" : "text"}
-                        className="m-0 p-0 text-primary col-9"
-                        value={125445584250}
-                      />{" "}
-                      <span
-                        onClick={() =>
-                          !visibleDocs
-                            ? setVisibleDocs(true)
-                            : setVisibleDocs(false)
-                        }
-                        style={{ cursor: "pointer" }}
-                        className="btn p-0 col-3"
-                      >
-                        <FaEye />
-                      </span>
-                    </div>
+                    ))}
                   </div>
                 </div>
               )}

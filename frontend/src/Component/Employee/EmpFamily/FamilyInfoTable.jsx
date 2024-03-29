@@ -26,7 +26,7 @@ const FamilyInfoTable = (props) => {
 
   const loadFamilyInfoData = () => {
     axios
-      .get(`${BASE_URL}/api/family-info/` + props.data["_id"], {
+      .get(`${BASE_URL}/api/family-info/` + localStorage.getItem("_id"), {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
