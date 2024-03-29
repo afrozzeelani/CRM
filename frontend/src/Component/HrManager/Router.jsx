@@ -30,7 +30,7 @@ import LeaveApplicationHRReject from "./LeaveStatus/LeaveApplicationHRReject.jsx
 import ManualAttendance from "./attendance/ManualAttendance.jsx";
 // import Main from "../../Pages/Profile/Main.jsx";
 import Notification from "./Notification/Notification.jsx";
-import Profile from "../Employee/EmpPresonal/PersonalInfoTable.jsx";
+import PersonalInfo from "../Employee/EmpPresonal/PersonalInfo.jsx";
 const MainContent = () => {
   return (
     <InnerDashContainer>
@@ -85,7 +85,11 @@ const MainContent = () => {
           />
           <Route path="/hr/notification" exact component={Notification} />
           <Route path="/hr/manualAttand" exact component={ManualAttendance} />
-
+          <Route
+            exact
+            path="/hr/:id/profile"
+            render={(props) => <PersonalInfo />}
+          />
           {/* <Route path="/hr/profile" exact component={Main} /> */}
           {/* attendance */}
           <Route render={() => <NotFound404 />} />

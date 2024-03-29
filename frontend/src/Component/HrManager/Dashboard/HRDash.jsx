@@ -387,7 +387,9 @@ const HRDash = () => {
       <div className="hrdashgrid dash-3">
         <LeaveCount />
       </div>
-      <div className="hrdashgrid dash-7 px-3">{/* <DailyAttendChart /> */}</div>
+      <div className="hrdashgrid dash-7 px-3">
+        <DailyAttendChart />
+      </div>
       <div className="hrdashgrid dash-5 px-3">
         <DepartmentChart />
       </div>

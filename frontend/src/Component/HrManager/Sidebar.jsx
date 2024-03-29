@@ -11,7 +11,7 @@ import { FcLeave } from "react-icons/fc";
 // import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { Link } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const [activeCategory, setActiveCategory] = useState(null);
   const [extended, setExtended] = useState(true);
 
@@ -95,7 +95,13 @@ const Sidebar = () => {
     {
       icon: <MdHolidayVillage />,
       name: "Profile",
-      navLinks: [{ to: "/hr/afroz", label: "My Profile" }]
+      navLinks: [
+        // { to: "/hr/afroz", label: "My Profile" }
+        {
+          to: "/hr/" + localStorage.getItem("_id") + "/profile",
+          label: "Profile"
+        }
+      ]
     }
   ];
 

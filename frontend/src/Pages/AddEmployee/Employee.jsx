@@ -218,16 +218,16 @@ const Employee = () => {
     formData.append("RoleID", newInfo.target[2].value);
     formData.append("Gender", editFormGender);
     formData.append("FirstName", newInfo.target[5].value);
-    formData.append("MiddleName", newInfo.target[6].value);
-    formData.append("LastName", newInfo.target[7].value);
-    formData.append("DOB", newInfo.target[8].value);
-    formData.append("ContactNo", newInfo.target[9].value);
+    // formData.append("MiddleName", newInfo.target[6].value);
+    formData.append("LastName", newInfo.target[6].value);
+    formData.append("DOB", newInfo.target[7].value);
+    formData.append("ContactNo", newInfo.target[8].value);
     // formData.append("EmployeeCode", newInfo.target[10].value);
-    formData.append("DepartmentID", newInfo.target[10].value);
-    formData.append("PositionID", newInfo.target[11].value);
-    formData.append("DateOfJoining", newInfo.target[12].value);
-    formData.append("profile", newInfo.target[13].files[0]);
-    formData.append("reportManager", newInfo.target[14].value);
+    formData.append("DepartmentID", newInfo.target[9].value);
+    formData.append("PositionID", newInfo.target[10].value);
+    formData.append("DateOfJoining", newInfo.target[11].value);
+    formData.append("profile", newInfo.target[12].files[0]);
+    formData.append("reportManager", newInfo.target[13].value);
     // formData.append("TerminateDate", newInfo.target[14].value);
 
     axios

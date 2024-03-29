@@ -311,11 +311,11 @@ const EmployeeForm = (props) => {
                   </Col>
                 </div>
 
-                <div className="form-group col-12 col-md-6">
-                  <Form.Label column sm={6}>
+                <div className="form-group col-12 col-md-6 p-0">
+                  <Form.Label column sm={12}>
                     Reporting Manager
                   </Form.Label>
-                  <Col sm={10} className="form-input">
+                  <Col sm={12} className="form-input">
                     <Form.Control as="select" name="role">
                       <option selected>Select your option</option>
                       {filterManagerData.map((data, index) => (
@@ -326,11 +326,11 @@ const EmployeeForm = (props) => {
                     </Form.Control>
                   </Col>
                 </div>
-                <div className="form-group col-12 col-md-6">
-                  <Form.Label column sm={6}>
+                <div className="form-group col-12 col-md-6 p-0">
+                  <Form.Label column sm={12}>
                     Reporting Hr
                   </Form.Label>
-                  <Col sm={10} className="form-input">
+                  <Col sm={12} className="form-input">
                     <Form.Control as="select" name="role">
                       <option selected>Select your option</option>
                       {filterHrData.map((data, index) => (

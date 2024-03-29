@@ -8,14 +8,18 @@ const EmployeeFormEdit = (props) => {
   const [roleData, setRoleData] = useState([]);
   const [positionData, setPositionData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
+  const [filterManagerData, setFilterManagerData] = useState([]);
+  const [filterHrData, setFilterHrData] = useState([]);
+  const [rowData, setRowData] = useState([]);
+
   const [genderData, setGenderData] = useState(props.editData["Gender"]);
   const [emailData, setEmailData] = useState(props.editData["Email"]);
   const [firstNameData, setFirstNameData] = useState(
     props.editData["FirstName"]
   );
-  const [middleNameData, setMiddleNameData] = useState(
-    props.editData["MiddleName"]
-  );
+  // const [middleNameData, setMiddleNameData] = useState(
+  //   props.editData["MiddleName"]
+  // );
   const [lastNameData, setLastNameData] = useState(props.editData["LastName"]);
   const [dobData, setDobData] = useState(props.editData["DOB"].slice(0, 10));
   const [contactNoData, setContactNoData] = useState(
@@ -28,19 +32,57 @@ const EmployeeFormEdit = (props) => {
   const [dateOfJoiningData, setDateOfJoiningData] = useState(
     props.editData["DateOfJoining"].slice(0, 10)
   );
-  // const [terminateDateData, setTerminateDateData] = useState(
-  //   props.editData["TerminateDate"].slice(0, 10)
-  // );
 
   useEffect(() => {
     loadRoleInfo();
     loadPositionInfo();
     loadDepartmentInfo();
+    loadEmployeeData();
   }, []);
+
+  const loadEmployeeData = () => {
+    axios
+      .get("http://localhost:4000/api/employee", {
+        headers: {
+          authorization: localStorage.getItem("token") || ""
+        }
+      })
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          setRowData([]);
+          response.data.forEach((data) => {
+            let temp = {
+              Email: data["Email"],
+              Account:
+                data["Account"] === 1
+                  ? 1
+                  : data["Account"] === 2
+                  ? 2
+                  : data["Account"] === 3
+                  ? 3
+                  : data["Account"] === 4
+                  ? 4
+                  : "",
+              FirstName: data["FirstName"],
+              LastName: data["LastName"],
+              empID: data["empID"]
+            };
+
+            // Use set function to update state
+            setRowData((prevData) => [...prevData, temp]);
+          });
+        } else {
+          console.error("Data received is not an array:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const loadRoleInfo = () => {
     axios
-      .get("${BASE_URL}/api/role", {
+      .get(`${BASE_URL}/api/role`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -83,6 +125,28 @@ const EmployeeFormEdit = (props) => {
       });
   };
 
+  const managerFilterHandler = (value) => {
+    console.log(value);
+    if (+value === 2 || +value === 4 || +value === 1) {
+      const data = rowData.filter((val) => {
+        return +val.Account === 1;
+      });
+
+      setFilterManagerData(data);
+    } else if (+value === 3) {
+      const data = rowData.filter((val) => {
+        return +val.Account === 4;
+      });
+
+      setFilterManagerData(data);
+    }
+    const hrData = rowData.filter((val) => {
+      return val.Account === 2;
+    });
+    setFilterHrData(hrData);
+  };
+  console.log(filterHrData);
+
   const onEmailDataChange = (e) => {
     setEmailData(e.target.value);
   };
@@ -91,9 +155,9 @@ const EmployeeFormEdit = (props) => {
     setFirstNameData(e.target.value);
   };
 
-  const onMiddleNameDataChange = (e) => {
-    setMiddleNameData(e.target.value);
-  };
+  // const onMiddleNameDataChange = (e) => {
+  //   setMiddleNameData(e.target.value);
+  // };
 
   const onLastNameDataChange = (e) => {
     setLastNameData(e.target.value);
@@ -123,10 +187,6 @@ const EmployeeFormEdit = (props) => {
   const onProfileDataChange = (e) => {
     setProfile(e.target.files[0]);
   };
-
-  // const onTerminateDateDataChange = (e) => {
-  //   setTerminateDateData(e.target.value);
-  // };
 
   const onFormSubmit = (e) => {
     props.onEmployeeEditUpdate(props.editData, e);
@@ -164,32 +224,22 @@ const EmployeeFormEdit = (props) => {
                     placeholder="Email"
                     required
                     value={emailData}
+                    disabled
                     onChange={(value) => onEmailDataChange(value)}
                   />
                 </Col>
               </div>
-
-              {/* <div className="form-group col-12 col-md-6">
-              <Form.Label column sm={6}>
-                Password
-              </Form.Label>
-              <Col sm={10} className="form-input">
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  required
-                  value={passwordData}
-                  onChange={value => onPasswordDataChange(value)}
-                />
-              </Col>
-            </div> */}
 
               <div className="form-group col-12 col-md-6">
                 <Form.Label column sm={6}>
                   Account access
                 </Form.Label>
                 <Col sm={10} className="form-input">
-                  <Form.Control as="select" required>
+                  <Form.Control
+                    as="select"
+                    required
+                    onBlur={(e) => managerFilterHandler(e.target.value)}
+                  >
                     <option value="1" selected={props.editData["Account"] == 1}>
                       Admin
                     </option>
@@ -270,7 +320,7 @@ const EmployeeFormEdit = (props) => {
                   />
                 </Col>
               </div>
-              <div className="form-group col-12 col-md-6">
+              {/* <div className="form-group col-12 col-md-6">
                 <Form.Label column sm={6}>
                   Middle Name
                 </Form.Label>
@@ -283,7 +333,7 @@ const EmployeeFormEdit = (props) => {
                     onChange={(value) => onMiddleNameDataChange(value)}
                   />
                 </Col>
-              </div>
+              </div> */}
               <div className="form-group col-12 col-md-6">
                 <Form.Label column sm={6}>
                   Last Name
@@ -327,20 +377,6 @@ const EmployeeFormEdit = (props) => {
                   />
                 </Col>
               </div>
-              {/* <div className="form-group col-12 col-md-6">
-                <Form.Label column sm={6}>
-                  Employee Code
-                </Form.Label>
-                <Col sm={10} className="form-input">
-                  <Form.Control
-                    type="text"
-                    placeholder="Employee Code"
-                    required
-                    value={employeeCodeData}
-                    onChange={(value) => onEmployeeCodeDataChange(value)}
-                  />
-                </Col>
-              </div> */}
 
               <div className="form-group col-12 col-md-6">
                 <Form.Label column sm={6}>
@@ -418,20 +454,37 @@ const EmployeeFormEdit = (props) => {
                   />
                 </Col>
               </div>
-              {/* <div className="form-group col-12 col-md-6">
-          <Form.Label column sm={6}>
-            Terminate Date
-          </Form.Label>
-          <Col sm={10} className="form-input">
-            <Form.Control
-              type="date"
-              placeholder="Terminate Date"
-              //   value={this.props.editData["TerminateDate"].slice(0, 10)}
-              value={terminateDateData}
-              onChange={value => onTerminateDateDataChange(value)}
-            />
-          </Col>
-            </div> */}
+
+              <div className="form-group col-12 col-md-6 p-0">
+                <Form.Label column sm={12}>
+                  Reporting Manager
+                </Form.Label>
+                <Col sm={12} className="form-input">
+                  <Form.Control as="select" name="role">
+                    <option selected>Select your option</option>
+                    {filterManagerData.map((data, index) => (
+                      <option key={index} value={data["Email"]}>
+                        {data["Email"]}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Col>
+              </div>
+              <div className="form-group col-12 col-md-6 p-0">
+                <Form.Label column sm={12}>
+                  Reporting Hr
+                </Form.Label>
+                <Col sm={12} className="form-input">
+                  <Form.Control as="select" name="role">
+                    <option selected>Select your option</option>
+                    {filterHrData.map((data, index) => (
+                      <option key={index} value={data.Email}>
+                        {data.Email}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Col>
+              </div>
 
               <div
                 className="form-group col-12 col-md-6"

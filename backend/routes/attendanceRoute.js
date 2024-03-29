@@ -16,7 +16,7 @@ const attendanceRoute = express.Router();
 
 attendanceRoute.post("/attendance/:attendanceId", createAttendance);
 attendanceRoute.post("/Create-holiday", createHolidays);
-attendanceRoute.post("/attendance", findAttendance);
+attendanceRoute.get("/attendance", findAttendance);
 attendanceRoute.post(
   "/attendance/:employeeId",
   findEmployeeAttendanceEployeeId

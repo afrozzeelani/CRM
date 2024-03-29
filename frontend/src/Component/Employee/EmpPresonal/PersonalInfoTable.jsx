@@ -68,7 +68,8 @@ const PersonalInfoTable = (props) => {
           PermanetAddress: data["PermanetAddress"] || "Not Avaiable",
           RoleName: data["role"][0] ? data["role"][0]["RoleName"] : "",
           DateOfJoining: data["DateOfJoining"].slice(0, 10),
-
+          reportManager: data["reportManager"] || "Not Avaiable",
+          reportHr: data["reportManager"] || "Not Avaiable",
           DepartmentName: data["department"][0]
             ? data["department"][0]["DepartmentName"]
             : "",
@@ -677,7 +678,17 @@ const PersonalInfoTable = (props) => {
                             <input
                               type="text"
                               className="form-control rounded-1 shadow-sm"
-                              value={items.BloodGroup}
+                              value={items.reportManager}
+                            />
+                          </div>
+                          <div className="col-12 col-sm-5 d-flex flex-column">
+                            <label htmlFor="" className=" fw-bold text-muted">
+                              Reporting HR
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control rounded-1 shadow-sm"
+                              value={items.reportHr}
                             />
                           </div>
                         </div>
