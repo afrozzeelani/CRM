@@ -42,6 +42,7 @@ const { attendanceRoute } = require("./routes/attendanceRoute");
 const { type } = require("joi/lib/types/object");
 const { Employee } = require("./models/employeeModel");
 const { Task } = require("./models/taskModel");
+const Document = require("./models/documentModel");
 const { fileUploadMiddleware, chackFile } = require("./middleware/multer");
 const {
   uplodeImagesCloudinary,
@@ -800,14 +801,6 @@ io.on("connection", (socket) => {
   });
 });
 
-/* document */
-const documentSchema = new mongoose.Schema({
-  title: String,
-  number: Number,
-  files: [String]
-});
-const Document = mongoose.model("Document", documentSchema);
-
 app.post("/upload", upload.array("files"), async (req, res) => {
   try {
     const { title, number } = req.body;
@@ -820,6 +813,8 @@ app.post("/upload", upload.array("files"), async (req, res) => {
     res.status(500).send("Error uploading document.");
   }
 });
+
+// Route to get all documents
 app.get("/documents", async (req, res) => {
   try {
     const documents = await Document.find();
@@ -829,6 +824,38 @@ app.get("/documents", async (req, res) => {
     res.status(500).send("Error fetching documents.");
   }
 });
+
+/* document */
+// const documentSchema = new mongoose.Schema({
+//   title: String,
+//   number: Number,
+//   files: [String]
+// });
+// const Document = mongoose.model("Document", documentSchema);
+
+// app.post("/upload", upload.array("files"), async (req, res) => {
+//   try {
+//     const { title, number } = req.body;
+//     const files = req.files.map((file) => file.originalname);
+//     const newDocument = new Document({ title, number, files });
+//     await newDocument.save();
+//     res.status(201).send("Document uploaded successfully.");
+//   } catch (error) {
+//     console.error("Error uploading document:", error);
+//     res.status(500).send("Error uploading document.");
+//   }
+// });
+
+// // Route to get all documents
+// app.get("/documents", async (req, res) => {
+//   try {
+//     const documents = await Document.find();
+//     res.json(documents);
+//   } catch (error) {
+//     console.error("Error fetching documents:", error);
+//     res.status(500).send("Error fetching documents.");
+//   }
+// });
 
 /* end  document */
 

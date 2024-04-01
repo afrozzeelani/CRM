@@ -22,11 +22,14 @@ const { fileUploadMiddleware, checkFileSize } = require("../middleware/multer");
 // GET: Retrieve all countries
 employeeRoute.get("/employee/", verifyAdminHR, getAllEmployee);
 employeeRoute.get("/employee/:id?", verifyEmployee, getAllEmployee);
-employeeRoute.get("/particularEmployee/:id",   findParticularEmployee);
-employeeRoute.post("/notificationStatusUpdate/:id", notificationStatusUpdate)
-employeeRoute.post("/notificationDeleteHandler/:id", deleteNotification)
-employeeRoute.post("/multiSelectedNotificationDelete", multiSelectedDeleteNotification)
-employeeRoute.post("/selectedNotificationDelete", selectedDeleteNotification)
+employeeRoute.get("/particularEmployee/:id", findParticularEmployee);
+employeeRoute.post("/notificationStatusUpdate/:id", notificationStatusUpdate);
+employeeRoute.post("/notificationDeleteHandler/:id", deleteNotification);
+employeeRoute.post(
+  "/multiSelectedNotificationDelete",
+  multiSelectedDeleteNotification
+);
+employeeRoute.post("/selectedNotificationDelete", selectedDeleteNotification);
 // POST: Create a new employee
 // verifyAdminHR
 employeeRoute.post(

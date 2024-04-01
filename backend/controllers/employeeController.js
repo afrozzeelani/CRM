@@ -227,7 +227,7 @@ const createEmployee = async (req, res) => {
       Gender: Gender,
       FirstName: FirstName,
       reportManager: reportManager,
-      reportHr:reportHr,
+      reportHr: reportHr,
       LastName: LastName,
       DOB: DOB,
       ContactNo: ContactNo,
@@ -430,25 +430,22 @@ const updateEmployee = async (req, res) => {
 
 // find and delete the city
 const deleteEmployee = async (req, res) => {};
-const upcomingBirthDay =async (req,res)=>{
-const employee= await  Employee.find()
+const upcomingBirthDay = async (req, res) => {
+  const employee = await Employee.find();
 
   employee.forEach((data) => {
     let temp = {
       data,
       FirstName: data["FirstName"],
       LastName: data["LastName"],
-      DOB: data["DOB"],
+      DOB: data["DOB"]
     };
-    console.log(temp)
+    console.log(temp);
     // Use set function to update state
-
   });
-
-}
+};
 const findParticularEmployee = async (req, res) => {
-
-  const id = req.params.id; 
+  const id = req.params.id;
 
   try {
     const findEmployee = await Employee.findById({ _id: id });
@@ -461,134 +458,126 @@ const findParticularEmployee = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-const notificationStatusUpdate = async (req, res)=>{
+const notificationStatusUpdate = async (req, res) => {
   const id = req.params.id;
-  const {email} = req.body;
-  try{
+  const { email } = req.body;
+  try {
     const findEmployee = await Employee.findOne({ Email: email });
-    console.log(findEmployee)
+    console.log(findEmployee);
     if (findEmployee) {
-    
       const notificationIndex = findEmployee.Notification.findIndex(
         (notification) => notification.taskId === id
       );
 
-     console.log(notificationIndex)
+      console.log(notificationIndex);
       if (notificationIndex !== -1) {
-        findEmployee.Notification[notificationIndex].status = 'seen';
-        findEmployee.markModified('Notification');
+        findEmployee.Notification[notificationIndex].status = "seen";
+        findEmployee.markModified("Notification");
         await findEmployee.save();
         res.status(200).json({
-          message: 'Notification status updated to seen',
-          result: findEmployee,
+          message: "Notification status updated to seen",
+          result: findEmployee
         });
       } else {
         res.status(404).json({
-          message: 'Notification not found with the specified id',
+          message: "Notification not found with the specified id"
         });
       }
     } else {
       res.status(404).json({
-        message: 'User not found with the specified email',
+        message: "User not found with the specified email"
       });
     }
-
-  }catch(error){
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
-}
-const deleteNotification =async (req,res)=>{
+};
+const deleteNotification = async (req, res) => {
   const id = req.params.id;
-  const {email} = req.body;
-  try{
+  const { email } = req.body;
+  try {
     const findEmployee = await Employee.findOne({ Email: email });
-    console.log(findEmployee)
+    console.log(findEmployee);
     if (findEmployee) {
-    
       const notificationIndex = findEmployee.Notification.findIndex(
         (notification) => notification.taskId === id
       );
 
-     console.log(notificationIndex)
+      console.log(notificationIndex);
       if (notificationIndex !== -1) {
-        findEmployee.Notification.splice(notificationIndex,1)
-        findEmployee.markModified('Notification');
+        findEmployee.Notification.splice(notificationIndex, 1);
+        findEmployee.markModified("Notification");
         await findEmployee.save();
         res.status(200).json({
-          message: 'Notification status updated to seen',
-          result: findEmployee,
+          message: "Notification status updated to seen",
+          result: findEmployee
         });
       } else {
         res.status(404).json({
-          message: 'Notification not found with the specified id',
+          message: "Notification not found with the specified id"
         });
       }
     } else {
       res.status(404).json({
-        message: 'User not found with the specified email',
+        message: "User not found with the specified email"
       });
     }
-
-  }catch(error){
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
-}
-const multiSelectedDeleteNotification =async (req,res)=>{
+};
+const multiSelectedDeleteNotification = async (req, res) => {
+  const { employeeMail, tasks } = req.body;
 
-  const {employeeMail,tasks} = req.body;
-
-  try{
+  try {
     const findEmployee = await Employee.findOne({ Email: employeeMail });
     console.log(tasks);
- 
+
     if (findEmployee) {
- 
-      const filteredObjectsArray = findEmployee.Notification.filter(obj => !tasks.includes(obj.taskId));
+      const filteredObjectsArray = findEmployee.Notification.filter(
+        (obj) => !tasks.includes(obj.taskId)
+      );
 
       console.log(filteredObjectsArray);
-      findEmployee.Notification = filteredObjectsArray
-      findEmployee.markModified('Notification');
-     await findEmployee.save();
-     res.status(200).json({
-      message: 'Notification status updated to seen',
-      result: findEmployee,
-    });
-     console.log(notificationIndex)
-    
-    } else {
-      res.status(404).json({
-        message: 'User not found with the specified email',
-      });
-    }
-
-  }catch(error){
-    console.log(error)
-  }
-}
-const selectedDeleteNotification =async (req, res)=>{
-
-  const {email} = req.body;
-  try{
-    const findEmployee = await Employee.findOne({ Email: email });
-    console.log(findEmployee)
-    if (findEmployee) {
-    
-      findEmployee.Notification = []
-      findEmployee.markModified('Notification');
+      findEmployee.Notification = filteredObjectsArray;
+      findEmployee.markModified("Notification");
       await findEmployee.save();
       res.status(200).json({
-        message: 'Notification status updated to seen',
-        result: findEmployee,
+        message: "Notification status updated to seen",
+        result: findEmployee
+      });
+      console.log(notificationIndex);
+    } else {
+      res.status(404).json({
+        message: "User not found with the specified email"
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+const selectedDeleteNotification = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const findEmployee = await Employee.findOne({ Email: email });
+    console.log(findEmployee);
+    if (findEmployee) {
+      findEmployee.Notification = [];
+      findEmployee.markModified("Notification");
+      await findEmployee.save();
+      res.status(200).json({
+        message: "Notification status updated to seen",
+        result: findEmployee
       });
     } else {
       res.status(404).json({
-        message: 'User not found with the specified email',
+        message: "User not found with the specified email"
       });
     }
-  }catch(error){
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
-}
+};
 module.exports = {
   getAllEmployee,
   upcomingBirthDay,
@@ -599,5 +588,5 @@ module.exports = {
   selectedDeleteNotification,
   deleteNotification,
   notificationStatusUpdate,
-  multiSelectedDeleteNotification,
+  multiSelectedDeleteNotification
 };
