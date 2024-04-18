@@ -1,23 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { ImBin } from 'react-icons/im';
-import { AttendanceContext } from '../../../Context/AttendanceContext/AttendanceContext';
-import './notification.css';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { ImBin } from "react-icons/im";
+import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
+import "./notification.css";
+import BASE_URL from "../../../Pages/config/config.js";
 
 const Notification = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState([]);
   const [notification, setNotification] = useState(null);
   const { socket } = useContext(AttendanceContext);
-  const id = localStorage.getItem('_id');
-  const email = localStorage.getItem('Email');
+  const id = localStorage.getItem("_id");
+  const email = localStorage.getItem("Email");
 
   const loadEmployeeData = () => {
     axios
-      .get(`http://localhost:4000/api/particularEmployee/${id}`, {
+      .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
-          authorization: localStorage.getItem('token') || '',
-        },
+          authorization: localStorage.getItem("token") || ""
+        }
       })
       .then((response) => {
         setNotification(response.data.Notification);
@@ -26,14 +27,12 @@ const Notification = () => {
         console.log(error);
       });
   };
-useEffect(()=>{
-  loadEmployeeData();
-
-},[])
   useEffect(() => {
-    
+    loadEmployeeData();
+  }, []);
+  useEffect(() => {
     if (socket) {
-      socket.on('taskNotificationReceived', () => {
+      socket.on("taskNotificationReceived", () => {
         loadEmployeeData();
       });
     }
@@ -42,7 +41,9 @@ useEffect(()=>{
   useEffect(() => {
     // Check if all notifications are selected and update the "Select All" checkbox accordingly
     setSelectAll(
-    notification &&  notification.length>0 && selectedNotification.length === notification.length
+      notification &&
+        notification.length > 0 &&
+        selectedNotification.length === notification.length
     );
   }, [selectedNotification, notification]);
 
@@ -64,94 +65,94 @@ useEffect(()=>{
     setSelectAll(!selectAll);
     setSelectedNotification(selectAll ? [] : [...notification]);
   };
-  const clearAllHandler = ()=>{
-    if(notification.length>0){
-      console.log("clearALL")
-      axios.post(`http://localhost:4000/api/selectedNotificationDelete`,{email},{
-        headers: {
-          authorization: localStorage.getItem("token") || ""
-        }
-      })
-      .then((response) => {
-        console.log(response)
-        setNotification(response.data.result.Notification);
-        socket.emit("notificationPageUpdate", true)
-      })
-      .catch((error) => {
-        console.log(error);
-      }); 
+  const clearAllHandler = () => {
+    if (notification.length > 0) {
+      console.log("clearALL");
+      axios
+        .post(
+          `${BASE_URL}/api/selectedNotificationDelete`,
+          { email },
+          {
+            headers: {
+              authorization: localStorage.getItem("token") || ""
+            }
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setNotification(response.data.result.Notification);
+          socket.emit("notificationPageUpdate", true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  
-   }
+  };
   const multiNotificationDeleteHandler = () => {
     if (selectedNotification.length > 0) {
       const taskIDArray = selectedNotification.map((val) => val.taskId);
       const data = {
         employeeMail: email,
-        tasks: taskIDArray,
+        tasks: taskIDArray
       };
-if(selectAll){
-
-   clearAllHandler()
-}else{
- 
-  axios
-  .post(
-    `http://localhost:4000/api/multiSelectedNotificationDelete`,
-    data,
-    {
-      headers: {
-        authorization: localStorage.getItem('token') || '',
-      },
-    }
-  )
-  .then((response) => {
-    setNotification(response.data.result.Notification);
-    setSelectedNotification([])
-    console.log("emittted")
-    socket.emit("notificationPageUpdate", true)
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-}
-      
+      if (selectAll) {
+        clearAllHandler();
+      } else {
+        axios
+          .post(`${BASE_URL}/api/multiSelectedNotificationDelete`, data, {
+            headers: {
+              authorization: localStorage.getItem("token") || ""
+            }
+          })
+          .then((response) => {
+            setNotification(response.data.result.Notification);
+            setSelectedNotification([]);
+            console.log("emittted");
+            socket.emit("notificationPageUpdate", true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
   };
-  const notificationDeleteHandler = (id)=>{
-    console.log(id)
+  const notificationDeleteHandler = (id) => {
+    console.log(id);
     axios
-    .post(`http://localhost:4000/api/notificationDeleteHandler/${id}`, {email},{
-      headers: {
-        authorization: localStorage.getItem("token") || ""
-      }
-    })
-    .then((response) => {
-
-      setNotification(response.data.result.Notification);
-      setSelectedNotification([]) 
-      console.log("emittted")
-      socket.emit("notificationPageUpdate", true)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
-console.log(notification)
+      .post(
+        `${BASE_URL}/api/notificationDeleteHandler/${id}`,
+        { email },
+        {
+          headers: {
+            authorization: localStorage.getItem("token") || ""
+          }
+        }
+      )
+      .then((response) => {
+        setNotification(response.data.result.Notification);
+        setSelectedNotification([]);
+        console.log("emittted");
+        socket.emit("notificationPageUpdate", true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  console.log(notification);
   return (
     <>
       <div className="row">
         <form className="d-flex col-8 flex-column gap-3">
           <div>
             <div className="p-2">
-              {' '}
+              {" "}
               <input
                 type="checkbox"
                 name=""
                 id=""
                 onChange={toggleSelectAll}
                 checked={selectAll}
-              />{' '}
+              />{" "}
               <span>Select All</span>
             </div>
             <table className="table">
@@ -182,13 +183,16 @@ console.log(notification)
                       </th>
                       <td>{val.taskName}</td>
                       <td>{val.senderMail}</td>
-                      {val.status === 'unseen' ? (
+                      {val.status === "unseen" ? (
                         <td>Unread</td>
                       ) : (
                         <td>read</td>
                       )}
                       <td>
-                        <ImBin onClick={()=>notificationDeleteHandler(val.taskId)} className="bin" />
+                        <ImBin
+                          onClick={() => notificationDeleteHandler(val.taskId)}
+                          className="bin"
+                        />
                       </td>
                     </tr>
                   ))}

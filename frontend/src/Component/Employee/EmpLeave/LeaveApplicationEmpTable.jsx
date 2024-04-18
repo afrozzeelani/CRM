@@ -6,6 +6,7 @@ import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import { Button, Table } from "react-bootstrap";
 import InnerDashContainer from "../../InnerDashContainer";
+import BASE_URL from "../../../Pages/config/config";
 
 const override = css`
   display: block;
@@ -22,14 +23,11 @@ const LeaveApplicationEmpTable = (props) => {
 
   const loadLeaveApplicationEmpData = () => {
     axios
-      .get(
-        `http://localhost:4000/api/leave-application-emp/${props.data["_id"]}`,
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+      .get(`${BASE_URL}/api/leave-application-emp/${props.data["_id"]}`, {
+        headers: {
+          authorization: localStorage.getItem("token") || ""
         }
-      )
+      })
       .then((response) => {
         const leaveApplicationEmpObj = response.data;
         console.log("response", response.data);
@@ -62,7 +60,7 @@ const LeaveApplicationEmpTable = (props) => {
     console.log(e1, e2);
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/leave-application-emp/${e1}/${e2}`, {
+        .delete(`${BASE_URL}/api/leave-application-emp/${e1}/${e2}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }

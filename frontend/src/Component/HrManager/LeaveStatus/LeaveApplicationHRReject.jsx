@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
-import { Dropdown, DropdownButton } from "react-bootstrap";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
 import { LuSearch } from "react-icons/lu";
 import { MdNearbyError } from "react-icons/md";
+import BASE_URL from "../../../Pages/config/config";
 
 const override = css`
   display: block;
@@ -29,7 +29,7 @@ const LeaveApplicationHRTable = (props) => {
 
   const loadLeaveApplicationHRData = () => {
     axios
-      .get("http://localhost:4000/api/leave-application-hr/", {
+      .get(`${BASE_URL}/api/leave-application-hr/`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -82,14 +82,11 @@ const LeaveApplicationHRTable = (props) => {
   const onLeaveApplicationHRDelete = (e1, e2) => {
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(
-          "http://localhost:4000/api/leave-application-hr/" + e1 + "/" + e2,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+        .delete(`${BASE_URL}/api/leave-application-hr/` + e1 + "/" + e2, {
+          headers: {
+            authorization: localStorage.getItem("token") || ""
           }
-        )
+        })
         .then((res) => {
           loadLeaveApplicationHRData();
         })

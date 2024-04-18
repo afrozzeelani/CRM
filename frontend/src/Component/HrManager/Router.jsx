@@ -29,6 +29,8 @@ import LeaveApplicationHRAccept from "./LeaveStatus/LeaveApplicationHRAccept.jsx
 import LeaveApplicationHRReject from "./LeaveStatus/LeaveApplicationHRReject.jsx";
 import ManualAttendance from "./attendance/ManualAttendance.jsx";
 // import Main from "../../Pages/Profile/Main.jsx";
+import AttendanceRegister from "./attendance/AttendanceRegister.jsx";
+
 import Notification from "./Notification/Notification.jsx";
 import PersonalInfo from "../Employee/EmpPresonal/PersonalInfo.jsx";
 const MainContent = () => {
@@ -66,6 +68,12 @@ const MainContent = () => {
           <Route path="/hr/rejectTask" exact component={ManagerRejectedTask} />
           <Route path="/hr/attenDance" exact component={Attendance} />
           <Route path="/hr/viewAttenDance" exact component={ViewAttendance} />
+          <Route
+            path="/hr/AttendanceRegister"
+            exact
+            component={AttendanceRegister}
+          />
+
           <Route path="/hr/holiday" exact component={LeaveCalendar} />
           <Route
             path="/hr/todaysAttendance"

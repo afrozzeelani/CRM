@@ -1,17 +1,30 @@
-/* Task && Department CHART css */
-.chart_container {
-  /* border: 1px solid #80808073; */
-  border-radius: 13px;
-  box-shadow: 1px 1px 10px #80808073;
+.ChartCard {
+  padding: 0;
   height: 350px;
+  border-radius: 10px;
+  background-color: rgba(241, 241, 241, 0.808);
+  backdrop-filter: blur(5px);
 }
 
-.chart_heading {
-  align-items: center;
-  padding: 4px 10px;
+.ChartCard .ChartHeader {
+  text-align: start;
 }
 
-.chart_heading h2 {
-  font-size: 21px;
+.ChartCard .chartBody {
+  height: 100%;
+}
+
+tspan {
+  font-size: .7rem;
   text-align: center;
+  font-weight: bold;
+  color: var(--primaryDashColorDark) !important;
 }
+
+/* .apexcharts-yaxis-title-text {
+  padding: 0;
+  text-align: center;
+  word-spacing: .5rem;
+  font-size: .9rem;
+  letter-spacing: .2rem;
+} */

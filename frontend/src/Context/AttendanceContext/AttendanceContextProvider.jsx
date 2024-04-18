@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { AttendanceContext } from "./AttendanceContext";
 import { io } from "socket.io-client";
+import BASE_URL from "../../Pages/config/config";
 
 const AttendanceContextProvider = ({ children }) => {
   const socket = useMemo(() => {
-    return io("http://localhost:4000");
+    return io(`${BASE_URL}`);
   }, []);
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState("");

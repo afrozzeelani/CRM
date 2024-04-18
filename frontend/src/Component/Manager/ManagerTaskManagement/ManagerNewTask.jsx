@@ -4,16 +4,17 @@ import { MdCancel } from "react-icons/md";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { BsFiletypeDoc } from "react-icons/bs";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
+import BASE_URL from "../../../Pages/config/config";
+import toast from "react-hot-toast";
 const ManagerNewTask = () => {
-
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [, setIsAccepted] = useState(false);
   const [, setIsRejected] = useState(false);
-  
-  const {socket} = useContext(AttendanceContext);
+
+  const { socket } = useContext(AttendanceContext);
   const email = localStorage.getItem("Email");
   const calculateRemainingTime = (endDate) => {
     const now = new Date();
@@ -38,7 +39,7 @@ const ManagerNewTask = () => {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/tasks");
+      const response = await axios.get(`${BASE_URL}/api/tasks`);
       console.log(response.data);
       setTasks(response.data);
     } catch (error) {
@@ -70,13 +71,13 @@ const ManagerNewTask = () => {
       }
 
       // Update the task status to "Cancelled" in the database
-      await axios.put(`http://localhost:4000/api/tasks/${taskID}`, {
+      await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
         status: "Pending",
         comment: AcceptTaskRemark
       });
 
       // Display success notification
-      alert("Task Accepteed successfully!");
+      toast.success("Task Accepteed successfully!");
       const taskId = uuid();
       const data = {
         taskId,
@@ -87,17 +88,16 @@ const ManagerNewTask = () => {
         message: `Task Accepted by ${email}`,
         adminMail,
         Account: 1,
-        taskStatus: "Accepted",
-      
-      }
-            // Update the UI by fetching the latest tasks;
-            socket.emit("adminTaskNotification", data);
-            console.log(data)
+        taskStatus: "Accepted"
+      };
+      // Update the UI by fetching the latest tasks;
+      socket.emit("adminTaskNotification", data);
+      console.log(data);
       // Update the UI by fetching the latest tasks
       fetchData();
     } catch (error) {
       console.error("Error canceling task:", error.message);
-      alert("Failed to cancel task. Please try again.");
+      toast.error("Failed to cancel task. Please try again.");
     } finally {
       setIsAccepted(false);
     }
@@ -112,12 +112,12 @@ const ManagerNewTask = () => {
         return;
       }
 
-      await axios.put(`http://localhost:4000/api/tasks/${taskID}`, {
+      await axios.put(`${BASE_URL}/api/tasks/${taskID}`, {
         status: "Rejected",
         comment: RejectRemarks
       });
 
-      alert("Task Rejected");
+      toast.success("Task Rejected");
       const taskId = uuid();
       const data = {
         taskId,
@@ -128,14 +128,13 @@ const ManagerNewTask = () => {
         message: `Task Rejected by ${email}`,
         adminMail,
         Account: 1,
-        taskStatus: "Rejected",
-      
-      }
+        taskStatus: "Rejected"
+      };
       socket.emit("adminTaskNotification", data);
       fetchData();
     } catch (error) {
       console.error("Error Rejecting task:", error.message);
-      alert("Failed to Reject task. Please try again.");
+      toast.error("Failed to Reject task. Please try again.");
     } finally {
       setIsRejected(false);
     }
@@ -331,7 +330,9 @@ const ManagerNewTask = () => {
                   >
                     <button
                       className="btn btn-info col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() => AcceptTask(task._id, task.Taskname, task.adminMail)}
+                      onClick={() =>
+                        AcceptTask(task._id, task.Taskname, task.adminMail)
+                      }
                     >
                       <IoCheckmarkDoneSharp />
                       Accept

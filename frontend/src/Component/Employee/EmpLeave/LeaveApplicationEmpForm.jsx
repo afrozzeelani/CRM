@@ -4,30 +4,29 @@ import axios from "axios";
 import "./LeaveApplicationEmpForm.css";
 import LeaveImg from "./Leave.svg";
 import InnerDashContainer from "../../InnerDashContainer";
+import BASE_URL from "../../../Pages/config/config";
 
 const LeaveApplicationEmpForm = (props) => {
   const id = localStorage.getItem("_id");
-  const [empData, setEmpData] = useState([])
+  const [empData, setEmpData] = useState([]);
   const loadEmployeeData = () => {
     axios
-      .get(`http://localhost:4000/api/particularEmployee/${id}`, {
+      .get(`${BASE_URL}/api/particularEmployee/${id}`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
       })
       .then((response) => {
-       
-        console.log(response.data)
-        setEmpData(response.data)
-        
+        console.log(response.data);
+        setEmpData(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  useEffect(()=>{
-    loadEmployeeData()
-  },[]);
+  useEffect(() => {
+    loadEmployeeData();
+  }, []);
   return (
     // <div
     //   style={{ height: "100vh", width: "100%" }}
@@ -127,8 +126,7 @@ const LeaveApplicationEmpForm = (props) => {
     //     </Form>
     //   </div>
     // </div>
-    
- 
+
     <InnerDashContainer>
       <div style={{ overflow: "auto" }} className="row">
         <div className="col-5">
@@ -203,12 +201,9 @@ const LeaveApplicationEmpForm = (props) => {
               </select>
             </div>
 
-      
-            
-           
-             <div className="mb-3">
+            <div className="mb-3">
               <label htmlFor="manager" className="form-label">
-              Reporting Manager:
+                Reporting Manager:
               </label>
               <input
                 className="form-control"
@@ -222,10 +217,9 @@ const LeaveApplicationEmpForm = (props) => {
               />
             </div>
 
-             
             <div className="mb-3">
               <label htmlFor="hr" className="form-label">
-              Reporting Hr:
+                Reporting Hr:
               </label>
               <input
                 className="form-control"
@@ -257,7 +251,11 @@ const LeaveApplicationEmpForm = (props) => {
               <button type="submit" className="btn btn-primary col-5 ">
                 Submit
               </button>
-              <button type="button" className="btn btn-danger col-5">
+              <button
+                type="reset"
+                className="btn btn-danger col-5"
+                onClick={props.onFormClose}
+              >
                 Cancel
               </button>
             </div>

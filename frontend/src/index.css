@@ -9,8 +9,23 @@ body {
 
 :root {
   --primaryDashColorDark: #01005E;
-  --primaryDashMenuColor: #f1f1f1;
+  --primaryDashMenuColor: #ffffff;
   --primaryDashColor: #01005E;
+}
+
+
+
+*::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  background-color: transparent !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent !important;
 }
 
 * {

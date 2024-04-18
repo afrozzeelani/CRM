@@ -3,7 +3,7 @@ import axios from "axios";
 import LeaveApplicationHRTable from "./LeaveApplicationHRTable.jsx";
 import LeaveApplicationHRFormEdit from "./LeaveApplicationHRFormEdit.jsx";
 import "./LeaveApplicationHR.css";
-
+import BASE_URL from "../../../Pages/config/config.js";
 const LeaveApplicationHR = (props) => {
   const [table, setTable] = useState(true);
   const [editForm, setEditForm] = useState(false);
@@ -22,15 +22,11 @@ const LeaveApplicationHR = (props) => {
       Reasonforleave: event.target[4].value
     };
     axios
-      .post(
-        "http://localhost:4000/api/leave-application-hr/" + props.data["_id"],
-        body,
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+      .post(`${BASE_URL}/api/leave-application-hr/` + props.data["_id"], body, {
+        headers: {
+          authorization: localStorage.getItem("token") || ""
         }
-      )
+      })
       .then((res) => {
         setTable(false);
         setTable(true);
@@ -72,15 +68,11 @@ const LeaveApplicationHR = (props) => {
     };
     console.log("update", body);
     axios
-      .put(
-        "http://localhost:4000/api/leave-application-hr/" + info["_id"],
-        body,
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+      .put(`${BASE_URL}/api/leave-application-hr/` + info["_id"], body, {
+        headers: {
+          authorization: localStorage.getItem("token") || ""
         }
-      )
+      })
       .then((res) => {
         setTable(false);
         setTable(true);

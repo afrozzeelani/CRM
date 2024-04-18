@@ -8,6 +8,7 @@ import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import "./WorkExperienceTable.css";
+import BASE_URL from "../../../Pages/config/config.js";
 
 const override = css`
   display: block;
@@ -27,15 +28,11 @@ const WorkExperienceTable = (props) => {
 
   const loadWorkExperienceData = () => {
     axios
-      .get(
-        "http://localhost:4000/api/work-experience/" +
-          localStorage.getItem("_id"),
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+      .get(`${BASE_URL}/api/work-experience/` + localStorage.getItem("_id"), {
+        headers: {
+          authorization: localStorage.getItem("token") || ""
         }
-      )
+      })
       .then((response) => {
         workExperienceObj = response.data;
         console.log("response", response.data);
@@ -64,7 +61,7 @@ const WorkExperienceTable = (props) => {
     console.log(e1, e2);
     if (window.confirm("Are you sure to delete this record? ") === true) {
       axios
-        .delete("http://localhost:4000/api/work-experience/" + e1 + "/" + e2, {
+        .delete(`${BASE_URL}/api/work-experience/` + e1 + "/" + e2, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }

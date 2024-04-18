@@ -3,6 +3,7 @@ import { HashRouter as Router, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import history from "./history.js";
+import toast from "react-hot-toast";
 
 import Login from "./Pages/Login/Login.jsx";
 import DashboardAdmin from "./Component/Admin/DashboardAdmin.jsx";
@@ -10,6 +11,8 @@ import DashboardHR from "./Component/HrManager/DashboardHR.jsx";
 import DashboardEmployee from "./Component/Employee/DashboardEmployee.jsx";
 import ManagerDashboard from "./Component/Manager/ManagerDashboard.jsx";
 import Moment from "moment";
+import ForgetPass from "./Pages/ForgotPass/ForgetPass.jsx";
+import BASE_URL from "./Pages/config/config.js";
 
 const App = () => {
   const [userData, setUserData] = useState({});
@@ -36,7 +39,7 @@ const App = () => {
   const loadEmployeeData = (email, account) => {
     console.log(email, account, localStorage.getItem("token"));
     axios
-      .get("http://localhost:4000/api/employee", {
+      .get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -80,22 +83,19 @@ const App = () => {
 
         const currentTime = Moment().format("HH:mm:ss");
         const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
-        await axios.post(
-          `http://localhost:4000/api/attendance/${attencenceID}`,
-          {
-            employeeId: selectedEmployee,
-            year: new Date().getFullYear(),
-            month: new Date().getMonth() + 1,
-            date: new Date().getDate(),
-            logoutTime: [currentTime],
-            logoutTimeMs: [currentTimeMs],
-            status: "logout"
-          }
-        );
-        alert("Logout time recorded successfully");
+        await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
+          employeeId: selectedEmployee,
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          date: new Date().getDate(),
+          logoutTime: [currentTime],
+          logoutTimeMs: [currentTimeMs],
+          status: "logout"
+        });
+        toast.success("Logout time recorded successfully");
       } catch (error) {
         console.error("Error recording logout time:", error);
-        alert("Error recording logout time");
+        toast.error("Error recording logout time");
       }
     }
   };
@@ -109,14 +109,11 @@ const App = () => {
   const fetchUsers = async (id, email) => {
     console.log(id, email);
     try {
-      const response = await axios.get(
-        "http://localhost:4000/api/employee/" + id,
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+      const response = await axios.get(`${BASE_URL}/api/employee/` + id, {
+        headers: {
+          authorization: localStorage.getItem("token") || ""
         }
-      );
+      });
       console.log(response.data);
       setEmployees(response.data);
       handleLogin(response.data, email);
@@ -144,22 +141,19 @@ const App = () => {
         const currentTime = Moment().format("HH:mm:ss");
         const currentTimeMs = Math.round(new Date().getTime() / 1000 / 60);
 
-        await axios.post(
-          `http://localhost:4000/api/attendance/${attencenceID}`,
-          {
-            employeeId: selectedEmployee,
-            year: new Date().getFullYear(),
-            month: new Date().getMonth() + 1,
-            date: new Date().getDate(),
-            loginTime: [currentTime],
-            loginTimeMs: [currentTimeMs],
-            status: "login"
-          }
-        );
-        alert("Login time recorded successfully");
+        await axios.post(`${BASE_URL}/api/attendance/${attencenceID}`, {
+          employeeId: selectedEmployee,
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+          date: new Date().getDate(),
+          loginTime: [currentTime],
+          loginTimeMs: [currentTimeMs],
+          status: "login"
+        });
+        toast.success("Login time recorded successfully");
       } catch (error) {
         console.error("Error recording login time:", error);
-        alert("Error recording login time");
+        toast.error("Error recording login time");
       }
     }
   };
@@ -170,7 +164,7 @@ const App = () => {
     };
 
     axios
-      .post("http://localhost:4000/api/login", bodyLogin)
+      .post(`${BASE_URL}/api/login`, bodyLogin)
       .then((res) => {
         const decodedData = jwt.decode(res.data);
 
@@ -310,6 +304,7 @@ const App = () => {
           )
         }
       />
+      <Route path="/forgetPassword" exact component={ForgetPass} />
       <Route path="/" render={() => <Redirect to="/login" />} />
       <Route render={() => <Redirect to="/login" />} />
     </Router>

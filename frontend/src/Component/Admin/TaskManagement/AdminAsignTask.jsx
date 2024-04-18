@@ -4,7 +4,7 @@ import axios from "axios";
 import { Button, Container, Form } from "react-bootstrap";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import { v4 as uuidv4 } from "uuid";
-// import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 // import "react-toastify/dist/ReactToastify.css";
 import BASE_URL from "../../../Pages/config/config";
 
@@ -78,7 +78,7 @@ const TaskAssign = () => {
   //         department: "",
   //         comment: ""
   //       });
-  //       alert("Task added successfully!");
+  //       toast.sucess("Task added successfully!");
   //     } else {
   //       // Handle the case where the request fails
   //       alert("Failed to add task. Please try again.");

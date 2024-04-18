@@ -152,7 +152,11 @@ const LeaveApplicationEmpForm = (props) => {
               <button type="submit" className="btn btn-primary col-5 ">
                 Submit
               </button>
-              <button type="button" className="btn btn-danger col-5">
+              <button
+                type="reset"
+                className="btn btn-danger col-5"
+                onClick={props.onFormClose}
+              >
                 Cancel
               </button>
             </div>

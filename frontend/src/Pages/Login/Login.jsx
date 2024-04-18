@@ -1,22 +1,15 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { css } from "@emotion/core";
 import LoginIMG from "../../img/LOGINBACK.svg";
 import { RxEyeOpen } from "react-icons/rx";
 import { GoEyeClosed } from "react-icons/go";
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-`;
-
 const Login = (props) => {
-  const [alertMsg, setalertMsg] = useState("");
+  const [alertMsg] = useState("");
   const [seePass, setSeepass] = useState(false);
-  const [password, setPassword] = useState("");
+  const [setPassword] = useState("");
 
   return (
     <div

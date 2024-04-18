@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineMore } from "react-icons/ai";
 import { TbLogin } from "react-icons/tb";
 import { TbLogin2 } from "react-icons/tb";
+import BASE_URL from "../../../Pages/config/config";
 
 const TodaysAttendance = () => {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -15,9 +16,7 @@ const TodaysAttendance = () => {
     // Fetch today's attendance data when the component mounts
     const fetchAttendanceData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/api/todays-attendance"
-        );
+        const response = await axios.get(`${BASE_URL}/api/todays-attendance`);
         setAttendanceData(response.data);
       } catch (error) {
         console.error("Error fetching today's attendance data:", error);
@@ -64,20 +63,6 @@ const TodaysAttendance = () => {
     return "--";
   };
 
-  // const calculateTotalLoginTime = (loginTimeMs, logoutTimeMs, totalBreak) => {
-  //     if (loginTimeMs && logoutTimeMs) {
-  //         const totalMilliseconds = logoutTimeMs - loginTimeMs - totalBreak;
-
-  //         // Convert totalMilliseconds to hours, minutes, and seconds
-  //         const hours = Math.floor(totalMilliseconds / (60 * 60 * 1000));
-  //         const minutes = Math.floor((totalMilliseconds % (60 * 60 * 1000)) / (60 * 1000));
-  //         const seconds = Math.floor((totalMilliseconds % (60 * 1000)) / 1000);
-
-  //         // Return the total login time in the format HH:MM:SS
-  //         return `${hours}:${minutes}:${seconds}`;
-  //     }
-  //     return 'N/A';
-  // };
   const calculatetotalBrake = (totalBrake) => {
     if (totalBrake) {
       const totalMilliseconds = totalBrake;

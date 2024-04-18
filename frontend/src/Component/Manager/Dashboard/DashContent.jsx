@@ -11,8 +11,6 @@ import HolidayList from "../../../Pages/LeaveCalendar/HolidayList";
 import ManagerCompletedTask from "../ManagerTaskManagement/ManagerCompletedTask";
 import UpcomingBirthdays from "../../../Pages/AddEmployee/UpcomingBirthdays";
 
-import Chart from "react-apexcharts";
-
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import Login from "../../../Pages/Login/Login";
 const HRDash = (props) => {

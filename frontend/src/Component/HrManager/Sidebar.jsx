@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 const Sidebar = (props) => {
   const [activeCategory, setActiveCategory] = useState(null);
-  const [extended, setExtended] = useState(true);
+  const [extended, setExtended] = useState(false);
 
   const allLinks = [
     {
@@ -35,6 +35,7 @@ const Sidebar = (props) => {
       navLinks: [
         { to: "/hr/attenDance", label: "Create Attendance" },
         { to: "/hr/todaysAttendance", label: "TodaysAttendance" },
+        { to: "/hr/AttendanceRegister", label: "Attendance Register" },
         { to: "/hr/viewAttenDance", label: "View Attendance" },
         { to: "/hr/manualAttand", label: "All Emp Attendance" }
         // { to: "/hr/leave-application-hr", label: "View All Leave " }

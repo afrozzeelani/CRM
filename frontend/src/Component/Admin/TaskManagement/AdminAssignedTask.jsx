@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { BsFiletypeDoc } from "react-icons/bs";
 import BASE_URL from "../../../Pages/config/config";
+import toast from "react-hot-toast";
 
 const AdminAssignedTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -116,13 +117,13 @@ const AdminAssignedTask = () => {
       });
 
       // Display success notification
-      alert("Task canceled successfully!");
+      toast.success("Task canceled successfully!");
 
       // Update the UI by fetching the latest tasks
       fetchData();
     } catch (error) {
       console.error("Error canceling task:", error.message);
-      alert("Failed to cancel task. Please try again.");
+      toast.error("Failed to cancel task. Please try again.");
     } finally {
       setIsCanceling(false);
     }
@@ -164,7 +165,7 @@ const AdminAssignedTask = () => {
       });
 
       // Display success notification
-      alert("Task updated successfully!");
+      toast.success("Task updated successfully!");
 
       // Close the update modal
       handleCloseUpdateModal();
@@ -173,7 +174,7 @@ const AdminAssignedTask = () => {
       fetchData();
     } catch (error) {
       console.error("Error updating task:", error.message);
-      alert("Failed to update task. Please try again.");
+      toast.error("Failed to update task. Please try again.");
     }
   };
 

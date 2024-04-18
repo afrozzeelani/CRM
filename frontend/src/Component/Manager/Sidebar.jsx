@@ -43,7 +43,6 @@ const Sidebar = () => {
       name: "Leave",
       navLinks: [
         { to: "/manager/createLeave", label: "Apply Leave" },
-        // { to: "/hr/hrLeave", label: "Apply Leave" },
         { to: "/manager/leaveApplication", label: "Pending " },
         { to: "/manager/leaveAccepted", label: "Accepted " },
         { to: "/manager/leaveRejected", label: "Rejected " }

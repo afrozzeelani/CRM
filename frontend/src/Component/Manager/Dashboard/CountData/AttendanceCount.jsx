@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import BASE_URL from "../../../../Pages/config/config";
 
 function AttendanceDashboard() {
   const [dashboardData, setDashboardData] = useState({
@@ -13,9 +14,7 @@ function AttendanceDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/api/attendance"
-        ); // Adjust the API endpoint accordingly
+        const response = await axios.get(`${BASE_URL}/api/attendance`); // Adjust the API endpoint accordingly
 
         const data = response.data;
 

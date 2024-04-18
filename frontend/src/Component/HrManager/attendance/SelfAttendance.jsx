@@ -2,8 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import axios from "axios";
 import { TfiReload } from "react-icons/tfi";
 import { FaCircleInfo } from "react-icons/fa6";
-import { MdOutlineRefresh } from "react-icons/md";
-
+import BASE_URL from "../../../Pages/config/config";
 const SelfAttendance = () => {
   const [employees, setEmployees] = useState([]);
   const [attendanceData, setAttendanceData] = useState(null);

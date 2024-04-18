@@ -2,21 +2,12 @@ import React, { useState, useEffect } from "react";
 // import "./LeaveApplicationHRTable.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-import { RingLoader } from "react-spinners";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 import { css } from "@emotion/core";
-import {
-  Form,
-  Button,
-  Col,
-  Row,
-  Table,
-  Dropdown,
-  DropdownButton
-} from "react-bootstrap";
+import BASE_URL from "../../../../Pages/config/config";
 
 // *************csv & pdf **************//
 import jsPDF from "jspdf";
@@ -31,7 +22,7 @@ const override = css`
   border-color: red;
 `;
 
-const LeaveApplicationHRTable = (props) => {
+const LeaveCount = (props) => {
   const [leaveApplicationHRData, setLeaveApplicationHRData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchData, setSearchData] = useState("");
@@ -47,7 +38,7 @@ const LeaveApplicationHRTable = (props) => {
 
   const loadLeaveApplicationHRData = () => {
     axios
-      .get("http://localhost:4000/api/leave-application-hr/", {
+      .get(`${BASE_URL}/api/leave-application-hr/`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -99,14 +90,11 @@ const LeaveApplicationHRTable = (props) => {
     console.log(e1, e2);
     if (window.confirm("Are you sure to delete this record? ") == true) {
       axios
-        .delete(
-          "http://localhost:4000/api/leave-application-hr/" + e1 + "/" + e2,
-          {
-            headers: {
-              authorization: localStorage.getItem("token") || ""
-            }
+        .delete(`${BASE_URL}/api/leave-application-hr/` + e1 + "/" + e2, {
+          headers: {
+            authorization: localStorage.getItem("token") || ""
           }
-        )
+        })
         .then((res) => {
           loadLeaveApplicationHRData();
         })
@@ -246,63 +234,8 @@ const LeaveApplicationHRTable = (props) => {
   ).length;
 
   return (
-    // <div className="p-4">
-    //   <div className="d-flex justify-between">
-    //     <h3 className="fw-bold text-muted">Leave Request ({totalLeaves})</h3>
-
-    //     <button
-    //       className="btn px-3 d-flex justify-center aline-center gap-2"
-    //       onClick={exportToPDF}
-    //     >
-    //       <BsFillFileEarmarkPdfFill className="text-danger fs-4" />
-    //       <p className="my-auto fs-5 fw-bold">PDF</p>
-    //     </button>
-    //   </div>
-
-    //   <div id="clear-both" />
-
-    //   <div className="mt-3">
-    //     {/* Display the total length for each status */}
-    //     <p>Total Pending Leaves: {pendingLeaves}</p>
-    //     <p>Total Approved Leaves: {approvedLeaves}</p>
-    //     <p>Total Rejected Leaves: {rejectedLeaves}</p>
-
-    //     {/* Display the table */}
-    //     {!loading ? (
-    //       <div
-    //         style={{
-    //           overflow: "auto",
-    //           height: "85vh",
-    //           width: "100%",
-    //           scrollbarWidth: "thin"
-    //         }}
-    //       >
-    //         <table className="table table-striped">
-    //           <thead>{/* ... (existing code) */}</thead>
-    //           <tbody>
-    //             {rowData
-    //               .filter((e) => e.Status == "Pending")
-    //               .map((data, index) => (
-    //                 <tr key={index}>{/* ... (existing code) */}</tr>
-    //               ))}
-    //           </tbody>
-    //         </table>
-    //       </div>
-    //     ) : (
-    //       <div id="loading-bar">
-    //         <RingLoader
-    //           css={override}
-    //           sizeUnit={"px"}
-    //           size={50}
-    //           color={"#0000ff"}
-    //           loading={true}
-    //         />
-    //       </div>
-    //     )}
-    //   </div>
-    // </div>
     <div>
-      <div className="container-fluid  mt-4">
+      <div className="container-fluid">
         <div className="row row-gap-4">
           <div className="col-md-4">
             <div
@@ -310,18 +243,20 @@ const LeaveApplicationHRTable = (props) => {
               className=" DashboardCard position-relative"
             >
               <div className=" d-flex flex-column gap-3">
-                <p className="fw-bold pt-2 text-muted">
-                  On Pending Leaves
+                <div className="d-flex justify-content-between align-items-center  flex-nowrap">
+                  <p className="fw-bold my-auto pt-2 text-muted">
+                    On Pending Leaves
+                  </p>
                   <span
-                    className="fw-bolder text-info position-absolute"
-                    style={{ fontSize: "35px", right: "10%", top: "4%" }}
+                    className="fw-bolder text-info"
+                    style={{ fontSize: "35px" }}
                   >
                     {pendingLeaves}
                   </span>
-                </p>
+                </div>
                 <Link
-                  className="text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-2  aline-items-center fw-bold text-info  aline-center"
-                  to="/hr/leave-application-hr"
+                  className=" moreInfoLink text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-1  aline-items-center fw-bold text-info  aline-center"
+                  to="/hr/leaveApplication"
                 >
                   <p className="my-auto">More Info</p>{" "}
                   <p className="my-auto fs-4 d-flex">
@@ -337,17 +272,19 @@ const LeaveApplicationHRTable = (props) => {
               className="DashboardCard position-relative"
             >
               <div className="d-flex flex-column gap-3">
-                <p className="fw-bold pt-2 text-muted">
-                  On Approved Leaves{" "}
+                <div className="d-flex justify-content-between align-items-center  flex-nowrap">
+                  <p className="fw-bold my-auto pt-2 text-muted">
+                    On Approved Leaves{" "}
+                  </p>
                   <span
-                    className="fw-bolder text-info position-absolute"
-                    style={{ fontSize: "35px", right: "10%", top: "4%" }}
+                    className="fw-bolder text-info"
+                    style={{ fontSize: "35px" }}
                   >
                     {approvedLeaves}
                   </span>
-                </p>
+                </div>
                 <Link
-                  className="text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-2  aline-items-center fw-bold text-info  aline-center"
+                  className=" moreInfoLink text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-1  aline-items-center fw-bold text-info  aline-center"
                   to="/hr/leaveAccepted"
                 >
                   <p className="my-auto">More Info</p>{" "}
@@ -366,17 +303,19 @@ const LeaveApplicationHRTable = (props) => {
               className="DashboardCard position-relative"
             >
               <div className="d-flex flex-column gap-3">
-                <p className="fw-bold pt-2 text-muted">
-                  On Rejected Leaves
+                <div className="d-flex justify-content-between align-items-center  flex-nowrap">
+                  <p className="fw-bold my-auto pt-2 text-muted">
+                    On Rejected Leaves
+                  </p>
                   <span
-                    className="fw-bolder text-info position-absolute"
-                    style={{ fontSize: "35px", right: "10%", top: "4%" }}
+                    className="fw-bolder text-info"
+                    style={{ fontSize: "35px" }}
                   >
                     {rejectedLeaves}
                   </span>
-                </p>
+                </div>
                 <Link
-                  className="text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-2  aline-items-center fw-bold text-info  aline-center"
+                  className=" moreInfoLink text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-1  aline-items-center fw-bold text-info  aline-center"
                   to="/hr/leaveRejected"
                 >
                   <p className="my-auto">More Info</p>{" "}
@@ -387,37 +326,10 @@ const LeaveApplicationHRTable = (props) => {
               </div>
             </div>
           </div>
-          {/* <div className="col-md-3">
-            <div
-              style={{ backgroundColor: "#BCCEF8" }}
-              className="DashboardCard position-relative"
-            >
-              <div className="d-flex flex-column gap-3">
-                <p className="fw-bold pt-2 text-muted">
-                  Total Role
-                  <span
-                    className="fw-bolder text-info position-absolute"
-                    style={{ fontSize: "35px", right: "10%", top: "4%" }}
-                  >
-                    {}
-                  </span>
-                </p>
-                <Link
-                  className="text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-2  aline-items-center fw-bold text-info  aline-center"
-                  to="/hr/role"
-                >
-                  <p className="my-auto">More Info</p>{" "}
-                  <p className="my-auto fs-4 d-flex">
-                    <IoIosArrowDroprightCircle />
-                  </p>
-                </Link>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>
   );
 };
 
-export default LeaveApplicationHRTable;
+export default LeaveCount;

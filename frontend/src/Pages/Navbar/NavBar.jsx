@@ -19,7 +19,7 @@ const NavBar = (props) => {
   const history = useHistory();
   const location = useLocation().pathname.split("/")[1];
   const [notification, setNotification] = useState([]);
-  const [employeeData, setEmployeeData] = useState("");
+  const [setEmployeeData] = useState("");
   const [notiToggle, setNotiToggle] = useState(false);
   const { socket } = useContext(AttendanceContext);
 

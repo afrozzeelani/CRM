@@ -23,6 +23,7 @@ import { IoArrowBackCircle, IoEye } from "react-icons/io5";
 import Education from "../EmpEducation/Education";
 import WorkExperience from "../EmpWorkExp/WorkExperience";
 import FamilyInfo from "../EmpFamily/FamilyInfo";
+import BASE_URL from "../../../Pages/config/config.js";
 
 const override = css`
   display: block;
@@ -40,7 +41,7 @@ const PersonalInfoTable = (props) => {
   const [visibleDocs, setVisibleDocs] = useState([]);
   const loadPersonalInfoData = () => {
     axios
-      .get(`http://localhost:4000/api/personal-info/${props.data["_id"]}`, {
+      .get(`${BASE_URL}/api/personal-info/${props.data["_id"]}`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -107,7 +108,7 @@ const PersonalInfoTable = (props) => {
     console.log(e);
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/personalInfo/${e}`, {
+        .delete(`${BASE_URL}/api/personalInfo/${e}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }

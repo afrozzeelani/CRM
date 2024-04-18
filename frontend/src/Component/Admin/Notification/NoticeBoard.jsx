@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import BASE_URL from "../../../Pages/config/config";
+import NoticeBadge from "../../../img/NoticeBadge.svg";
+
 import axios from "axios";
 const NoticeBoard = () => {
   const [notice, setNotice] = useState([]);
@@ -52,17 +54,25 @@ const NoticeBoard = () => {
       });
   };
   return (
-    <div className="container box-shadow: 0 4px 10px 0 rgb(137 137 137 / 25%); mt-4 ">
+    <div className="container box-shadow: 0 4px 10px 0 rgb(137 137 137 / 25%); p-0 h-100 ">
       <div className="birthday">
-        <h4 className="fw-bolder d-flex text-muted gap-0 text-center">
+        <h5
+          style={{
+            position: "sticky",
+            top: "0",
+            backgroundColor: "var(--primaryDashColorDark)",
+            color: "var(--primaryDashMenuColor)"
+          }}
+          className="fw-bolder pb-3 px-3 pt-3 d-flex justify-content-between gap-0 text-center"
+        >
           Notice Board{" "}
-          <span className="text-primary mx-2">({notice.length})</span>
-        </h4>
+          {notice && <span className="text-primary">({notice.length})</span>}
+        </h5>
         <div
           className="mainbirth"
           style={{ maxWidth: "100%", overflowX: "auto" }}
         >
-          {notice.length > 0 ? (
+          {notice && notice.length > 0 ? (
             <table className="table table-striped mt-3">
               <thead>
                 <tr>
@@ -100,11 +110,80 @@ const NoticeBoard = () => {
               </tbody>
             </table>
           ) : (
-            <p>No Notice</p>
+            <div
+              className="d-flex flex-column justify-content-center aline-items-center gap-3"
+              style={{ height: "100%", width: "100%" }}
+            >
+              <img
+                style={{ height: "70%", width: "60%" }}
+                className="mx-auto"
+                src={NoticeBadge}
+                alt="Happy Birthday"
+              />
+              <p
+                style={{ opacity: "60%", fontSize: "13px" }}
+                className="text-center w-75 mx-auto  fw-bold text-muted "
+              >
+                Notice Not Assigned
+              </p>
+            </div>
           )}
         </div>
       </div>
     </div>
+    // <div className="container box-shadow: 0 4px 10px 0 rgb(137 137 137 / 25%); mt-4 ">
+    //   <div className="birthday">
+    //     <h4 className="fw-bolder d-flex text-muted gap-0 text-center">
+    //       Notice Board{" "}
+    //       <span className="text-primary mx-2">({notice.length})</span>
+    //     </h4>
+    //     <div
+    //       className="mainbirth"
+    //       style={{ maxWidth: "100%", overflowX: "auto" }}
+    //     >
+    //       {notice.length > 0 ? (
+    //         <table className="table table-striped mt-3">
+    //           <thead>
+    //             <tr>
+    //               <th className="cursor-pointer" style={{ width: "80%" }}>
+    //                 Notice
+    //               </th>
+    //               <th style={{ width: "80%" }}>Action</th>
+    //             </tr>
+    //           </thead>
+    //           <tbody>
+    //             {notice
+    //               .filter(
+    //                 (val, i, ar) =>
+    //                   ar.findIndex((item) => item.noticeId === val.noticeId) ===
+    //                   i
+    //               )
+    //               .map((val) => (
+    //                 <tr key={val.noticeId} style={{ cursor: "pointer" }}>
+    //                   <td
+    //                     onClick={() => pdfHandler(val.attachments)}
+    //                   >{`${val.notice}`}</td>
+    //                   <td
+    //                     style={{
+    //                       fontSize: "22px",
+    //                       color: "red",
+    //                       textAlign: "center"
+    //                     }}
+    //                   >
+    //                     <TiDeleteOutline
+    //                       onClick={() => deleteHandler(val.noticeId)}
+    //                     />
+    //                   </td>
+    //                 </tr>
+    //               ))}
+    //           </tbody>
+    //         </table>
+    //       ) : (
+    //         <p>No Notice</p>
+    //       )}
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 

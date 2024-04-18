@@ -8,18 +8,16 @@ import {
   faEdit,
   faInfoCircle
 } from "@fortawesome/free-solid-svg-icons";
-import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
-
+import BASE_URL from "../../../../Pages/config/config";
 import { Link } from "react-router-dom";
 
 // *************csv & pdf **************//
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-// import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { FiSearch } from "react-icons/fi";
+
 // *************csv & pdf **************//
 
 const override = css`
@@ -41,7 +39,7 @@ const AdminEmployeeTable = (props) => {
 
   const loadEmployeeData = () => {
     axios
-      .get("http://localhost:4000/api/employee", {
+      .get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -103,7 +101,7 @@ const AdminEmployeeTable = (props) => {
   const onEmployeeDelete = (e) => {
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/employee/${e}`, {
+        .delete(`${BASE_URL}/api/employee/${e}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }

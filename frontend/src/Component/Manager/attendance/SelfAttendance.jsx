@@ -2,8 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import axios from "axios";
 import { TfiReload } from "react-icons/tfi";
 import { FaCircleInfo } from "react-icons/fa6";
-import { MdOutlineRefresh } from "react-icons/md";
-
+import BASE_URL from "../../../Pages/config/config";
 const SelfAttendance = () => {
   const [employees, setEmployees] = useState([]);
   const [attendanceData, setAttendanceData] = useState(null);
@@ -31,48 +30,11 @@ const SelfAttendance = () => {
     setIsInfoHovering(false);
   };
 
-  //   useEffect(() => {
-  //     fetchEmployees();
-  //   }, []);
-
-  //   const fetchEmployees = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:4000/api/employee", {
-  //         headers: {
-  //           authorization: localStorage.getItem("token") || ""
-  //         }
-  //       });
-  //       setEmployees(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching employees:", error);
-  //     }
-  //   };
-
-  // const handleFetchAttendance = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:4000/api/attendance/${employeeId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token") || ""}`
-  //         }
-  //       }
-  //     );
-  //     let singleUser = response.data.filter((val) => {
-  //       return val.employeeObjID._id === employeeId;
-  //     });
-  //     setAttendanceData(singleUser.length > 0 ? singleUser[0] : null);
-  //   } catch (error) {
-  //     console.error("Error fetching attendance data:", error);
-  //   }
-  // };
-
-  // setIsButtonClicked(true);
   useEffect(() => {
     const handleFetchAttendance = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/attendance/${employeeId}`,
+          `${BASE_URL}/api/attendance/${employeeId}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token") || ""}`
@@ -181,40 +143,6 @@ const SelfAttendance = () => {
 
   return (
     <div className="d-flex flex-column p-5 gap-3">
-      {/* <div className="d-flex gap-3 ">
-        <div>
-          <select
-            className="form-select w-100 shadow-sm text-muted"
-            id="employeeId"
-            value={employeeId}
-            onChange={handleEmployeeChange}
-          >
-            <option value="" disabled>
-              --Select an employee--
-            </option>
-
-            {employees
-              .sort((a, b) => a.empID - b.empID)
-              .map((employee) => (
-                <option
-                  className="text-uppercase"
-                  key={employee._id}
-                  value={employee._id}
-                >
-                  🪪 ({employee.empID}) {employee.FirstName}-{employee.LastName}
-                </option>
-              ))}
-          </select>
-        </div>
-
-        <button
-          className="btn shadow btn-dark fw-bolder"
-          style={{ width: "fit-content" }}
-          onClick={handleFetchAttendance}
-        >
-          Fetch Attendance
-        </button>
-      </div> */}
       <div className="d-flex gap-3 justify-content-between">
         {/* <div>
           <select

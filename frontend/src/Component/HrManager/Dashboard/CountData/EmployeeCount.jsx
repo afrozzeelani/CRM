@@ -12,7 +12,7 @@ import { RingLoader } from "react-spinners";
 import { css } from "@emotion/core";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
-
+import BASE_URL from "../../../../Pages/config/config";
 import { Link } from "react-router-dom";
 
 // *************csv & pdf **************//
@@ -29,7 +29,7 @@ const override = css`
   border-color: red;
 `;
 
-const AdminEmployeeTable = (props) => {
+const EmployeeCount = (props) => {
   const [employeeData, setEmployeeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowData, setRowData] = useState([]);
@@ -41,7 +41,7 @@ const AdminEmployeeTable = (props) => {
 
   const loadEmployeeData = () => {
     axios
-      .get("http://localhost:4000/api/employee", {
+      .get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -103,7 +103,7 @@ const AdminEmployeeTable = (props) => {
   const onEmployeeDelete = (e) => {
     if (window.confirm("Are you sure to delete this record? ")) {
       axios
-        .delete(`http://localhost:4000/api/employee/${e}`, {
+        .delete(`${BASE_URL}/api/employee/${e}`, {
           headers: {
             authorization: localStorage.getItem("token") || ""
           }
@@ -286,26 +286,28 @@ const AdminEmployeeTable = (props) => {
   ).length;
 
   return (
-    <div>
-      <div className="container-fluid ">
+    <div className="">
+      <div className="container-fluid">
         <div className="row row-gap-4">
-          <div className="col-md-3">
+          <div className="col-6 col-md-3 ">
             <div
               style={{ backgroundColor: "#FED2AA" }}
               className=" DashboardCard position-relative"
             >
               <div className=" d-flex flex-column gap-3">
-                <p className="fw-bold pt-2 text-muted">
-                  Total Admins
+                <div className="d-flex justify-content-between align-items-center  flex-nowrap">
+                  <p className="fw-bold my-auto pt-2 text-muted">
+                    Total <br /> Admins
+                  </p>
                   <span
-                    className="fw-bolder text-info position-absolute"
-                    style={{ fontSize: "35px", right: "10%", top: "4%" }}
+                    className="fw-bolder text-info"
+                    style={{ fontSize: "35px" }}
                   >
                     {adminCount}
                   </span>
-                </p>
+                </div>
                 <Link
-                  className="text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-2  aline-items-center fw-bold text-info  aline-center"
+                  className="moreInfoLink text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-1  aline-items-center fw-bold text-info  aline-center"
                   to="/hr/employee"
                 >
                   <p className="my-auto">More Info</p>{" "}
@@ -316,24 +318,26 @@ const AdminEmployeeTable = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-6 col-md-3">
             <div
               style={{ backgroundColor: "#DFFFD8" }}
               className="DashboardCard position-relative"
             >
               <div className="d-flex flex-column gap-3">
-                <p className="fw-bold pt-2 text-muted">
-                  Total HR{" "}
+                <div className="d-flex justify-content-between align-items-center  flex-nowrap">
+                  <p className="fw-bold my-auto pt-2 text-muted">
+                    Total <br /> HR{" "}
+                  </p>
                   <span
-                    className="fw-bolder text-info position-absolute"
-                    style={{ fontSize: "35px", right: "10%", top: "4%" }}
+                    className="fw-bolder text-info"
+                    style={{ fontSize: "35px" }}
                   >
                     {hrCount}
                   </span>
-                </p>
+                </div>
                 <Link
-                  className="text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-2  aline-items-center fw-bold text-info  aline-center"
-                  to="/hr/leave-application-hr"
+                  className="moreInfoLink text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-1  aline-items-center fw-bold text-info  aline-center"
+                  to="/hr/employee"
                 >
                   <p className="my-auto">More Info</p>{" "}
                   <p className="my-auto fs-4 d-flex">
@@ -344,24 +348,25 @@ const AdminEmployeeTable = (props) => {
             </div>
           </div>
 
-          {/* <div className="row row-gap-4"></div> */}
-          <div className="col-md-3">
+          <div className="col-6 col-md-3">
             <div
               style={{ backgroundColor: "#FEBBCC" }}
               className="DashboardCard position-relative"
             >
               <div className="d-flex flex-column gap-3">
-                <p className="fw-bold pt-2 text-muted">
-                  Total Manager
+                <div className="d-flex justify-content-between align-items-center  flex-nowrap">
+                  <p className="fw-bold my-auto pt-2 text-muted">
+                    Total <br /> Manager
+                  </p>
                   <span
-                    className="fw-bolder text-info position-absolute"
-                    style={{ fontSize: "35px", right: "10%", top: "4%" }}
+                    className="fw-bolder text-info"
+                    style={{ fontSize: "35px" }}
                   >
                     {managerCount}
                   </span>
-                </p>
+                </div>
                 <Link
-                  className="text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-2  aline-items-center fw-bold text-info  aline-center"
+                  className=" moreInfoLink text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-1  aline-items-center fw-bold text-info  aline-center"
                   to="/hr/employee"
                 >
                   <p className="my-auto">More Info</p>{" "}
@@ -373,23 +378,26 @@ const AdminEmployeeTable = (props) => {
             </div>
           </div>
 
-          <div className="col-md-3">
+          <div className="col-6 col-md-3">
             <div
               style={{ backgroundColor: "#BCCEF8" }}
               className="DashboardCard position-relative"
             >
               <div className="d-flex flex-column gap-3">
-                <p className="fw-bold pt-2 text-muted">
-                  Total Employee
+                <div className="d-flex justify-content-between align-items-center  flex-nowrap">
+                  <p className="fw-bold my-auto pt-2 text-muted">
+                    Total <br /> Employee
+                  </p>
                   <span
-                    className="fw-bolder text-info position-absolute"
-                    style={{ fontSize: "35px", right: "10%", top: "4%" }}
+                    className="fw-bolder text-info"
+                    style={{ fontSize: "35px" }}
                   >
                     {employeeCount}
                   </span>
-                </p>
+                </div>
+
                 <Link
-                  className="text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-2  aline-items-center fw-bold text-info  aline-center"
+                  className=" moreInfoLink text-decoration-none bg-white px-4  rounded-5 d-flex justify-between py-1  aline-items-center fw-bold text-info  aline-center"
                   to="/hr/employee"
                 >
                   <p className="my-auto">More Info</p>{" "}
@@ -400,12 +408,10 @@ const AdminEmployeeTable = (props) => {
               </div>
             </div>
           </div>
-
-          <div className="col-md-9"></div>
         </div>
       </div>
     </div>
   );
 };
 
-export default AdminEmployeeTable;
+export default EmployeeCount;

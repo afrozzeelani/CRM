@@ -4,6 +4,7 @@ import { GiIndianPalace, GiPartyPopper } from "react-icons/gi"; // Importing nec
 import { PiBankBold } from "react-icons/pi";
 import { MdCreateNewFolder } from "react-icons/md";
 import { Link } from "react-router-dom/cjs/react-router-dom";
+import BASE_URL from "../config/config";
 
 function HolidayList() {
   const [holidaysData, setHolidaysData] = useState([]);
@@ -17,7 +18,7 @@ function HolidayList() {
   useEffect(() => {
     const fetchHolidays = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/holidays");
+        const response = await axios.get(`${BASE_URL}/api/holidays`);
 
         if (response.status === 200) {
           const data = response.data;

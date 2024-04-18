@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import BASE_URL from "../../../Pages/config/config";
 const ManagerCencelledTask = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ const ManagerCencelledTask = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/tasks", {
+      const response = await axios.get(`${BASE_URL}/api/tasks`, {
         params: { status: "Cancelled" }
       });
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import BASE_URL from "../../../Pages/config/config";
 const ManagerCompletedTask = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ const ManagerCompletedTask = () => {
   const email = localStorage.getItem("Email");
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/tasks", {
+      const response = await axios.get(`${BASE_URL}/api/tasks`, {
         params: { status: "Completed" } // Filter by status "Completed"
       });
 
@@ -57,7 +57,9 @@ const ManagerCompletedTask = () => {
         className="d-flex flex-column gap-3"
       >
         {tasks
-          .filter((task) => task.status === "Completed" && task.managerEmail ===email)
+          .filter(
+            (task) => task.status === "Completed" && task.managerEmail === email
+          )
           .map((task, index) => (
             <details
               style={{

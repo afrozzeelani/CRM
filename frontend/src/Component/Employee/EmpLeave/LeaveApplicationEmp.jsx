@@ -6,6 +6,8 @@ import LeaveApplicationEmpForm from "./LeaveApplicationEmpForm.jsx";
 import LeaveApplicationEmpFormEdit from "./LeaveApplicationEmpFormEdit.jsx";
 import { AttendanceContext } from "../../../Context/AttendanceContext/AttendanceContext";
 import { v4 as uuid } from "uuid";
+import BASE_URL from "../../../Pages/config/config";
+
 const LeaveApplicationEmp = (props) => {
   const [table, setTable] = useState(true);
   const [editForm, setEditForm] = useState(false);
@@ -30,7 +32,7 @@ const LeaveApplicationEmp = (props) => {
     console.log(body);
     axios
       .post(
-        "http://localhost:4000/api/leave-application-emp/" + props.data["_id"],
+        `${BASE_URL}/api/leave-application-emp/` + props.data["_id"],
         body,
         {
           headers: {
@@ -96,15 +98,11 @@ const LeaveApplicationEmp = (props) => {
     console.log("update", body);
 
     axios
-      .put(
-        "http://localhost:4000/api/leave-application-emp/" + info["_id"],
-        body,
-        {
-          headers: {
-            authorization: localStorage.getItem("token") || ""
-          }
+      .put(`${BASE_URL}/api/leave-application-emp/` + info["_id"], body, {
+        headers: {
+          authorization: localStorage.getItem("token") || ""
         }
-      )
+      })
       .then((res) => {
         setTable(false);
         setTable(true);

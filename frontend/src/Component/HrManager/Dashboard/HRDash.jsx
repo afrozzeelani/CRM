@@ -59,10 +59,12 @@ import HolidayList from "../../../Pages/LeaveCalendar/HolidayList";
 import LeaveCount from "./CountData/LeavesCount";
 import EmployeeCount from "./CountData/EmployeeCount";
 import DailyAttendChart from "../../../Pages/Chart/DailyAttendChart";
+import NoticeBoard from "../Notification/NoticeBoard";
+import { MdCreateNewFolder } from "react-icons/md";
 
 const HRDash = () => {
   return (
-    <div className="hrdashgrid-container">
+    <div className="hrdashgrid-container container-fluid py-3">
       <div className="hrdashgrid dash-1">
         <EmployeeCount />
       </div>
@@ -79,10 +81,17 @@ const HRDash = () => {
         <TaskChart />
       </div>
       <div className="hrdashgrid dash-2">
-        <UpcomingBirthdays />
+        <NoticeBoard />
       </div>
       <div className="hrdashgrid dash-6">
-        <HolidayList />
+        <HolidayList
+          title={"Holiday List"}
+          newFolderLink={"/hr/holiday"}
+          holidayIcons={<MdCreateNewFolder />}
+        />
+      </div>
+      <div className="hrdashgrid dash-8">
+        <UpcomingBirthdays />
       </div>
     </div>
   );

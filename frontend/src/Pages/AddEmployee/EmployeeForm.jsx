@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Form, Button, Col } from "react-bootstrap";
 import { TbUsersPlus } from "react-icons/tb";
+import BASE_URL from "../config/config";
 
 const EmployeeForm = (props) => {
   const [roleData, setRoleData] = useState([]);
@@ -18,7 +19,7 @@ const EmployeeForm = (props) => {
   }, []);
   const loadEmployeeData = () => {
     axios
-      .get("http://localhost:4000/api/employee", {
+      .get(`${BASE_URL}/api/employee`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -57,7 +58,7 @@ const EmployeeForm = (props) => {
   };
   const loadRoleInfo = () => {
     axios
-      .get("http://localhost:4000/api/role", {
+      .get(`${BASE_URL}/api/role`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -72,7 +73,7 @@ const EmployeeForm = (props) => {
 
   const loadPositionInfo = () => {
     axios
-      .get("http://localhost:4000/api/position", {
+      .get(`${BASE_URL}/api/position`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
@@ -87,7 +88,7 @@ const EmployeeForm = (props) => {
 
   const loadDepartmentInfo = () => {
     axios
-      .get("http://localhost:4000/api/department", {
+      .get(`${BASE_URL}/api/department`, {
         headers: {
           authorization: localStorage.getItem("token") || ""
         }
