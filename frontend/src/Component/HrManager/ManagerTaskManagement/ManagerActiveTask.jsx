@@ -529,10 +529,7 @@ const ManagerActiveTask = () => {
                     >
                       <IoCheckmarkDoneSharp /> Forward Task
                     </button>
-                    <button
-                      className="btn btn-warning col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() => askStatus(task._id)}
-                    >
+                    <button className="btn btn-warning col-2 d-flex justify-center aline-center gap-2">
                       <BsFiletypeDoc /> Ask Status
                     </button>
                     <button

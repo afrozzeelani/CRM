@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.css": "/static/css/main.0aa75980.chunk.css",
+    "main.js": "/static/js/main.a75d433f.chunk.js",
+    "main.js.map": "/static/js/main.a75d433f.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.fca15210.js",
+    "runtime-main.js.map": "/static/js/runtime-main.fca15210.js.map",
+    "static/css/2.f4fba10e.chunk.css": "/static/css/2.f4fba10e.chunk.css",
+    "static/js/2.d9e36f5a.chunk.js": "/static/js/2.d9e36f5a.chunk.js",
+    "static/js/2.d9e36f5a.chunk.js.map": "/static/js/2.d9e36f5a.chunk.js.map",
+    "static/js/3.0413ed8e.chunk.js": "/static/js/3.0413ed8e.chunk.js",
+    "static/js/3.0413ed8e.chunk.js.map": "/static/js/3.0413ed8e.chunk.js.map",
+    "static/js/4.59f6538e.chunk.js": "/static/js/4.59f6538e.chunk.js",
+    "static/js/4.59f6538e.chunk.js.map": "/static/js/4.59f6538e.chunk.js.map",
+    "static/js/5.d1623efe.chunk.js": "/static/js/5.d1623efe.chunk.js",
+    "static/js/5.d1623efe.chunk.js.map": "/static/js/5.d1623efe.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.f4fba10e.chunk.css.map": "/static/css/2.f4fba10e.chunk.css.map",
+    "static/css/main.0aa75980.chunk.css.map": "/static/css/main.0aa75980.chunk.css.map",
+    "static/js/2.d9e36f5a.chunk.js.LICENSE.txt": "/static/js/2.d9e36f5a.chunk.js.LICENSE.txt",
+    "static/js/3.0413ed8e.chunk.js.LICENSE.txt": "/static/js/3.0413ed8e.chunk.js.LICENSE.txt",
+    "static/js/4.59f6538e.chunk.js.LICENSE.txt": "/static/js/4.59f6538e.chunk.js.LICENSE.txt",
+    "static/js/5.d1623efe.chunk.js.LICENSE.txt": "/static/js/5.d1623efe.chunk.js.LICENSE.txt",
+    "static/media/AttendanceNotAvailable.5519bd8b.svg": "/static/media/AttendanceNotAvailable.5519bd8b.svg",
+    "static/media/Sidebar.css": "/static/media/DashboardObjectAdmin.e6ea8485.png",
+    "static/media/Login.css": "/static/media/FLATiMAGE.e42bb2ca.jpeg",
+    "static/media/FloralAbstract.033bb0de.jpg": "/static/media/FloralAbstract.033bb0de.jpg",
+    "static/media/HappyBirthday.181e9653.svg": "/static/media/HappyBirthday.181e9653.svg",
+    "static/media/LOGINBACK.f8757d26.svg": "/static/media/LOGINBACK.f8757d26.svg",
+    "static/media/Leave.cde90f6b.svg": "/static/media/Leave.cde90f6b.svg",
+    "static/media/NoticeBadge.fa1402bd.svg": "/static/media/NoticeBadge.fa1402bd.svg",
+    "static/media/Personalinfo.309589af.svg": "/static/media/Personalinfo.309589af.svg",
+    "static/media/DashboardAdmin.css": "/static/media/texturetech.47897e30.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fca15210.js",
+    "static/css/2.f4fba10e.chunk.css",
+    "static/js/2.d9e36f5a.chunk.js",
+    "static/css/main.0aa75980.chunk.css",
+    "static/js/main.a75d433f.chunk.js"
+  ]
+}

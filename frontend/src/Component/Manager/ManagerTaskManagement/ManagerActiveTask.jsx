@@ -33,6 +33,8 @@ const ManagerActiveTask = () => {
   const [taskDepartment, setTaskDepartment] = useState("");
   const { socket } = useContext(AttendanceContext);
   const [taskName, setTaskName] = useState("");
+  const [allImage, setAllImage] = useState(null);
+
   const loadEmployeeData = () => {
     axios
       .get(`${BASE_URL}/api/employee`, {
@@ -235,7 +237,7 @@ const ManagerActiveTask = () => {
 
   const removeSelectedEmployee = (email) => {
     setSelectedEmployees(
-      selectedEmployees.filter((employee) => employee.email !== email)
+      selectedEmployees.filter((employee) => employee.Email !== email)
     );
   };
 
@@ -279,6 +281,24 @@ const ManagerActiveTask = () => {
     return tasks.filter(
       (task) => task.status === "Pending" && task.managerEmail === email
     ).length;
+  };
+
+  useEffect(() => {
+    getPdf();
+  }, []);
+  const getPdf = async () => {
+    const result = await axios.get(`${BASE_URL}/api/getTask`);
+    console.log(result.data.data);
+    setAllImage(result.data.data);
+  };
+  const showPdf = (id) => {
+    let require =
+      allImage &&
+      allImage.filter((val) => {
+        return val._id === id;
+      });
+    console.log(require[0].pdf);
+    window.open(`${BASE_URL}/${require[0].pdf}`, "_blank", "noreferrer");
   };
 
   return (
@@ -574,7 +594,7 @@ const ManagerActiveTask = () => {
                     </button>
                     <button
                       className="btn btn-warning col-2 d-flex justify-center aline-center gap-2"
-                      onClick={() => askStatus(task._id)}
+                      onClick={() => showPdf(task._id)}
                     >
                       <BsFiletypeDoc /> View Docs
                     </button>
@@ -665,10 +685,13 @@ const ManagerActiveTask = () => {
                 </table>
               </div>
             </form>
-            <div className="d-flex flex-column col-4 gap-2">
-              <div className="row form-control d-flex pt-3 rounded mx-1 justify-content-between">
+            <div className="d-flex flex-column col-4 gap-2 ">
+              <div
+                className="row form-control d-flex pt-3 rounded mx-1 justify-content-between"
+                style={{ height: "fit-content" }}
+              >
                 <div>
-                  <span className="fw-bold">Selected Employees:</span>
+                  <span className="fw-bold ">Selected Employees:</span>
                   {selectedEmployees.map((employee, index) => (
                     <div key={index} className="d-flex">
                       <span
@@ -688,8 +711,9 @@ const ManagerActiveTask = () => {
                   ))}
                 </div>
               </div>
+
               <button
-                className="btn  btn-primary"
+                className="btn  btn-primary "
                 onClick={() => forwardTaskToEmployees(selectedTaskId)}
                 disabled={isForwardButtonDisabled}
               >

@@ -1,5 +1,4 @@
-
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 require("dotenv").config();
 let mongoURI = process.env.DATABASEURL;
 
@@ -9,8 +8,8 @@ mongoose.set("useCreateIndex", true);
 mongoose
   .connect(mongoURI)
   .then(() => console.log("db connection successful"))
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
-  const connection = mongoose.createConnection(mongoURI);
+const connection = mongoose.createConnection(mongoURI);
 
-  module.exports = connection
+module.exports = connection;

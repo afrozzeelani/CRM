@@ -60,34 +60,45 @@ const TaskAssign = () => {
   };
 
   // const addTask = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       "${BASE_URL}/api/tasks",
-  //       newTask
-  //     );
+  //   let formData = new FormData();
+  //   formData.append("Taskname", newTask.Taskname);
+  //   formData.append("description", newTask.description);
+  //   formData.append("startDate", newTask.startDate);
+  //   formData.append("endDate", newTask.endDate);
+  //   formData.append("file", newTask.attachments);
+  //   formData.append("managerEmail", newTask.managerEmail);
+  //   formData.append("department", newTask.department);
+  //   formData.append("comment", newTask.comment);
+  //   formData.append("adminMail", email);
 
-  //     if (response.status === 201) {
-  //       // Reset the form and show a success toast
-  //       setNewTask({
-  //         Taskname: "",
-  //         description: "",
-  //         startDate: "",
-  //         endDate: "",
-  //         attachments: null,
-  //         managerEmail: "",
-  //         department: "",
-  //         comment: ""
-  //       });
-  //       toast.sucess("Task added successfully!");
-  //     } else {
-  //       // Handle the case where the request fails
-  //       alert("Failed to add task. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error adding task:", error);
-  //     alert("An unexpected error occurred. Please try again later.");
-  //   }
+  //   const id = localStorage.getItem("_id");
+  //   axios
+  //     .post(`${BASE_URL}/api/tasks`, formData)
+  //     .then((res) => {
+  //       console.log(res);
+  //       const taskNotificationData = {
+  //         taskId,
+  //         taskName: newTask.Taskname,
+  //         senderMail: email,
+  //         managerEmail: newTask.managerEmail,
+  //         Account: 4,
+  //         message: `New task assigned by ${email}`,
+  //         status: "unseen",
+  //         path: "newTask"
+  //       };
+
+  //       socket.emit("managerTaskNotification", taskNotificationData);
+
+  //       // Display success toast
+  //       toast.success("Task added successfully!");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       // Display error toast
+  //       toast.error("Failed to add task. Please try again.");
+  //     });
   // };
+
   const addTask = async () => {
     let formData = new FormData();
     formData.append("Taskname", newTask.Taskname);
@@ -99,7 +110,7 @@ const TaskAssign = () => {
     formData.append("department", newTask.department);
     formData.append("comment", newTask.comment);
     formData.append("adminMail", email);
-    // console.log();
+
     const id = localStorage.getItem("_id");
     axios
       .post(`${BASE_URL}/api/tasks`, formData)
@@ -117,11 +128,63 @@ const TaskAssign = () => {
         };
 
         socket.emit("managerTaskNotification", taskNotificationData);
+
+        // Display success toast
+        toast.success("Task added successfully!");
+
+        // Clear the form fields and reset state
+        setNewTask({
+          Taskname: "",
+          description: "",
+          startDate: "",
+          endDate: "",
+          attachments: null,
+          managerEmail: "",
+          department: "",
+          comment: ""
+        });
       })
       .catch((err) => {
         console.log(err);
+        // Display error toast
+        toast.error("Failed to add task. Please try again.");
       });
   };
+
+  // const addTask = async () => {
+  //   let formData = new FormData();
+  //   formData.append("Taskname", newTask.Taskname);
+  //   formData.append("description", newTask.description);
+  //   formData.append("startDate", newTask.startDate);
+  //   formData.append("endDate", newTask.endDate);
+  //   formData.append("file", newTask.attachments);
+  //   formData.append("managerEmail", newTask.managerEmail);
+  //   formData.append("department", newTask.department);
+  //   formData.append("comment", newTask.comment);
+  //   formData.append("adminMail", email);
+  //   // console.log();
+  //   const id = localStorage.getItem("_id");
+  //   axios
+  //     .post(`${BASE_URL}/api/tasks`, formData)
+  //     .then((res) => {
+  //       console.log(res);
+  //       const taskNotificationData = {
+  //         taskId,
+  //         taskName: newTask.Taskname,
+  //         senderMail: email,
+  //         managerEmail: newTask.managerEmail,
+  //         Account: 4,
+  //         message: `New task assigned by ${email}`,
+  //         status: "unseen",
+  //         path: "newTask"
+  //       };
+
+  //       socket.emit("managerTaskNotification", taskNotificationData);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   // Fetch all tasks on component mount
   useEffect(() => {
     const fetchTasks = async () => {

@@ -13,6 +13,7 @@ const ManagerNewTask = () => {
   const [error, setError] = useState(null);
   const [, setIsAccepted] = useState(false);
   const [, setIsRejected] = useState(false);
+  const [allImage, setAllImage] = useState(null);
 
   const { socket } = useContext(AttendanceContext);
   const email = localStorage.getItem("Email");
@@ -143,6 +144,24 @@ const ManagerNewTask = () => {
   const newTasks = tasks.filter(
     (task) => task.status === "Assigned" && task.managerEmail === email
   ).length;
+
+  useEffect(() => {
+    getPdf();
+  }, []);
+  const getPdf = async () => {
+    const result = await axios.get(`${BASE_URL}/api/getTask`);
+    console.log(result.data.data);
+    setAllImage(result.data.data);
+  };
+  const showPdf = (id) => {
+    let require =
+      allImage &&
+      allImage.filter((val) => {
+        return val._id === id;
+      });
+    console.log(require[0].pdf);
+    window.open(`${BASE_URL}/${require[0].pdf}`, "_blank", "noreferrer");
+  };
 
   return (
     <div className="p-4">
@@ -337,7 +356,10 @@ const ManagerNewTask = () => {
                       <IoCheckmarkDoneSharp />
                       Accept
                     </button>
-                    <button className="btn btn-primary col-2 d-flex justify-center aline-center gap-2">
+                    <button
+                      className="btn btn-primary col-2 d-flex justify-center aline-center gap-2"
+                      onClick={() => showPdf(task._id)}
+                    >
                       <BsFiletypeDoc />
                       View Docs
                     </button>

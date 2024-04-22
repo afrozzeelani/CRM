@@ -12,17 +12,20 @@ import { AttendanceContext } from "../../Context/AttendanceContext/AttendanceCon
 import { useHistory } from "react-router-dom";
 import addNotification from "react-push-notification";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
-import BASE_URL from "../config/config";
+import { FaBell } from "react-icons/fa6";
+import { LuMenu } from "react-icons/lu";
 
+import BASE_URL from "../config/config";
+import { Toaster, toast } from "react-hot-toast";
 const NavBar = (props) => {
   const [activeProfile, setActiveProfile] = useState(null);
   const history = useHistory();
   const location = useLocation().pathname.split("/")[1];
   const [notification, setNotification] = useState([]);
-  const [setEmployeeData] = useState("");
+  const [employeeData, setEmployeeData] = useState("");
   const [notiToggle, setNotiToggle] = useState(false);
   const { socket } = useContext(AttendanceContext);
-
+  const [loginNoti, setLoginNoti] = useState(true); //this is only for hr and admin to block employee login notification.
   const id = localStorage.getItem("_id");
   const email = localStorage.getItem("Email");
   const pushNotification = (taskName) => {
@@ -108,6 +111,7 @@ const NavBar = (props) => {
   useEffect(() => {
     // console.log('Socket:', socket.id);
     socket.emit("userConnected", { email });
+    console.log("hello");
     handleNotificationRequest();
     if (socket) {
       socket.on("taskNotificationReceived", (data) => {
@@ -140,9 +144,27 @@ const NavBar = (props) => {
         }
       });
       socket.on("leaveNotificationReceived", (data) => {
-        const { message, status, path, taskId, managerEmail, hrEmail } = data;
+        const {
+          message,
+          status,
+          path,
+          taskId,
+          managerEmail,
+          hrEmail,
+          messageBy,
+          profile
+        } = data;
 
-        const data1 = { message, status, path, taskId, managerEmail, hrEmail };
+        const data1 = {
+          message,
+          status,
+          path,
+          taskId,
+          managerEmail,
+          hrEmail,
+          messageBy,
+          profile
+        };
         setNotification((prev) => [data1, ...prev]);
         pushNotification(data1.message);
       });
@@ -154,6 +176,8 @@ const NavBar = (props) => {
           taskId,
           employeeEmail,
           hrEmail,
+          messageBy,
+          profile,
           managerEmail
         } = data;
         if (location === "employee") {
@@ -162,6 +186,8 @@ const NavBar = (props) => {
             status,
             path,
             taskId,
+            messageBy,
+            profile,
             employeeEmail,
             hrEmail
           };
@@ -173,6 +199,8 @@ const NavBar = (props) => {
             status,
             path,
             taskId,
+            messageBy,
+            profile,
             employeeEmail,
             hrEmail
           };
@@ -184,6 +212,8 @@ const NavBar = (props) => {
             status,
             path,
             taskId,
+            messageBy,
+            profile,
             employeeEmail,
             managerEmail
           };
@@ -193,6 +223,61 @@ const NavBar = (props) => {
       });
     }
   }, [socket]);
+  const handleUserLogin = (data) => {
+    const showNotification = (data) => {
+      if (data) {
+        const { message } = data;
+        toast.success(message, {
+          duration: 2000,
+          position: "top-right",
+          style: {
+            color: "green",
+            backgroundColor: "white",
+            boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+            borderRadius: "4px",
+            zIndex: "9999"
+          },
+          toastClassName: "custom-toast"
+        });
+      }
+    };
+    if (loginNoti) {
+      showNotification(data);
+    }
+  };
+  const handleUserLogout = (data) => {
+    const showNotification = (data) => {
+      if (data) {
+        const { message } = data;
+        toast.error(message, {
+          duration: 2000,
+          position: "top-right",
+          style: {
+            color: "white",
+            backgroundColor: "red",
+            boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+            borderRadius: "4px",
+            zIndex: "9999"
+          },
+          toastClassName: "custom-toast"
+        });
+      }
+    };
+
+    if (loginNoti) {
+      showNotification(data);
+    }
+  };
+
+  useEffect(() => {
+    socket.on("userLogin", handleUserLogin);
+    socket.on("userLogout", handleUserLogout);
+    return () => {
+      socket.off("userLogin", handleUserLogin);
+      socket.off("userLogout", handleUserLogout);
+    };
+  }, []);
+
   const clearAllHandler = () => {
     if (notification.length > 0) {
       axios
@@ -230,81 +315,133 @@ const NavBar = (props) => {
         <Navbar.Brand className="my-auto" style={{ width: "120px" }}>
           <img style={{ width: "100%" }} src={Logo} alt="" />
         </Navbar.Brand>
+
         <div className="ml-auto my-auto d-flex align-items-center gap-3">
           <div
             className="position-relative"
-            onClick={() => setNotiToggle(!notiToggle)}
+            onMouseEnter={() => setNotiToggle("name")}
+            onMouseLeave={() => setNotiToggle(false)}
           >
-            <LuBell className="fs-4" />
-            {notification.length > 0 && uniqueNotification.length > 0 && (
-              <p
-                style={{
-                  height: "1.3rem",
-                  width: "1.3rem",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "absolute",
-                  top: "-35%",
-                  right: "-30%",
-                  borderRadius: "50% 50% 50% 0",
-                  scale: ".7"
-                }}
-                className="bg-primary text-white fw-bold"
-              >
-                {uniqueNotification.length}
-              </p>
-            )}
-            {notiToggle && (
-              <span className="notification-list">
-                {notiToggle &&
-                  notification
-                    .slice(0, 10)
-                    .filter(
-                      (val, i, ar) =>
-                        ar.findIndex((item) => item.taskId === val.taskId) === i
-                    )
-                    .map((val, i) => {
-                      return (
-                        <span
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            gap: ".1rem"
-                          }}
-                          className={val.status === "unseen" ? "new" : "old"}
-                        >
-                          <h6
-                            style={{ fontSize: "0.9rem" }}
-                            onClick={
-                              val.status === "unseen"
-                                ? () =>
-                                    notificationHandler(val.taskId, val.path)
-                                : () => history.push(`/${location}/${val.path}`)
-                            }
-                          >
-                            {val.message}
-                          </h6>
-                          <IoMdClose
-                            onClick={(e) => (
-                              notificationDeleteHandler(val.taskId),
-                              e.stopPropagation()
-                            )}
-                            style={{ cursor: "pointer" }}
-                            className="closing"
-                          />
-                        </span>
-                      );
-                    })}
+            <div
+              className="notilenghth bg-warning text-muted fw-bold"
+              style={{
+                display: uniqueNotification.length <= 0 ? "none" : "flex",
+                height: "fit-content",
+                width: "fit-content",
+                minWidth: "18px",
+                position: "absolute",
+                top: "-30%",
+                right: "-35%",
+                borderRadius: "50% 50% 50% 0",
+                objectFit: "cover",
+                fontSize: ".8rem",
+                padding: "0 .1rem"
+              }}
+            >
+              {notification.length > 0 && uniqueNotification.length > 0 && (
+                <span className="m-auto">{uniqueNotification.length}</span>
+              )}
+            </div>
+            <div className="position-relative">
+              <FaBell className="fs-5 text-primary" />
+              {notiToggle && notification.length > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: ".5rem",
+                    top: "100%",
+                    minWidth: "230px",
+                    zIndex: "10000",
+                    maxWidth: "250px",
+                    borderRadius: "20px 0 20px 20px",
+                    display: notiToggle == "name" ? "flex" : "none"
+                  }}
+                  className="border border-muted border-1 flex-column gap-1 w-100 bg-white align-items-center gap-2 justify-content-between  p-2  shadow"
+                >
+                  {notiToggle &&
+                    notification
+                      .slice(0, 10)
+                      .filter(
+                        (val, i, ar) =>
+                          ar.findIndex((item) => item.taskId === val.taskId) ===
+                          i
+                      )
+                      .map((val, i) => {
+                        return (
+                          <div className="d-flex align-items-center justify-content-between w-100">
+                            <div className="d-flex align-items-center gap-2">
+                              <div
+                                style={{
+                                  height: "30px",
+                                  width: "30px",
+                                  overflow: "hidden"
+                                }}
+                              >
+                                <img
+                                  style={{
+                                    height: "100%",
+                                    width: "100%",
+                                    objectFit: "cover",
+                                    overflow: "hidden",
+                                    borderRadius: "50%"
+                                  }}
+                                  src="https://tse3.mm.bing.net/th?id=OIP.-d8GY5axNJZYoXsNOUJ4iwAAAA&pid=Api&P=0&h=180"
+                                  alt=""
+                                />
+                              </div>
+                              <div>
+                                <p
+                                  style={{ fontSize: ".75rem" }}
+                                  className="p-0 m-0 w-100 text-muted fw-bold"
+                                >
+                                  New Task Received
+                                </p>
+                                <p
+                                  style={{ fontSize: ".80rem" }}
+                                  className="p-0 m-0 w-100"
+                                >
+                                  {val.message}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="d-flex align-items-center gap-1">
+                              <span
+                                style={{ fontSize: ".80rem" }}
+                                className="btn py-1 py-0 px-1 rounded-5 text-white  w-100 fw-bold bg-danger"
+                                onClick={(e) => (
+                                  notificationDeleteHandler(val.taskId),
+                                  e.stopPropagation()
+                                )}
+                              >
+                                x
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                </div>
+              )}
+            </div>
+            {/* {notification.length > 0 && uniqueNotification.length > 0 && <p style={{ height: '1.3rem', width: '1.3rem', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'absolute', top: '-35%', right: '-30%', borderRadius: '50% 50% 50% 0', scale: '.7' }} className="bg-primary text-white fw-bold">{uniqueNotification.length}</p>} */}
+            {/* {notiToggle && ( */}
+            {/* <span className='notification-list'> */}
+            {/* {notiToggle && notification.slice(0, 10).filter((val, i, ar) => ar.findIndex(item => item.taskId === val.taskId) === i).map((val, i) => {
+                return <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '.1rem' }} className={val.status === "unseen" ? "new" : "old"}><h6 style={{ fontSize: "0.9rem" }} onClick={val.status === "unseen" ? () => notificationHandler(val.taskId, val.path) : () => history.push(`/${location}/${val.path}`)}>{val.message}</h6><IoMdClose onClick={(e) => (notificationDeleteHandler(val.taskId), e.stopPropagation())} style={{ cursor: "pointer" }} className="closing" /></span>
+              })}
 
-                {notiToggle && notification.length > 0 && (
-                  <h4 className="viewAll" onClick={clearAllHandler}>
-                    Clear All
-                  </h4>
-                )}
-              </span>
-            )}
+              {notiToggle && notification.length > 0 && <h4 className="viewAll" onClick={clearAllHandler}>Clear All</h4>} */}
+
+            {/* <span style={{ position: 'absolute', right: "0", top: '2rem', zIndex: '2001', minWidth: '230px', maxWidth: '250px' }} className='notification-list bg-white'>
+                {notiToggle && notification.slice(0, 10).filter((val, i, ar) => ar.findIndex(item => item.taskId === val.taskId) === i).map((val, i) => {
+                  return <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '.1rem' }} className={val.status === "unseen" ? "new" : "old"}><h6 style={{ fontSize: "0.9rem" }} onClick={val.status === "unseen" ? () => notificationHandler(val.taskId, val.path) : () => history.push(`/${location}/${val.path}`)}>{val.message}</h6><IoMdClose onClick={(e) => (notificationDeleteHandler(val.taskId), e.stopPropagation())} style={{ cursor: "pointer" }} className="closing" /></span>
+                })}
+
+                {notiToggle && notification.length > 0 && <h4 className="viewAll" onClick={clearAllHandler}>Clear All</h4>}
+
+              </span> */}
+
+            {/* </span> */}
+            {/* )} */}
           </div>
           <span className="navbar-right-content my-auto d-flex  fw-bold">
             <div
